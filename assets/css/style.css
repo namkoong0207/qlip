@@ -765,6 +765,7 @@ footer {
   .hero-note { justify-content: center; }
   .hero-stage { margin-top: 20px; }
   .phone { transform: none; width: min(280px, 62vw); }
+  .float-chip { display: none; }
   .demo { grid-template-columns: 1fr; }
   .trust-inner { grid-template-columns: 1fr; }
   .features { grid-template-columns: repeat(2, 1fr); }
