@@ -116,4 +116,103 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     io2.observe(chatBody);
   }
+
+  // ---- verification pipeline demo ----
+  const verifyStage = document.querySelector("[data-verify-stage]");
+  const verifyStatus = document.querySelector("[data-verify-status]");
+  if (verifyStage && verifyStatus) {
+    const nodes = Array.from(verifyStage.querySelectorAll(".verify-node")).map((el) => ({
+      el,
+      note: el.querySelector("[data-node-note]"),
+      defaultNote: el.querySelector("[data-node-note]").textContent,
+    }));
+    const [analyze, solve, verify, show] = nodes;
+
+    const wait2 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const setState = (node, state) => {
+      node.el.className = "verify-node" + (state ? ` ${state}` : "");
+    };
+    const setStatus = (text, kind) => {
+      verifyStatus.textContent = text;
+      verifyStatus.className = "verify-status" + (kind ? ` ${kind}` : "");
+    };
+    const resetNote = (node) => { node.note.textContent = node.defaultNote; };
+
+    let cycle = 0;
+    let cancelled2 = false;
+
+    const runVerifyLoop = async () => {
+      while (!cancelled2) {
+        cycle += 1;
+        nodes.forEach((n) => { setState(n, ""); resetNote(n); });
+        setStatus("대기 중…");
+        await wait2(700);
+
+        setState(analyze, "active");
+        setStatus("사진에서 문제를 인식하는 중…", "busy");
+        await wait2(1200);
+        setState(analyze, "done");
+
+        setState(solve, "active");
+        setStatus("단계별 풀이를 작성하는 중…", "busy");
+        await wait2(1300);
+        setState(solve, "done");
+
+        setState(verify, "active");
+        setStatus("독립적으로 다시 풀어서 대조하는 중…", "busy");
+        await wait2(1400);
+
+        // Every third pass through, dramatize the safety net: verification
+        // catches an issue and the pipeline loops back to re-solve before
+        // re-verifying — this is the actual retry Qlip's Solver/Verifier
+        // does, not just a decorative animation.
+        const showsRetry = cycle % 3 === 0;
+        if (showsRetry) {
+          setState(verify, "retry");
+          verify.note.textContent = "이슈를 발견했어요 — 풀이 단계로 되돌아가요.";
+          setStatus("검증 실패 — 이슈를 반영해 다시 풀이하는 중…", "retry");
+          await wait2(1300);
+
+          setState(verify, "");
+          setState(solve, "active");
+          solve.note.textContent = "발견된 문제점을 반영해서 다시 풀어요.";
+          await wait2(1300);
+          setState(solve, "done");
+          resetNote(solve);
+
+          setState(verify, "active");
+          verify.note.textContent = "다시 한번 대조해서 확인해요.";
+          setStatus("재검증하는 중…", "busy");
+          await wait2(1300);
+        }
+
+        setState(verify, "done");
+        resetNote(verify);
+        setStatus(showsRetry ? "재검증 통과 — 이번엔 이상이 없어요." : "검증 통과 — 이상이 없어요.", "ok");
+        await wait2(700);
+
+        setState(show, "active");
+        setStatus("화면에 표시하는 중…", "busy");
+        await wait2(900);
+        setState(show, "done");
+        setStatus("완료 — 검증까지 통과한 풀이만 보여드려요.", "ok");
+
+        await wait2(2600);
+      }
+    };
+
+    const io3 = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            runVerifyLoop();
+            io3.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    io3.observe(verifyStage);
+  }
 });

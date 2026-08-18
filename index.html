@@ -149,28 +149,69 @@
 </section>
 
 <section id="trust" class="trust">
-  <div class="container trust-inner">
-    <div class="reveal">
-      <span class="eyebrow" style="margin-bottom:18px;"><span class="dot-wrap">i</span>정직하게, Qlip에 대해</span>
-      <h2>Qlip은 AI예요.<br>그래서 검증 과정을 거쳐요.</h2>
-      <p class="lead-p">AI가 만든 풀이는 실수할 수 있어요. Qlip은 그 사실을 숨기지 않아요 — 풀이를 만들 때마다 스스로 검증하고, 이상이 발견되면 화면에 명확히 알려드려요.</p>
+  <div class="container">
+    <div class="trust-inner">
+      <div class="reveal">
+        <span class="eyebrow" style="margin-bottom:18px;"><span class="dot-wrap">i</span>정직하게, Qlip에 대해</span>
+        <h2>AI 풀이를,<br>AI가 다시 검증해요.</h2>
+        <p class="lead-p">다른 도구들은 AI가 만든 답을 그대로 보여줘요. Qlip은 하나가 풀면 다른 시각에서 문제를 처음부터 다시 풀어 대조하고, 그 검증까지 통과한 풀이만 화면에 올려요. 이상이 발견되면 스스로 다시 고쳐 풀어요 — 이 과정을 그대로 보여드릴게요.</p>
+      </div>
+
+      <div class="verify-panel reveal reveal-delay-1">
+        <div class="verify-stage" data-verify-stage>
+          <div class="verify-node" data-node="analyze">
+            <div class="node-dot">1</div>
+            <div class="node-body">
+              <h4>문제 인식</h4>
+              <p data-node-note>사진에서 조건·단위·요구사항을 정확히 추출해요.</p>
+            </div>
+          </div>
+          <div class="verify-node" data-node="solve">
+            <div class="node-dot">2</div>
+            <div class="node-body">
+              <h4>풀이 생성</h4>
+              <p data-node-note>개념과 수식을 포함한 단계별 풀이를 작성해요.</p>
+            </div>
+          </div>
+          <div class="verify-node" data-node="verify">
+            <div class="node-dot">3</div>
+            <div class="node-body">
+              <h4>독립 검증</h4>
+              <p data-node-note>다른 시각에서 문제를 처음부터 다시 풀어 대조해요.</p>
+            </div>
+          </div>
+          <div class="verify-node" data-node="show">
+            <div class="node-dot">4</div>
+            <div class="node-body">
+              <h4>화면에 표시</h4>
+              <p data-node-note>검증까지 통과한 풀이만 보여드려요.</p>
+            </div>
+          </div>
+        </div>
+        <div class="verify-status" data-verify-status>대기 중…</div>
+      </div>
     </div>
-    <div class="trust-card reveal reveal-delay-1">
-      <div class="trust-row">
-        <div class="check">✓</div>
-        <p><b>풀이마다 검증 단계를 거쳐요.</b> Qlip이 스스로 풀이를 다시 확인한 뒤에 보여드려요.</p>
+
+    <div class="diff-grid reveal reveal-delay-2">
+      <div class="diff-card">
+        <div class="num">01 · SCOPE</div>
+        <h4>대학 수준 전문성</h4>
+        <p>고등학교 문제집이 아니라 미적분학·선형대수·공업수학·일반물리·일반화학·회로이론·열역학 같은 대학 전공 문제에 맞춰져 있어요.</p>
       </div>
-      <div class="trust-row">
-        <div class="check">✓</div>
-        <p><b>오류는 숨기지 않아요.</b> 후속 질문 중 오류가 발견되면 즉시 안내하고 재검증해요.</p>
+      <div class="diff-card">
+        <div class="num">02 · DISPLAY</div>
+        <h4>깨지지 않는 수식</h4>
+        <p>흐릿한 사진을 그대로 보여주지 않아요. 교과서처럼 깔끔하게 다시 조판해서 보여드려요 — 그림이 있는 문제만 원본을 그대로 유지해요.</p>
       </div>
-      <div class="trust-row">
-        <div class="check">✓</div>
-        <p><b>내 콘텐츠는 내 것이에요.</b> 광고 목적으로 데이터를 이용하지 않아요.</p>
+      <div class="diff-card">
+        <div class="num">03 · HONESTY</div>
+        <h4>정직한 오류 인정</h4>
+        <p>기존 풀이가 맞다고 무조건 우기지 않아요. 후속 질문 중 실제 오류가 발견되면 방어하지 않고 즉시 알려주고 다시 검증해요.</p>
       </div>
-      <div class="trust-row">
-        <div class="check">✓</div>
-        <p><b>iCloud로 안전하게 동기화.</b> 별도 서버 없이 내 계정의 iCloud에만 저장돼요.</p>
+      <div class="diff-card">
+        <div class="num">04 · PRIVACY</div>
+        <h4>내 콘텐츠는 내 것</h4>
+        <p>별도 서버 없이 내 계정의 iCloud에만 저장돼요. 광고 목적으로 학습 데이터를 이용하지 않아요.</p>
       </div>
     </div>
   </div>
