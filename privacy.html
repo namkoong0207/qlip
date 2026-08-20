@@ -30,7 +30,7 @@
     <div class="legal-card">
       <span class="eyebrow">안내</span>
       <h1>Qlip 개인정보처리방침</h1>
-      <div class="effective-date">시행일: 2026년 8월 16일</div>
+      <div class="effective-date">시행일: 2026년 8월 21일</div>
 
       <div class="legal-body">
         <p>남궁재환(이하 "회사")은 이용자의 개인정보를 중요시하며, 관련 법령을 준수하기 위해 다음과 같은 처리방침을 수립합니다.</p>
@@ -39,7 +39,8 @@
         <ul>
           <li><strong>Apple 계정 정보</strong>: Sign in with Apple을 통해 최초 로그인 시 제공되는 이름, 이메일 주소 (Apple 정책에 따라 최초 1회만 제공될 수 있습니다)</li>
           <li><strong>콘텐츠</strong>: 이용자가 촬영하거나 업로드한 문제 사진, 족보, 이를 통해 생성된 풀이·질문·메모</li>
-          <li><strong>구독 정보</strong>: Apple App Store를 통한 구독 상태 (결제 정보 자체는 Apple이 처리하며 회사는 결제 카드 정보를 수집하지 않습니다)</li>
+          <li><strong>구독 정보</strong>: Apple App Store를 통한 구독 상태 및 구매 거래 식별자 (결제 정보 자체는 Apple이 처리하며 회사는 결제 카드 정보를 수집하지 않습니다)</li>
+          <li><strong>이용 기록</strong>: 회원별 크레딧 잔액, 사용량 및 초기화 시점 (AI 기능의 이용 한도를 적용하기 위한 정보이며, 문제 내용이나 풀이 내용은 포함되지 않습니다)</li>
         </ul>
 
         <h2>2. 개인정보의 처리 목적</h2>
@@ -47,19 +48,21 @@
           <li>Sign in with Apple을 통한 회원 식별 및 서비스 제공</li>
           <li>촬영한 문제 사진을 AI 모델로 분석하여 풀이를 생성하기 위함</li>
           <li>저장한 문제, 족보, 질답 기록을 기기 간 동기화하기 위함</li>
-          <li>Pro 구독 상태 확인 및 서비스 제공</li>
+          <li>유료 구독 상태 확인 및 등급별 서비스 제공</li>
+          <li>등급별 크레딧 잔액 관리 및 이용 한도 적용</li>
         </ol>
 
         <h2>3. 개인정보의 저장 및 처리</h2>
         <ol>
-          <li>이용자의 콘텐츠는 Apple의 SwiftData 및 CloudKit(이용자 개인 iCloud 저장 공간)에 저장되며, 회사는 별도의 자체 서버를 운영하지 않습니다.</li>
-          <li>촬영한 문제 사진은 풀이 생성을 위해 AI 모델 제공사(OpenAI)의 API로 전송되어 처리되며, 처리 목적 달성 후에는 AI 모델 제공사의 자체 정책에 따라 처리됩니다.</li>
+          <li>이용자가 촬영·저장한 문제 사진, 족보, 풀이, 질답 기록 등 <strong>콘텐츠는 Apple의 SwiftData 및 CloudKit(이용자 개인 iCloud 저장 공간)에만 저장</strong>되며, 회사의 서버에는 저장되지 않습니다.</li>
+          <li>회원 식별 정보(Apple 계정 이름·이메일), 구독 상태, 크레딧 잔액 및 사용량은 회사가 운영하는 <strong>Google Firebase(Authentication, Cloud Firestore, Cloud Functions)</strong>에 저장·처리되며, 데이터는 대한민국 리전(asia-northeast3)에 보관됩니다.</li>
+          <li>촬영한 문제 사진은 풀이 생성을 위해 회사의 서버를 경유하여 AI 모델 제공사(OpenAI)의 API로 전송되어 처리됩니다. 회사의 서버는 요청을 중계할 뿐 사진이나 풀이 내용을 저장하지 않으며, 전송된 데이터는 처리 목적 달성 후 AI 모델 제공사의 자체 정책에 따라 처리됩니다.</li>
           <li>회사는 이용자의 콘텐츠를 광고, 마케팅 등 서비스 제공 목적 외로 이용하지 않습니다.</li>
         </ol>
 
         <h2>4. 개인정보의 보유 및 파기</h2>
         <ol>
-          <li>이용자가 "내정보 &gt; 계정 탈퇴"를 통해 탈퇴하는 경우, 저장된 모든 콘텐츠와 계정 정보는 즉시 영구적으로 삭제됩니다.</li>
+          <li>이용자가 "내정보 &gt; 계정 탈퇴"를 통해 탈퇴하는 경우, 기기에 저장된 모든 콘텐츠와 회사 서버에 저장된 계정 정보 및 이용 기록은 즉시 영구적으로 삭제됩니다.</li>
           <li>관련 법령에 따라 보존이 필요한 정보는 해당 법령이 정한 기간 동안 보관 후 파기합니다.</li>
         </ol>
 
@@ -68,6 +71,7 @@
         <ul>
           <li>Apple: Sign in with Apple, iCloud 동기화, App Store 결제 처리</li>
           <li>OpenAI: 문제 사진 인식 및 풀이 생성을 위한 AI 처리</li>
+          <li>Google (Firebase): 회원 인증, 구독 상태 및 크레딧 잔액의 저장·처리</li>
         </ul>
 
         <h2>6. 광고</h2>
