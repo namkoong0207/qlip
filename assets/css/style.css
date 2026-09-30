@@ -858,6 +858,18 @@ footer {
 /* 개정 예고. Sits above a legal document that is being replaced on a named date,
    and says what is changing and why — which the document's own 제3조 requires of
    any change, and the law requires of one that is unfavourable to the reader. */
+/* 사업자 정보. 자랑할 줄은 아니지만 없으면 안 되는 줄이라, 읽히되 눈에 먼저
+   들어오지는 않는 크기로 두고 좁은 화면에서는 저작권 줄 아래로 떨어뜨린다. */
+.footer-bottom .biz-info {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  flex-basis: 100%;
+  order: 99;
+  line-height: 1.7;
+}
+
+.footer-bottom .biz-info a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
 .legal-card .legal-revision {
   border: 1px solid var(--border);
   border-left: 3px solid var(--blue);
