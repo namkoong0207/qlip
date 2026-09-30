@@ -855,6 +855,30 @@ footer {
   font-family: var(--font-mono);
 }
 
+/* 개정 예고. Sits above a legal document that is being replaced on a named date,
+   and says what is changing and why — which the document's own 제3조 requires of
+   any change, and the law requires of one that is unfavourable to the reader. */
+.legal-card .legal-revision {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 18px 20px;
+  margin-bottom: 40px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.legal-card .legal-revision h3 {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.legal-card .legal-revision ul { margin: 8px 0 0; padding-left: 18px; }
+.legal-card .legal-revision li { margin-bottom: 4px; }
+
 .legal-body { color: var(--text-secondary); font-size: 15.5px; line-height: 1.85; }
 
 .legal-body h2 {

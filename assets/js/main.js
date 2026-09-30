@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setStatus("화면에 표시하는 중…", "busy");
         await wait2(900);
         setState(show, "done");
-        setStatus("완료 — 검증까지 통과한 풀이만 보여드려요.", "ok");
+        setStatus("완료 — 검증 결과와 함께 보여드려요.", "ok");
 
         await wait2(2600);
       }
