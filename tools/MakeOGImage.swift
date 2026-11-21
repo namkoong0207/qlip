@@ -91,8 +91,8 @@ func draw(_ text: String, x: Double, y: Double, size: Double, weight: NSFont.Wei
 let left = 88.0
 draw("QLIP", x: left, y: h - 132, size: 30, weight: .heavy, color: rgb(0xFFFFFF), tracking: 6)
 draw("사진 한 장이면,", x: left, y: h - 250, size: 62, weight: .bold, color: rgb(0xFFFFFF))
-draw("이해될 때까지 풀어드려요.", x: left, y: h - 336, size: 62, weight: .bold, color: rgb(0x9BB4FF))
-draw("대학 이공계 문제 풀이 · AI가 푼 답을 AI가 다시 검증해요",
+draw("단계별 해설이 나와요.", x: left, y: h - 336, size: 62, weight: .bold, color: rgb(0x9BB4FF))
+draw("대학 이공계 문제 해설 · AI 해설을 다른 AI가 다시 검증해요",
      x: left, y: 176, size: 25, weight: .regular, color: rgb(0x9AA3B4))
 
 // A pill that says where to get it, because that is the next action.

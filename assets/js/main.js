@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setState(analyze, "done");
 
         setState(solve, "active");
-        setStatus("단계별 풀이를 작성하는 중…", "busy");
+        setStatus("단계별 해설을 작성하는 중…", "busy");
         await wait2(1300);
         setState(solve, "done");
 
@@ -170,8 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const showsRetry = cycle % 3 === 0;
         if (showsRetry) {
           setState(verify, "retry");
-          verify.note.textContent = "이슈를 발견했어요 — 풀이 단계로 되돌아가요.";
-          setStatus("검증 실패 — 이슈를 반영해 다시 풀이하는 중…", "retry");
+          verify.note.textContent = "이슈를 발견했어요 — 해설 단계로 되돌아가요.";
+          setStatus("검증 실패 — 이슈를 반영해 해설을 다시 쓰는 중…", "retry");
           await wait2(1300);
 
           setState(verify, "");
