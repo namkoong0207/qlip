@@ -1,0 +1,104 @@
+---
+subject: physics
+unit: rotation-oscillation
+order: 110
+title: "만유인력과 원궤도 — 인공위성 속력·주기, 탈출 속도 예제"
+h1: "만유인력과 원궤도 운동"
+description: "뉴턴의 만유인력 F = GMm/r²을 구심력으로 두어 원궤도 속력 v = √(GM/r)과 주기를 구하는 방법, 탈출 속도 √(2GM/R)을 정리하고 고도 400 km 위성 예제를 단계별로 해설해요."
+summary:
+  - "만유인력 F = GMm/r²이 원궤도의 구심력 역할을 하므로 GMm/r² = mv²/r에서 v = √(GM/r)."
+  - "r은 지표면 높이가 아니라 지구 중심부터의 거리(R + h)다."
+  - "탈출 속도는 운동에너지가 중력 퍼텐셜 에너지 −GMm/R을 이길 때: v_esc = √(2GM/R)."
+keyword: "인공위성 궤도 속력"
+level: core
+prerequisites: [physics/circular-motion]
+checks:
+  - id: ex1
+    claim: "고도 400 km: v ≈ 7.67 km/s, 주기 ≈ 92.4분"
+    sympy: "Abs(sqrt(Float('6.674e-11')*Float('5.97e24')/(Float('6.37e6')+Float('4e5'))) - 7672) < 1 and Abs(2*pi*(Float('6.37e6')+Float('4e5'))/sqrt(Float('6.674e-11')*Float('5.97e24')/(Float('6.37e6')+Float('4e5')))/60 - 92.41) < 0.05"
+  - id: p1
+    claim: "지구 탈출 속도 ≈ 11.2 km/s"
+    sympy: "Abs(sqrt(2*Float('6.674e-11')*Float('5.97e24')/Float('6.37e6')) - 11185) < 1"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 계속 떨어지지만 땅에 닿지 않는 운동
+
+위성은 지구를 향해 계속 떨어지고 있지만, 옆으로 충분히 빠르게 움직이고 있어서 떨어지는 만큼 지표가 둥글게 멀어집니다. 이때 위성을 원궤도에 붙잡는 구심력이 바로 만유인력입니다. 두 힘을 같다고 두면 궤도 속력과 주기가 나오고, 중력 퍼텐셜 에너지를 이기는 속력을 구하면 탈출 속도가 나옵니다.
+
+## 핵심 공식
+
+$$
+F = \frac{GMm}{r^2}, \qquad \frac{GMm}{r^2} = \frac{mv^2}{r} \;\Longrightarrow\; v = \sqrt{\frac{GM}{r}},\quad T = \frac{2\pi r}{v}
+$$
+
+$$
+U = -\frac{GMm}{r}, \qquad v_{\text{esc}} = \sqrt{\frac{2GM}{R}}
+$$
+
+($G = 6.674\times10^{-11}\ \text{N·m}^2/\text{kg}^2$, 지구 $M = 5.97\times10^{24}\ \text{kg}$, $R = 6.37\times10^6\ \text{m}$)
+
+## 예제
+
+<Example>
+지표면에서 $400\ \text{km}$ 높이의 원궤도를 도는 위성의 속력과 주기를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="궤도 반지름을 구한다">
+$$
+r = R + h = 6.37\times10^6 + 0.40\times10^6 = 6.77\times10^6\ \text{m}
+$$
+</Step>
+
+<Step n={2} title="궤도 속력">
+$$
+v = \sqrt{\frac{(6.674\times10^{-11})(5.97\times10^{24})}{6.77\times10^6}} \approx 7.67\times10^3\ \text{m/s}
+$$
+</Step>
+
+<Step n={3} title="주기">
+$$
+T = \frac{2\pi(6.77\times10^6)}{7.67\times10^3} \approx 5.5\times10^3\ \text{s} \approx 92\ \text{분}
+$$
+
+국제우주정거장의 실제 주기(약 92분)와 비슷합니다. 위성의 질량은 약분되었습니다.
+</Step>
+
+<Answer>
+속력 약 $7.7\ \text{km/s}$, 주기 약 $92$분
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="r에 고도 h만 넣는다">
+만유인력의 $r$은 두 물체 중심 사이 거리입니다. 지구 반지름을 더해야 합니다.
+</Mistake>
+
+<Mistake title="km를 m로 바꾸지 않는다">
+$G$가 SI 단위라 거리도 m로 넣어야 합니다.
+</Mistake>
+
+<Mistake title="높은 궤도가 더 빠르다고 생각한다">
+$v = \sqrt{GM/r}$이라 높을수록 느리고 주기는 깁니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+지표면에서의 탈출 속도를 구하세요. (공기 저항 무시)
+</Fragment>
+
+$\frac12mv^2 - \frac{GMm}{R} = 0$에서 $v = \sqrt{2GM/R}$. 같은 위치의 원궤도 속력의 $\sqrt2$배입니다.
+
+**정답:** 약 $11.2\ \text{km/s}$
+</Practice>

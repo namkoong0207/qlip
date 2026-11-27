@@ -1,0 +1,102 @@
+---
+subject: physics
+unit: kinematics-dynamics
+order: 30
+title: "연결된 물체와 장력 — 도르래 문제 뉴턴 제2법칙 풀이"
+h1: "연결된 물체: 도르래와 장력 문제"
+description: "줄로 연결된 두 물체가 도르래를 지나 함께 움직일 때, 물체마다 자유물체도를 그리고 뉴턴 제2법칙을 세워 가속도와 장력을 구하는 방법을 예제로 해설해요. 애트우드 기계 연습 문제 포함."
+summary:
+  - "줄로 연결된 물체는 같은 크기의 가속도로 움직인다(줄이 늘어나지 않을 때)."
+  - "물체마다 따로 F = ma를 세우고, 두 식을 더하면 장력이 사라져 가속도가 바로 나온다."
+  - "가벼운 줄과 마찰 없는 도르래라면 줄 전체의 장력은 같다."
+keyword: "도르래 장력 문제"
+level: core
+prerequisites: [physics/incline-friction]
+related: [physics/rotational-inertia]
+checks:
+  - id: ex1
+    claim: "마찰 없는 책상 위 3 kg과 매달린 2 kg: a = 2g/5 ≈ 3.92 m/s², T ≈ 11.8 N"
+    sympy: "Abs(N(2*Rational(98,10)/5) - 3.92) < 1e-9 and Abs(N(3*2*Rational(98,10)/5) - 11.76) < 1e-9"
+  - id: p1
+    claim: "애트우드 5 kg, 3 kg: a = 2g/8 ≈ 2.45 m/s², T = 2·5·3g/8 ≈ 36.8 N"
+    sympy: "Abs(N(2*Rational(98,10)/8) - 2.45) < 1e-9 and Abs(N(30*Rational(98,10)/8) - 36.75) < 1e-9"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 물체마다 따로, 그러나 같은 가속도로
+
+줄로 묶인 두 물체는 한 몸처럼 같이 움직이지만, 각 물체에 작용하는 힘은 다릅니다. 그래서 **물체마다 자유물체도를 따로 그리고** 각자 $F = ma$를 세웁니다. 두 식에 공통으로 들어가는 장력 $T$는 내부 힘이라, 식을 더하면 사라지고 가속도가 바로 나옵니다. 엘리베이터, 크레인, 도르래 장치의 기본 모델입니다.
+
+## 핵심 공식
+
+물체마다 운동 방향을 $+$로 잡고
+
+$$
+\sum F_1 = m_1 a, \qquad \sum F_2 = m_2 a
+$$
+
+두 식을 더하면 계 전체: $\ (\text{외력의 합}) = (m_1 + m_2)\,a$
+
+## 예제
+
+<Example>
+마찰 없는 책상 위의 $3.0\ \text{kg}$ 상자가 줄에 묶여 책상 끝 도르래를 지나, 매달린 $2.0\ \text{kg}$ 추와 연결되어 있습니다. 가속도와 장력을 구하세요. ($g = 9.8\ \text{m/s}^2$)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="물체마다 식을 세운다">
+상자(오른쪽 $+$): $T = 3a$ 
+추(아래 $+$): $2g - T = 2a$
+</Step>
+
+<Step n={2} title="두 식을 더해 장력을 없앤다">
+$$
+2g = 5a \quad\Longrightarrow\quad a = \frac{2(9.8)}{5} = 3.92\ \text{m/s}^2
+$$
+</Step>
+
+<Step n={3} title="장력을 구한다">
+$$
+T = 3a = 11.76 \approx 11.8\ \text{N}
+$$
+
+장력이 추의 무게 $19.6\ \text{N}$보다 작아야 추가 아래로 가속하므로 맞습니다.
+</Step>
+
+<Answer>
+$a \approx 3.92\ \text{m/s}^2$, $T \approx 11.8\ \text{N}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="장력을 추의 무게 mg로 둔다">
+추가 가속하고 있으면 $T \neq mg$입니다. $T = mg$는 정지하거나 등속일 때만 성립합니다.
+</Mistake>
+
+<Mistake title="물체마다 방향을 제멋대로 잡는다">
+줄을 따라 같은 쪽으로 움직이는 방향을 각각 $+$로 잡아야 가속도가 같은 부호로 맞춰집니다.
+</Mistake>
+
+<Mistake title="전체 질량을 빼고 한 물체 질량으로 나눈다">
+계 전체로 보면 외력 $m_2g$가 질량 $m_1 + m_2$ 전체를 가속합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+도르래 양쪽에 $5.0\ \text{kg}$과 $3.0\ \text{kg}$이 매달린 애트우드 기계의 가속도와 장력은?
+</Fragment>
+
+$5g - T = 5a$, $T - 3g = 3a$를 더하면 $2g = 8a$. $T = 3(g + a)$.
+
+**정답:** $a \approx 2.45\ \text{m/s}^2$, $T \approx 36.8\ \text{N}$
+</Practice>

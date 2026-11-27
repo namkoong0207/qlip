@@ -1,0 +1,102 @@
+---
+subject: physics
+unit: fluids-thermo
+order: 130
+title: "열역학 제1법칙 ΔU = Q − W — 부호 약속과 등압 팽창 예제"
+h1: "열역학 제1법칙과 부호 약속"
+description: "계에 들어온 열 Q, 계가 한 일 W, 내부에너지 변화 ΔU 사이의 관계 ΔU = Q − W와 부호 약속을 정리하고, 등압 팽창에서 일 W = PΔV를 구하는 예제를 단계별로 해설해요. 교재마다 다른 부호 주의."
+summary:
+  - "열역학 제1법칙: ΔU = Q − W. 계가 받은 열은 내부에너지를 늘리거나 바깥에 일을 하는 데 쓰인다."
+  - "부호: 계가 열을 받으면 Q > 0, 계가 팽창하며 바깥에 일을 하면 W > 0."
+  - "압력이 일정하면 W = PΔV, 일반적으로 W = ∫P dV(P–V 그래프 아래 넓이)."
+keyword: "열역학 제1법칙 문제"
+level: intro
+related: [physics/ideal-gas-processes, chemistry/hess-law]
+checks:
+  - id: ex1
+    claim: "Q=500 J, W=200 J → ΔU = 300 J"
+    sympy: "500 - 200 == 300"
+  - id: p1
+    claim: "1.0×10⁵ Pa에서 0.010→0.030 m³ 팽창: W = 2000 J, Q=5000 J이면 ΔU = 3000 J"
+    sympy: "100000*(Rational(3,100) - Rational(1,100)) == 2000 and 5000 - 2000 == 3000"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 열도 에너지다
+
+기체를 데우면 온도가 오르거나(내부에너지 증가), 피스톤을 밀어내거나(일), 둘 다 일어납니다. 열역학 제1법칙은 이 세 양 사이의 **에너지 보존**입니다. 공식 자체는 단순하지만, $Q$와 $W$의 부호를 어느 쪽 기준으로 잡는지가 교재마다 달라서 대부분의 실수가 부호에서 나옵니다. 엔진, 냉장고, 화학 반응의 에너지 계산이 모두 여기서 출발합니다.
+
+## 핵심 공식
+
+$$
+\Delta U = Q - W
+$$
+
+| 양 | 양수일 때 |
+|---|---|
+| $Q$ | 계가 열을 **받음** |
+| $W$ | 계가 바깥에 일을 **함** (팽창) |
+| $\Delta U$ | 내부에너지 증가 (이상기체면 온도 상승) |
+
+$$
+W = \int_{V_1}^{V_2}P\,dV, \qquad \text{등압: } W = P\,\Delta V
+$$
+
+## 예제
+
+<Example>
+기체가 $500\ \text{J}$의 열을 받으면서 팽창해 바깥에 $200\ \text{J}$의 일을 했습니다. 내부에너지 변화는?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="부호를 정한다">
+열을 받았으므로 $Q = +500\ \text{J}$, 팽창하며 일을 했으므로 $W = +200\ \text{J}$.
+</Step>
+
+<Step n={2} title="제1법칙에 넣는다">
+$$
+\Delta U = 500 - 200 = 300\ \text{J}
+$$
+</Step>
+
+<Step n={3} title="의미를 해석한다">
+받은 열 $500\ \text{J}$ 중 $200\ \text{J}$은 바깥으로 일로 나가고, $300\ \text{J}$이 기체 안에 남아 온도를 올렸습니다.
+</Step>
+
+<Answer>
+$\Delta U = +300\ \text{J}$ (내부에너지 증가)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="교재의 부호 약속을 섞는다">
+일부 교재(특히 화학)는 '계가 **받은** 일'을 $W$로 써서 $\Delta U = Q + W$입니다. 한 문제 안에서는 한 가지 약속만 쓰세요.
+</Mistake>
+
+<Mistake title="압축인데 W를 양수로 둔다">
+기체가 압축되면 바깥이 기체에 일을 한 것이므로 이 약속에서는 $W \lt 0$입니다.
+</Mistake>
+
+<Mistake title="L·atm 단위로 일을 구하고 J로 바꾸지 않는다">
+$1\ \text{L·atm} \approx 101.3\ \text{J}$입니다. 열과 더하기 전에 단위를 맞추세요.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+압력 $1.0\times10^5\ \text{Pa}$로 일정한 채 기체의 부피가 $0.010\ \text{m}^3$에서 $0.030\ \text{m}^3$으로 늘었습니다. 기체가 한 일은? 이때 $5000\ \text{J}$의 열을 받았다면 $\Delta U$는?
+</Fragment>
+
+$W = P\Delta V = (1.0\times10^5)(0.020)$, $\Delta U = Q - W$.
+
+**정답:** $W = 2000\ \text{J}$, $\Delta U = 3000\ \text{J}$
+</Practice>

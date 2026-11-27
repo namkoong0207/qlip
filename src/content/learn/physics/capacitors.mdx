@@ -1,0 +1,106 @@
+---
+subject: physics
+unit: electromagnetism
+order: 180
+title: "축전기 — 평행판 전기용량, 직렬·병렬 연결, 저장 에너지 예제"
+h1: "축전기와 전기용량"
+description: "평행판 축전기의 전기용량 C = ε₀A/d, 직렬·병렬 연결의 합성 용량, 축전기에 저장된 에너지 ½CV²을 정리하고 예제로 해설해요. 저항과 반대인 직렬·병렬 공식 주의점 포함."
+summary:
+  - "전기용량 C = Q/V는 같은 전압에서 전하를 얼마나 많이 저장하는지를 나타내며, 평행판은 C = ε₀A/d."
+  - "병렬은 C = C₁ + C₂, 직렬은 1/C = 1/C₁ + 1/C₂. 저항과 반대다."
+  - "저장된 에너지는 U = ½CV² = Q²/(2C) = ½QV."
+keyword: "축전기 직렬 병렬"
+level: core
+prerequisites: [physics/electric-potential]
+related: [physics/rc-circuit]
+checks:
+  - id: ex1
+    claim: "A=0.010 m², d=1.0 mm: C = 8.85×10⁻¹¹ F = 88.5 pF"
+    sympy: "Abs(Float('8.85e-12')*Float('0.01')/Float('1e-3') - Float('8.85e-11')) < 1e-15"
+  - id: ex2
+    claim: "2 μF, 3 μF 직렬 = 1.2 μF, 10 V에서 에너지 60 μJ; 병렬 = 5 μF"
+    sympy: "1/(Rational(1,2)+Rational(1,3)) == Rational(6,5) and Rational(1,2)*Rational(6,5)*10**2 == 60 and 2+3 == 5"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 전하를 담아 두는 그릇
+
+축전기는 두 도체판 사이에 전하를 나눠 담아 에너지를 저장하는 소자입니다. 같은 전압을 걸었을 때 담기는 전하량이 클수록 전기용량이 크고, 판이 넓을수록, 간격이 좁을수록 커집니다. 카메라 플래시, 전원 평활 회로, 메모리 셀, 터치스크린이 모두 축전기의 원리를 씁니다.
+
+## 핵심 공식
+
+$$
+C = \frac QV, \qquad C_{\text{평행판}} = \frac{\varepsilon_0A}{d}\ \ (\varepsilon_0 = 8.85\times10^{-12}\ \text{F/m})
+$$
+
+$$
+\text{병렬: } C = C_1 + C_2, \qquad \text{직렬: } \frac1C = \frac1{C_1} + \frac1{C_2}, \qquad U = \frac12CV^2
+$$
+
+## 예제
+
+<Example>
+(1) 판의 넓이 $0.010\ \text{m}^2$, 간격 $1.0\ \text{mm}$인 평행판 축전기의 전기용량은?
+(2) $2.0\ \mu\text{F}$과 $3.0\ \mu\text{F}$을 직렬로 연결하고 $10\ \text{V}$를 걸었을 때 합성 용량과 저장된 에너지는?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 평행판 공식">
+$$
+C = \frac{(8.85\times10^{-12})(0.010)}{1.0\times10^{-3}} = 8.85\times10^{-11}\ \text{F} = 88.5\ \text{pF}
+$$
+
+일상적인 크기의 판으로는 아주 작은 용량이라, 실제 축전기는 판을 말거나 유전체를 넣습니다.
+</Step>
+
+<Step n={2} title="(2) 직렬 합성 용량">
+$$
+\frac1C = \frac12 + \frac13 = \frac56 \quad\Longrightarrow\quad C = 1.2\ \mu\text{F}
+$$
+
+직렬이면 합성 용량은 가장 작은 것보다도 작습니다.
+</Step>
+
+<Step n={3} title="(2) 저장된 에너지">
+$$
+U = \frac12(1.2\times10^{-6})(10)^2 = 6.0\times10^{-5}\ \text{J} = 60\ \mu\text{J}
+$$
+</Step>
+
+<Answer>
+(1) $88.5\ \text{pF}$ (2) $1.2\ \mu\text{F}$, $60\ \mu\text{J}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="저항의 직렬·병렬 공식을 그대로 쓴다">
+축전기는 저항과 반대입니다. 병렬일 때 그냥 더하고, 직렬일 때 역수로 더합니다.
+</Mistake>
+
+<Mistake title="mm, cm²를 m 단위로 바꾸지 않는다">
+$1\ \text{mm} = 10^{-3}\ \text{m}$, $1\ \text{cm}^2 = 10^{-4}\ \text{m}^2$입니다.
+</Mistake>
+
+<Mistake title="직렬에서 각 축전기 전압이 같다고 둔다">
+직렬에서는 전하량이 같고 전압이 나뉩니다. 병렬에서는 전압이 같고 전하량이 나뉩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+예제 (2)의 두 축전기를 병렬로 바꿔 $10\ \text{V}$를 걸면 합성 용량과 저장 에너지는?
+</Fragment>
+
+$C = 2.0 + 3.0 = 5.0\ \mu\text{F}$, $U = \frac12(5.0\times10^{-6})(100)$.
+
+**정답:** $5.0\ \mu\text{F}$, $250\ \mu\text{J}$
+</Practice>

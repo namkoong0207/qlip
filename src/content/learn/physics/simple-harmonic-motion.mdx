@@ -1,0 +1,105 @@
+---
+subject: physics
+unit: rotation-oscillation
+order: 100
+title: "단진동 — 각진동수·주기 공식, 최대 속력과 가속도 예제"
+h1: "단진동: 용수철과 진자"
+description: "복원력이 변위에 비례할 때 생기는 단진동 x = A cos(ωt + φ)의 각진동수 ω = √(k/m), 주기, 최대 속력 Aω, 최대 가속도 Aω²를 정리하고, 용수철 진동자와 단진자 예제를 해설해요."
+summary:
+  - "복원력 F = −kx이면 운동은 x = A cos(ωt + φ)인 단진동이고 ω = √(k/m)이다."
+  - "주기 T = 2π/ω는 진폭과 무관하다. 단진자는 작은 각에서 T = 2π√(L/g)."
+  - "최대 속력 v_max = Aω(평형점), 최대 가속도 a_max = Aω²(양 끝)."
+keyword: "단진동 주기 공식"
+level: core
+related: [physics/energy-conservation]
+checks:
+  - id: ex1
+    claim: "m=0.5 kg, k=200 N/m, A=0.05 m: ω=20 rad/s, T≈0.314 s, vmax=1 m/s, amax=20 m/s²"
+    sympy: "sqrt(Rational(200)/Rational(1,2)) == 20 and Abs(N(2*pi/20) - 0.3142) < 1e-4 and Rational(1,20)*20 == 1 and Rational(1,20)*400 == 20"
+  - id: ex2
+    claim: "x=A cos(ωt)가 x″ = −(k/m)x를 만족"
+    sympy: "(lambda t, A, w: simplify(diff(A*cos(w*t), t, 2) + w**2*A*cos(w*t)) == 0)(*symbols('t A w', positive=True))"
+  - id: p1
+    claim: "L=1.0 m 단진자 주기 ≈ 2.01 s"
+    sympy: "Abs(N(2*pi*sqrt(1/Rational(98,10))) - 2.007) < 1e-3"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 되돌리는 힘이 거리에 비례하면 사인 모양으로 흔들린다
+
+용수철에 매단 물체를 당겼다 놓으면, 늘어난 만큼 되돌리는 힘이 생겨 평형점을 지나 반대편으로 갔다가 다시 돌아옵니다. 복원력이 변위에 정확히 비례하면($F = -kx$) 이 왕복은 사인·코사인 모양을 그리고, 이를 단진동이라 합니다. 작은 각도로 흔들리는 진자, 분자 진동, LC 회로의 전류가 모두 같은 수학을 따릅니다.
+
+## 핵심 공식
+
+$$
+m\ddot x = -kx \;\Longrightarrow\; x(t) = A\cos(\omega t + \phi), \qquad \omega = \sqrt{\frac km},\quad T = \frac{2\pi}{\omega}
+$$
+
+$$
+v_{\max} = A\omega, \qquad a_{\max} = A\omega^2, \qquad \text{단진자: } T = 2\pi\sqrt{\frac Lg}
+$$
+
+## 예제
+
+<Example>
+질량 $0.50\ \text{kg}$인 물체가 용수철 상수 $200\ \text{N/m}$인 용수철에 매달려 진폭 $5.0\ \text{cm}$로 진동합니다. 각진동수, 주기, 최대 속력, 최대 가속도를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="각진동수와 주기">
+$$
+\omega = \sqrt{\frac{200}{0.50}} = 20\ \text{rad/s}, \qquad T = \frac{2\pi}{20} \approx 0.31\ \text{s}
+$$
+</Step>
+
+<Step n={2} title="최대 속력 (평형점)">
+$$
+v_{\max} = A\omega = (0.050)(20) = 1.0\ \text{m/s}
+$$
+</Step>
+
+<Step n={3} title="최대 가속도 (양 끝)">
+$$
+a_{\max} = A\omega^2 = (0.050)(400) = 20\ \text{m/s}^2
+$$
+
+에너지로 확인: $\frac12kA^2 = \frac12(200)(0.05)^2 = 0.25\ \text{J} = \frac12(0.5)(1.0)^2$.
+</Step>
+
+<Answer>
+$\omega = 20\ \text{rad/s}$, $T \approx 0.31\ \text{s}$, $v_{\max} = 1.0\ \text{m/s}$, $a_{\max} = 20\ \text{m/s}^2$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="cm를 m로 바꾸지 않는다">
+진폭 $5\ \text{cm}$를 $5$로 넣으면 속력과 가속도가 100배가 됩니다.
+</Mistake>
+
+<Mistake title="ω와 진동수 f를 섞는다">
+$\omega$는 rad/s, $f = \frac{\omega}{2\pi}$는 Hz입니다. 주기는 $T = \frac1f = \frac{2\pi}{\omega}$입니다.
+</Mistake>
+
+<Mistake title="진폭이 크면 주기도 길어진다고 생각한다">
+단진동의 주기는 진폭과 무관합니다. (진자는 각이 작을 때만 성립)
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+길이 $1.0\ \text{m}$인 단진자의 주기는? ($g = 9.8\ \text{m/s}^2$, 작은 각)
+</Fragment>
+
+$T = 2\pi\sqrt{\dfrac{1.0}{9.8}}$.
+
+**정답:** 약 $2.0\ \text{s}$
+</Practice>

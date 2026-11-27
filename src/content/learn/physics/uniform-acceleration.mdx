@@ -1,0 +1,99 @@
+---
+subject: physics
+unit: kinematics-dynamics
+order: 10
+title: "등가속도 운동 공식 4개 — 언제 무엇을 쓰나, 제동 거리 예제"
+h1: "등가속도 운동: 공식 고르는 법"
+description: "등가속도 직선 운동의 네 공식(v=v₀+at, x=v₀t+½at², v²=v₀²+2ax, x=(v₀+v)t/2)을 '모르는 양과 필요 없는 양'으로 고르는 방법을 정리하고, 제동 거리와 연직 위로 던진 공 예제를 해설해요."
+summary:
+  - "등가속도 운동의 다섯 양(v₀, v, a, t, x) 중 세 개를 알면 나머지 둘이 정해진다."
+  - "문제에 없는 양 하나를 빼고 나머지로 이루어진 공식을 고른다. 시간이 없으면 v² = v₀² + 2ax."
+  - "방향을 정하고 부호를 일관되게 쓴다. 감속이면 가속도 부호가 속도와 반대다."
+keyword: "등가속도 운동 공식"
+level: intro
+related: [physics/projectile-motion]
+checks:
+  - id: ex1
+    claim: "20 m/s에서 4 m/s²로 감속하면 정지 거리 50 m, 시간 5 s"
+    sympy: "Rational(20**2, 2*4) == 50 and Rational(20,4) == 5"
+  - id: p1
+    claim: "15 m/s로 던진 공: 최고 높이 ≈ 11.5 m, 걸린 시간 ≈ 1.53 s (g=9.8)"
+    sympy: "Abs(N(15**2/(2*Rational(98,10))) - 11.48) < 0.01 and Abs(N(15/Rational(98,10)) - 1.531) < 0.001"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 다섯 양, 네 공식
+
+가속도가 일정한 직선 운동은 처음 속도 $v_0$, 나중 속도 $v$, 가속도 $a$, 시간 $t$, 변위 $x$ 다섯 양으로 완전히 설명됩니다. 네 공식은 각각 이 중 하나씩을 빼고 만든 것이라, **문제에 나오지 않는 양**을 보면 쓸 공식이 바로 정해집니다. 자유낙하(가속도 $g$), 자동차 제동, 경사면 운동이 모두 이 공식으로 풀립니다.
+
+## 핵심 공식
+
+| 공식 | 없는 양 |
+|---|---|
+| $v = v_0 + at$ | $x$ |
+| $x = v_0t + \frac12 at^2$ | $v$ |
+| $v^2 = v_0^2 + 2ax$ | $t$ |
+| $x = \dfrac{v_0 + v}{2}\,t$ | $a$ |
+
+## 예제
+
+<Example>
+$20\ \text{m/s}$로 달리던 차가 일정하게 $4\ \text{m/s}^2$로 감속해 멈췄습니다. 멈출 때까지 이동한 거리와 걸린 시간을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="방향과 아는 양을 정리한다">
+운동 방향을 $+$로 잡으면 $v_0 = 20$, $v = 0$, $a = -4$ 입니다.
+</Step>
+
+<Step n={2} title="거리: 시간이 없는 공식">
+$$
+0 = 20^2 + 2(-4)x \quad\Longrightarrow\quad x = \frac{400}{8} = 50\ \text{m}
+$$
+</Step>
+
+<Step n={3} title="시간: 변위가 없는 공식">
+$$
+0 = 20 + (-4)t \quad\Longrightarrow\quad t = 5\ \text{s}
+$$
+
+검산: 평균 속도 $10\ \text{m/s}$로 $5\ \text{s}$ 가면 $50\ \text{m}$.
+</Step>
+
+<Answer>
+$50\ \text{m}$, $5\ \text{s}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="감속인데 가속도를 양수로 넣는다">
+속도와 반대 방향이면 $a$는 음수입니다. 양수로 넣으면 $x$가 음수로 나와 이상해집니다.
+</Mistake>
+
+<Mistake title="가속도가 변하는 운동에 쓴다">
+이 공식들은 가속도가 일정할 때만 성립합니다. 용수철이나 공기 저항이 있는 운동에는 쓸 수 없습니다.
+</Mistake>
+
+<Mistake title="연직 운동에서 g의 부호를 바꿔 쓴다">
+위를 $+$로 잡았다면 $a = -g$로 끝까지 유지해야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+공을 $15\ \text{m/s}$로 연직 위로 던졌습니다. 최고 높이와 최고점까지 걸린 시간은? ($g = 9.8\ \text{m/s}^2$)
+</Fragment>
+
+최고점에서 $v = 0$. $0 = 15^2 - 2gh$에서 $h = \dfrac{225}{19.6}$, $0 = 15 - gt$에서 $t = \dfrac{15}{9.8}$.
+
+**정답:** 약 $11.5\ \text{m}$, 약 $1.53\ \text{s}$
+</Practice>

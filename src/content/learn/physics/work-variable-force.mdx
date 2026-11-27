@@ -1,0 +1,98 @@
+---
+subject: physics
+unit: energy-momentum
+order: 55
+title: "일-에너지 정리와 변하는 힘이 한 일 — 적분으로 일 구하기"
+h1: "일-에너지 정리: 변하는 힘이 한 일"
+description: "힘이 위치에 따라 변할 때 일을 W = ∫F dx로 구하는 방법과, 알짜일이 운동에너지 변화와 같다는 일-에너지 정리를 정리하고 용수철과 F = 3x² 예제를 단계별로 해설해요."
+summary:
+  - "일정한 힘의 일은 W = Fd cosθ, 위치에 따라 변하는 힘의 일은 W = ∫F(x)dx이다."
+  - "용수철을 x₁에서 x₂까지 늘리는 일은 ½k(x₂² − x₁²)이다."
+  - "알짜힘이 한 일 = 운동에너지 변화(W = ΔK). 이것이 일-에너지 정리다."
+keyword: "일 에너지 정리"
+level: core
+related: [physics/energy-conservation]
+checks:
+  - id: ex1
+    claim: "F=3x²가 0~2 m에서 한 일 = 8 J, 1 kg 정지 물체면 v=4 m/s"
+    sympy: "(lambda x: integrate(3*x**2, (x,0,2)) == 8 and sqrt(2*8/1) == 4)(Symbol('x'))"
+  - id: p1
+    claim: "k=400 N/m 용수철을 0.05→0.10 m 늘리는 일 = 1.5 J"
+    sympy: "Rational(1,2)*400*(Rational(1,10)**2 - Rational(1,20)**2) == Rational(3,2)"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 힘 × 거리의 합
+
+힘이 일정하면 일은 힘과 이동 거리의 곱이지만, 용수철처럼 늘어날수록 힘이 커지면 단순히 곱할 수 없습니다. 이동 구간을 잘게 나누면 각 조각에서는 힘이 거의 일정하므로, 조각마다 $F\,dx$를 구해 더하면 됩니다. 이것이 적분 $W = \int F\,dx$이고, 그래프로는 힘-위치 그래프 아래 넓이입니다. 알짜힘이 한 일은 운동에너지의 변화와 같아서, 속력을 구하는 데 바로 쓸 수 있습니다.
+
+## 핵심 공식
+
+$$
+W = \int_{x_1}^{x_2}F(x)\,dx, \qquad W_{\text{용수철 늘리기}} = \frac12 k\left(x_2^2 - x_1^2\right)
+$$
+
+$$
+W_{\text{알짜}} = \Delta K = \frac12 mv_2^2 - \frac12 mv_1^2
+$$
+
+## 예제
+
+<Example>
+질량 $1.0\ \text{kg}$인 물체에 $F(x) = 3x^2$ (N, $x$는 m)인 힘이 $x$ 방향으로 작용합니다. 정지 상태에서 $x = 0$부터 $x = 2\ \text{m}$까지 움직였을 때 힘이 한 일과 나중 속력을 구하세요. (다른 힘은 무시)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="일을 적분한다">
+$$
+W = \int_0^2 3x^2\,dx = \Big[x^3\Big]_0^2 = 8\ \text{J}
+$$
+</Step>
+
+<Step n={2} title="일-에너지 정리를 쓴다">
+이 힘만 작용하므로 알짜일이 $8\ \text{J}$입니다. $\frac12(1.0)v^2 - 0 = 8$.
+</Step>
+
+<Step n={3} title="속력을 구한다">
+$$
+v = \sqrt{16} = 4\ \text{m/s}
+$$
+</Step>
+
+<Answer>
+일 $8\ \text{J}$, 나중 속력 $4\ \text{m/s}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="변하는 힘에 F × 거리를 쓴다">
+$F(2) \times 2 = 24\ \text{J}$로 쓰면 틀립니다. 힘이 변하면 반드시 적분(그래프 넓이)으로 구합니다.
+</Mistake>
+
+<Mistake title="용수철 일을 ½k(x₂ − x₁)²로 쓴다">
+$\frac12k(x_2^2 - x_1^2)$와 $\frac12k(x_2 - x_1)^2$는 다릅니다. 처음부터 늘어나 있던 상태라면 차이가 큽니다.
+</Mistake>
+
+<Mistake title="알짜일 대신 한 힘의 일만 쓴다">
+마찰 같은 다른 힘이 있으면 그 일까지 합한 알짜일이 운동에너지 변화와 같습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+용수철 상수 $400\ \text{N/m}$인 용수철을 $5\ \text{cm}$ 늘어난 상태에서 $10\ \text{cm}$까지 더 늘리는 데 필요한 일은?
+</Fragment>
+
+$\frac12(400)\big(0.10^2 - 0.05^2\big) = 200(0.0075)$.
+
+**정답:** $1.5\ \text{J}$
+</Practice>
