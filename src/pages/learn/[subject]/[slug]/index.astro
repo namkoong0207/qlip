@@ -1,0 +1,111 @@
+---
+import "katex/dist/katex.min.css";
+import { render, getEntries } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PageHead from "../../../../components/PageHead.astro";
+import Download from "../../../../components/Download.astro";
+import Example from "../../../../components/learn/Example.astro";
+import Step from "../../../../components/learn/Step.astro";
+import Answer from "../../../../components/learn/Answer.astro";
+import Mistake from "../../../../components/learn/Mistake.astro";
+import Practice from "../../../../components/learn/Practice.astro";
+import { learnEntries, pathOf, slugOf, isLive, type LearnEntry } from "../../../../lib/learn";
+import { subjectBySlug } from "../../../../data/subjects";
+import { articleLd, breadcrumbLd } from "../../../../lib/jsonld";
+
+export async function getStaticPaths() {
+  const entries = await learnEntries();
+  return entries.map((entry) => ({
+    params: { subject: entry.data.subject, slug: slugOf(entry) },
+    props: { entry, all: entries },
+  }));
+}
+
+const { entry, all } = Astro.props as { entry: LearnEntry; all: LearnEntry[] };
+const d = entry.data;
+const subject = subjectBySlug(d.subject)!;
+const unit = subject.units.find((u) => u.slug === d.unit);
+const path = pathOf(entry);
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+
+const live = new Set(all.map((e) => e.id));
+const resolve = async (refs: { collection: "learn"; id: string }[]) =>
+  (await getEntries(refs)).filter((e): e is LearnEntry => !!e && live.has(e.id));
+const prereqs = await resolve(d.prerequisites);
+const related = await resolve(d.related);
+const sameUnit = all.filter((e) => e.data.subject === d.subject && e.data.unit === d.unit && e.id !== entry.id);
+
+const crumbs = [
+  { name: "학습 라이브러리", path: "/learn/" },
+  { name: subject.name, path: `/learn/${subject.slug}/` },
+  { name: d.h1, path },
+];
+const fmt = (x: Date) => `${x.getFullYear()}.${String(x.getMonth() + 1).padStart(2, "0")}.${String(x.getDate()).padStart(2, "0")}`;
+const reviewed = isLive(entry);
+const campaign = `web_learn_${d.subject.replace(/-/g, "_")}`;
+---
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  path={path}
+  ogType="article"
+  section="learn"
+  campaign={campaign}
+  noindex={!reviewed}
+  jsonLd={[
+    breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs]),
+    articleLd({ title: d.title, description: d.description, path, published: d.created, modified: d.updated, author: d.author, reviewer: d.review?.by, learning: { subject: subject.name, level: d.level } }),
+  ]}
+>
+  {!reviewed && <div class="draft-banner" role="note">검수 전 미리보기 — 운영 사이트에는 공개되지 않아요 (status: {d.status})</div>}
+  <PageHead crumbs={crumbs} eyebrow={`${subject.name}${unit ? ` · ${unit.name}` : ""}`} h1={d.h1}>
+    <p class="learn-meta">
+      {d.review ? <span class="badge-verified">✓ 검수 완료</span> : <span>검수 대기</span>}
+      <span>작성 {d.author}</span>
+      {d.review && <span>검수 {d.review.by}{d.review.credential ? ` (${d.review.credential})` : ""}</span>}
+      <span>최종 수정 <time datetime={d.updated.toISOString().slice(0, 10)}>{fmt(d.updated)}</time></span>
+    </p>
+  </PageHead>
+
+  <div class="container learn-grid">
+    <article class="prose">
+      <div class="summary-box">
+        <div class="ex-label">핵심 요약</div>
+        <ul>{d.summary.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      {prereqs.length > 0 && (
+        <p class="muted">먼저 알면 좋은 개념: {prereqs.map((p, i) => <>{i > 0 && " · "}<a href={pathOf(p)}>{p.data.h1}</a></>)}</p>
+      )}
+      <Content components={{ Example, Step, Answer, Mistake, Practice }} />
+
+      <aside class="learn-cta">
+        <h2>내 문제도 이렇게 해설받으려면</h2>
+        <p>교재나 족보의 {subject.name} 문제를 사진으로 찍으면, Qlip이 이 페이지처럼 단계별 해설을 만들고 다른 AI가 다시 풀어 검증해요. 막힌 단계는 그 자리에서 물어볼 수 있어요.</p>
+        <Download campaign={campaign} loc="learn_cta" />
+      </aside>
+
+      <section class="learn-related">
+        {(related.length > 0 || sameUnit.length > 0) && <h2>관련 개념</h2>}
+        <ul class="related-list">
+          {[...related, ...sameUnit.filter((e) => !related.some((r) => r.id === e.id))].slice(0, 6).map((e) => (
+            <li><a href={pathOf(e)}><b>{e.data.h1}</b><span>{e.data.summary[0]}</span></a></li>
+          ))}
+        </ul>
+        <p style="margin-top:16px;"><a class="link-arrow" href={`/learn/${subject.slug}/`}>{subject.name} 전체 목록</a></p>
+      </section>
+
+      <p class="muted learn-foot">
+        이 페이지의 예제와 연습 문제는 Qlip이 직접 만든 문제예요. AI로 초안을 만들고 정답을 수식 계산으로 다시 확인했어요{reviewed ? ", 그리고 사람이 검수한 뒤 공개했어요" : ". 아직 사람의 검수 전이에요"}.
+        오류를 발견하면 <a href={`mailto:support@qlip.kr?subject=${encodeURIComponent(`[학습 라이브러리 오류] ${d.h1}`)}`}>support@qlip.kr</a>로 알려 주세요.
+      </p>
+    </article>
+
+    {toc.length > 2 && (
+      <nav class="toc" aria-label="목차">
+        <div class="ex-label">목차</div>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </nav>
+    )}
+  </div>
+</BaseLayout>

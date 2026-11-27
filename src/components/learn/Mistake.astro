@@ -1,0 +1,8 @@
+---
+/** One common mistake: what goes wrong, then how to get it right. */
+const { title } = Astro.props as { title: string };
+---
+<div class="mistake">
+  <h3>{title}</h3>
+  <slot />
+</div>

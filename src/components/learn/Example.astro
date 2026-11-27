@@ -1,0 +1,8 @@
+---
+/** A worked example's problem statement. Original problems only (see provenance). */
+const { label = "예제" } = Astro.props as { label?: string };
+---
+<div class="ex-problem">
+  <div class="ex-label">{label}</div>
+  <slot />
+</div>

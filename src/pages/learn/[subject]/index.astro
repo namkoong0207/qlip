@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHead from "../../../components/PageHead.astro";
+import Download from "../../../components/Download.astro";
+import { SUBJECTS, type Subject } from "../../../data/subjects";
+import { learnEntries, pathOf, isLive, type LearnEntry } from "../../../lib/learn";
+import { breadcrumbLd } from "../../../lib/jsonld";
+
+export async function getStaticPaths() {
+  const entries = await learnEntries();
+  return SUBJECTS.map((subject) => ({
+    params: { subject: subject.slug },
+    props: { subject, entries: entries.filter((e) => e.data.subject === subject.slug) },
+  }));
+}
+const { subject, entries } = Astro.props as { subject: Subject; entries: LearnEntry[] };
+const path = `/learn/${subject.slug}/`;
+const crumbs = [{ name: "학습 라이브러리", path: "/learn/" }, { name: subject.name, path }];
+const units = subject.units.map((u) => ({ ...u, entries: entries.filter((e) => e.data.unit === u.slug) })).filter((u) => u.entries.length);
+const campaign = `web_learn_${subject.slug.replace(/-/g, "_")}_hub`;
+// A hub with nothing reviewed in it yet says so, and stays out of the index.
+const empty = entries.filter(isLive).length === 0;
+---
+<BaseLayout
+  title={`${subject.name} 개념과 문제 풀이 — 공식, 예제, 단계별 해설`}
+  description={`대학 ${subject.name}(${subject.short}) 핵심 개념을 공식, 직접 만든 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 정리했어요. 무료로 공부하고, 내 문제는 Qlip 앱으로 해설받으세요.`}
+  path={path}
+  section="learn"
+  campaign={campaign}
+  noindex={empty}
+  jsonLd={[breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs])]}
+>
+  <PageHead crumbs={crumbs} eyebrow="학습 라이브러리" h1={`${subject.name} 개념과 문제 풀이`} lead={subject.intro} />
+
+  <section class="section">
+    <div class="container">
+      {units.length === 0 && <p class="lead">첫 콘텐츠를 검수하고 있어요. 곧 공개할게요.</p>}
+      {units.map((u) => (
+        <div class="unit-block">
+          <h2>{u.name}</h2>
+          <div class="grid grid-2">
+            {u.entries.map((e) => (
+              <a class="card" href={pathOf(e)}>
+                <h3>{e.data.h1}</h3>
+                <p>{e.data.summary[0]}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container split" style="align-items:start;">
+      <div>
+        <h2>{subject.name} 시험 대비 팁</h2>
+        <ul class="steps">{subject.examTips.map((t) => <li><div><span>{t}</span></div></li>)}</ul>
+      </div>
+      <div class="card">
+        <h2 style="font-size:22px;margin-bottom:10px;">교재·족보의 {subject.name} 문제는 앱으로</h2>
+        <p>라이브러리는 개념을 잡는 곳이에요. 과제나 족보의 문제는 Qlip 앱에서 사진으로 찍으면 단계별 해설을 받고, 막힌 단계를 바로 물어볼 수 있어요.</p>
+        <div style="margin-top:20px;"><Download campaign={campaign} loc="learn_hub" /></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
