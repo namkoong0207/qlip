@@ -1,0 +1,133 @@
+---
+subject: engineering-math
+unit: second-order-ode
+order: 5
+title: "미정계수법 — 특수해 추측 표, 공명(중복) 수정, 예제 풀이"
+h1: "미정계수법으로 비동차 미분방정식 풀기"
+description: "ay″+by′+cy=g(x)에서 g(x)가 다항식·지수·삼각함수일 때 특수해의 꼴을 추측해 계수를 정하는 미정계수법을 정리했어요. 추측이 동차해와 겹칠 때 x를 곱하는 규칙과 예제, 연습 문제까지."
+summary:
+  - "비동차 방정식의 일반해 = 동차해 y_h + 특수해 y_p이다."
+  - "g(x)와 같은 종류의 함수(다항식, e^{kx}, sin·cos)로 y_p를 추측하고, 대입해 계수를 정한다."
+  - "추측한 항이 동차해와 겹치면 겹치지 않을 때까지 x를 곱한다."
+keyword: "미정계수법 특수해"
+level: core
+checks:
+  - id: ex1
+    claim: "y″−3y′+2y=4x의 특수해 y_p=2x+3"
+    sympy: "(lambda x: simplify(diff(2*x+3, x, 2) - 3*diff(2*x+3, x) + 2*(2*x+3) - 4*x) == 0)(Symbol('x'))"
+  - id: ex2
+    claim: "y″−y=2eˣ의 특수해 y_p=xeˣ (eˣ가 동차해라 x를 곱함)"
+    sympy: "(lambda x: simplify(diff(x*exp(x), x, 2) - x*exp(x) - 2*exp(x)) == 0 and simplify(diff(exp(x), x, 2) - exp(x)) == 0)(Symbol('x'))"
+  - id: p1
+    claim: "y″+y=3e^{2x}의 특수해 (3/5)e^{2x}"
+    sympy: "(lambda x: simplify(diff(Rational(3,5)*exp(2*x), x, 2) + Rational(3,5)*exp(2*x) - 3*exp(2*x)) == 0)(Symbol('x'))"
+  - id: p2
+    claim: "y″+4y=8cos x의 특수해 (8/3)cos x"
+    sympy: "(lambda x: simplify(diff(Rational(8,3)*cos(x), x, 2) + 4*Rational(8,3)*cos(x) - 8*cos(x)) == 0)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 답의 '모양'을 먼저 맞히고 숫자를 정한다
+
+$ay'' + by' + cy = g(x)$에서 좌변에 무엇을 넣어야 $g(x)$가 나올지 생각해 보세요. 다항식을 미분하면 다항식, $e^{kx}$를 미분하면 $e^{kx}$, $\sin$과 $\cos$은 서로 바뀝니다. 그래서 $g(x)$가 이런 함수들이면 **특수해도 같은 종류일 것**이라고 추측할 수 있습니다. 계수만 미정으로 두고 대입해서 정하는 방법이 미정계수법입니다.
+
+일반해는 동차 방정식의 해 $y_h$(특성방정식으로 구함)에 특수해 $y_p$를 더한 것입니다. 진동계에 외력이 가해질 때의 강제 응답, 직류·교류 전원이 걸린 RLC 회로가 이 꼴입니다.
+
+## 핵심 공식
+
+$$
+y = y_h + y_p
+$$
+
+| $g(x)$ | 특수해 추측 $y_p$ |
+|---|---|
+| $n$차 다항식 | $A_nx^n + \cdots + A_1x + A_0$ |
+| $e^{kx}$ | $Ae^{kx}$ |
+| $\cos\omega x$ 또는 $\sin\omega x$ | $A\cos\omega x + B\sin\omega x$ |
+| 위의 곱 | 각 추측의 곱 |
+
+**수정 규칙:** 추측한 항 중 하나라도 $y_h$에 들어 있으면, 겹치지 않을 때까지 추측 전체에 $x$를 곱합니다(보통 $x$ 또는 $x^2$).
+
+## 예제
+
+<Example>
+(1) $y'' - 3y' + 2y = 4x$의 일반해를 구하세요.
+
+(2) $y'' - y = 2e^{x}$의 특수해를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 동차해를 구한다">
+특성방정식 $r^2 - 3r + 2 = (r - 1)(r - 2) = 0$이므로 $y_h = C_1e^{x} + C_2e^{2x}$ 입니다.
+</Step>
+
+<Step n={2} title="(1) 특수해의 꼴을 추측한다">
+$g(x) = 4x$는 1차 다항식이므로 $y_p = Ax + B$로 둡니다. 상수항 $B$도 반드시 넣습니다. $y_h$와 겹치는 항은 없습니다.
+</Step>
+
+<Step n={3} title="(1) 대입해서 계수를 비교한다">
+$y_p' = A$, $y_p'' = 0$이므로
+
+$$
+0 - 3A + 2(Ax + B) = 4x \quad\Longrightarrow\quad 2A\,x + (2B - 3A) = 4x
+$$
+
+$x$의 계수: $2A = 4$, $A = 2$. 상수항: $2B - 6 = 0$, $B = 3$. 따라서 $y_p = 2x + 3$ 입니다.
+</Step>
+
+<Step n={4} title="(2) 추측이 동차해와 겹치는지 확인한다">
+$y'' - y = 0$의 특성근은 $\pm1$이므로 $y_h = C_1e^{x} + C_2e^{-x}$ 입니다. $g(x) = 2e^x$를 보고 $Ae^{x}$로 추측하면 이것이 $y_h$에 이미 있어서 좌변이 $0$이 됩니다. 그래서 $x$를 곱해 $y_p = Axe^{x}$로 둡니다.
+</Step>
+
+<Step n={5} title="(2) 대입해서 A를 정한다">
+$y_p' = A(1 + x)e^x$, $y_p'' = A(2 + x)e^x$ 이므로
+
+$$
+A(2 + x)e^x - Axe^x = 2Ae^x = 2e^x \quad\Longrightarrow\quad A = 1
+$$
+</Step>
+
+<Answer>
+(1) $y = C_1e^{x} + C_2e^{2x} + 2x + 3$ (2) $y_p = xe^{x}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="다항식 추측에서 낮은 차수 항을 빠뜨린다">
+$g(x) = 4x$라고 $y_p = Ax$로만 두면 상수항을 맞출 수 없어 모순이 생깁니다. $n$차 다항식이면 $n$차부터 상수항까지 모두 넣어야 합니다.
+</Mistake>
+
+<Mistake title="cos만 있다고 sin 항을 빼고 추측한다">
+$g(x) = 8\cos x$여도 일반적으로 $A\cos x + B\sin x$로 둬야 합니다. $y'$ 항이 있으면 미분할 때 $\sin$이 생기기 때문입니다. 계산 결과 $B = 0$이 나올 수는 있습니다.
+</Mistake>
+
+<Mistake title="겹침을 확인하지 않는다">
+추측이 동차해와 겹치면 대입했을 때 좌변이 $0$이 되어 "$0 = 2e^x$" 같은 모순이 나옵니다. 이것이 보이면 $x$를 곱하라는 신호입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y'' + y = 3e^{2x}$의 특수해를 구하세요.
+</Fragment>
+
+$y_h$는 $\cos x$, $\sin x$이므로 겹치지 않습니다. $y_p = Ae^{2x}$를 넣으면 $4A + A = 3$.
+
+**정답:** $y_p = \dfrac35 e^{2x}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$y'' + 4y = 8\cos x$의 특수해를 구하세요.
+</Fragment>
+
+$y_h$는 $\cos 2x$, $\sin 2x$라 $\cos x$와 겹치지 않습니다. $y_p = A\cos x + B\sin x$를 넣으면 $3A\cos x + 3B\sin x = 8\cos x$ 이므로 $A = \frac83$, $B = 0$.
+
+**정답:** $y_p = \dfrac83\cos x$
+</Practice>

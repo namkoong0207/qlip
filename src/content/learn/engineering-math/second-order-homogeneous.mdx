@@ -1,0 +1,131 @@
+---
+subject: engineering-math
+unit: second-order-ode
+order: 4
+title: "2계 상수계수 동차 미분방정식 — 특성방정식 세 경우와 예제"
+h1: "2계 상수계수 동차 미분방정식: 특성방정식으로 풀기"
+description: "ay″ + by′ + cy = 0을 특성방정식 ar² + br + c = 0으로 푸는 방법을 서로 다른 실근, 중근, 복소근 세 경우로 정리하고, 초기값 문제를 단계별로 해설해요. 흔한 실수와 연습 문제 포함."
+summary:
+  - "y = e^{rx}를 넣으면 ay″ + by′ + cy = 0이 특성방정식 ar² + br + c = 0이 된다."
+  - "근이 서로 다른 실근이면 C₁e^{r₁x} + C₂e^{r₂x}, 중근이면 (C₁ + C₂x)e^{rx}, 복소근 α ± βi면 e^{αx}(C₁cos βx + C₂sin βx)."
+  - "두 초기값 y(0), y′(0)으로 두 상수를 정한다."
+keyword: "2계 상수계수 동차 미분방정식"
+level: core
+checks:
+  - id: ex1
+    claim: "y″−y′−6y=0, y(0)=3, y′(0)=4의 해 2e^{3x}+e^{−2x}"
+    sympy: "(lambda x: simplify(diff(2*exp(3*x)+exp(-2*x), x, 2) - diff(2*exp(3*x)+exp(-2*x), x) - 6*(2*exp(3*x)+exp(-2*x))) == 0 and (2*exp(3*x)+exp(-2*x)).subs(x, 0) == 3 and diff(2*exp(3*x)+exp(-2*x), x).subs(x, 0) == 4)(Symbol('x'))"
+  - id: p1
+    claim: "y″+4y′+4y=0, y(0)=1, y′(0)=0의 해 (1+2x)e^{−2x}"
+    sympy: "(lambda x: simplify(diff((1+2*x)*exp(-2*x), x, 2) + 4*diff((1+2*x)*exp(-2*x), x) + 4*(1+2*x)*exp(-2*x)) == 0 and ((1+2*x)*exp(-2*x)).subs(x, 0) == 1 and diff((1+2*x)*exp(-2*x), x).subs(x, 0) == 0)(Symbol('x'))"
+  - id: p2
+    claim: "y″+2y′+5y=0, y(0)=1, y′(0)=1의 해 e^{−x}(cos2x+sin2x)"
+    sympy: "(lambda x: simplify(diff(exp(-x)*(cos(2*x)+sin(2*x)), x, 2) + 2*diff(exp(-x)*(cos(2*x)+sin(2*x)), x) + 5*exp(-x)*(cos(2*x)+sin(2*x))) == 0 and (exp(-x)*(cos(2*x)+sin(2*x))).subs(x, 0) == 1 and diff(exp(-x)*(cos(2*x)+sin(2*x)), x).subs(x, 0) == 1)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 지수함수를 넣어 보면 대수 방정식이 된다
+
+상수계수 선형 동차 방정식에서 $y$, $y'$, $y''$의 일차결합이 $0$이 되려면, 미분해도 모양이 바뀌지 않는 함수가 후보가 됩니다. 바로 지수함수 $e^{rx}$입니다. $y = e^{rx}$를 넣으면 모든 항에 $e^{rx}$가 공통으로 붙고, 남는 것은 $r$에 대한 이차방정식뿐입니다.
+
+이차방정식의 근이 어떤 종류인지에 따라 해의 모양이 세 가지로 갈립니다. 스프링-질량-댐퍼 시스템에서 이 세 경우가 각각 과감쇠, 임계감쇠, 부족감쇠(진동)에 해당합니다.
+
+## 핵심 공식
+
+$$
+ay'' + by' + cy = 0 \quad\xrightarrow{\;y = e^{rx}\;}\quad ar^2 + br + c = 0
+$$
+
+| 판별식 $b^2 - 4ac$ | 근 | 일반해 |
+|---|---|---|
+| $\gt 0$ | 서로 다른 실근 $r_1, r_2$ | $y = C_1e^{r_1x} + C_2e^{r_2x}$ |
+| $= 0$ | 중근 $r$ | $y = (C_1 + C_2x)\,e^{rx}$ |
+| $\lt 0$ | 복소근 $\alpha \pm \beta i$ | $y = e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$ |
+
+## 예제
+
+<Example>
+$y'' - y' - 6y = 0$, $y(0) = 3$, $y'(0) = 4$를 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="특성방정식을 세운다">
+$y''$ → $r^2$, $y'$ → $r$, $y$ → $1$로 바꿉니다.
+
+$$
+r^2 - r - 6 = 0
+$$
+</Step>
+
+<Step n={2} title="근을 구해 경우를 정한다">
+$$
+(r - 3)(r + 2) = 0 \quad\Longrightarrow\quad r_1 = 3,\ r_2 = -2
+$$
+
+서로 다른 실근이므로 $y = C_1e^{3x} + C_2e^{-2x}$ 입니다.
+</Step>
+
+<Step n={3} title="초기값으로 연립방정식을 만든다">
+$y' = 3C_1e^{3x} - 2C_2e^{-2x}$ 이므로
+
+$$
+y(0) = C_1 + C_2 = 3, \qquad y'(0) = 3C_1 - 2C_2 = 4
+$$
+</Step>
+
+<Step n={4} title="풀어서 해를 쓴다">
+첫 식에 2를 곱해 더하면 $5C_1 = 10$, $C_1 = 2$, $C_2 = 1$ 입니다.
+
+$$
+y = 2e^{3x} + e^{-2x}
+$$
+</Step>
+
+<Step n={5} title="검산한다">
+$y(0) = 2 + 1 = 3$, $y'(0) = 6 - 2 = 4$로 맞습니다. $e^{3x}$를 방정식에 넣으면 $9 - 3 - 6 = 0$, $e^{-2x}$는 $4 + 2 - 6 = 0$으로 각각 해입니다.
+</Step>
+
+<Answer>
+$y = 2e^{3x} + e^{-2x}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="중근에서 x를 곱한 해를 빠뜨린다">
+중근 $r$이면 $e^{rx}$ 하나만으로는 해가 하나뿐이라 초기값 두 개를 맞출 수 없습니다. 두 번째 독립해는 $xe^{rx}$ 입니다.
+</Mistake>
+
+<Mistake title="복소근의 실수부를 잊는다">
+근이 $-1 \pm 2i$이면 해는 $e^{-x}(\cos 2x + \ldots)$입니다. $e^{\alpha x}$를 빼고 $\cos 2x$, $\sin 2x$만 쓰면 감쇠가 사라진 틀린 해가 됩니다.
+</Mistake>
+
+<Mistake title="y′(0)을 구할 때 지수의 계수를 곱하지 않는다">
+$C_1e^{3x}$를 미분하면 $3C_1e^{3x}$입니다. 초기값 식을 세울 때 일반해를 먼저 미분해 적어 두면 실수가 줄어듭니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y'' + 4y' + 4y = 0$, $y(0) = 1$, $y'(0) = 0$을 푸세요.
+</Fragment>
+
+$r^2 + 4r + 4 = (r + 2)^2$이므로 중근 $r = -2$, $y = (C_1 + C_2x)e^{-2x}$ 입니다. $y(0) = C_1 = 1$, $y'(0) = C_2 - 2C_1 = 0$에서 $C_2 = 2$.
+
+**정답:** $y = (1 + 2x)e^{-2x}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$y'' + 2y' + 5y = 0$, $y(0) = 1$, $y'(0) = 1$을 푸세요.
+</Fragment>
+
+$r = \dfrac{-2 \pm \sqrt{4 - 20}}{2} = -1 \pm 2i$ 이므로 $y = e^{-x}(C_1\cos 2x + C_2\sin 2x)$ 입니다. $y(0) = C_1 = 1$, $y'(0) = -C_1 + 2C_2 = 1$에서 $C_2 = 1$.
+
+**정답:** $y = e^{-x}(\cos 2x + \sin 2x)$
+</Practice>

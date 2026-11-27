@@ -1,0 +1,144 @@
+---
+subject: engineering-math
+unit: first-order-ode
+order: 2
+title: "1계 선형 미분방정식 — 적분인자 공식과 단계별 풀이"
+h1: "1계 선형 미분방정식과 적분인자"
+description: "y′ + P(x)y = Q(x) 꼴의 1계 선형 미분방정식을 적분인자 e^{∫P dx}로 푸는 방법을 정리하고, 표준형 만들기부터 초기값 대입까지 예제를 단계별로 해설해요. 흔한 실수와 연습 문제 포함."
+summary:
+  - "1계 선형 미분방정식은 먼저 y′ 계수를 1로 만든 표준형 y′ + P(x)y = Q(x)로 정리한다."
+  - "적분인자 μ = e^{∫P dx}를 양변에 곱하면 좌변이 (μy)′ 하나로 묶인다."
+  - "(μy)′ = μQ를 적분하고 μ로 나누면 일반해가 나오며, 적분상수는 초기값으로 정한다."
+keyword: "1계 선형 미분방정식 적분인자"
+level: intro
+checks:
+  - id: ex1
+    claim: "y′+(2/t)y=t, y(1)=1/2의 해 y=(t⁴+1)/(4t²)"
+    sympy: "(lambda t: simplify(diff((t**4+1)/(4*t**2), t) + 2/t*(t**4+1)/(4*t**2) - t) == 0 and ((t**4+1)/(4*t**2)).subs(t, 1) == Rational(1,2))(Symbol('t', positive=True))"
+  - id: ex2
+    claim: "y′+2xy=x, y(0)=2의 해 y=1/2+(3/2)e^{−x²}"
+    sympy: "(lambda x: simplify(diff(Rational(1,2)+Rational(3,2)*exp(-x**2), x) + 2*x*(Rational(1,2)+Rational(3,2)*exp(-x**2)) - x) == 0 and (Rational(1,2)+Rational(3,2)*exp(-x**2)).subs(x, 0) == 2)(Symbol('x'))"
+  - id: p1
+    claim: "y′−3y=6, y(0)=1의 해 y=3e^{3x}−2"
+    sympy: "(lambda x: simplify(diff(3*exp(3*x)-2, x) - 3*(3*exp(3*x)-2) - 6) == 0 and (3*exp(3*x)-2).subs(x, 0) == 1)(Symbol('x'))"
+  - id: p2
+    claim: "y′+y=x의 일반해 y=x−1+Ce^{−x}"
+    sympy: "(lambda x, C: simplify(diff(x-1+C*exp(-x), x) + (x-1+C*exp(-x)) - x) == 0)(Symbol('x'), Symbol('C'))"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 곱의 미분 꼴로 만들기
+
+$y' + P(x)y$는 그 자체로는 어떤 함수의 도함수도 아닙니다. 그런데 적당한 함수 $\mu(x)$를 곱하면 $\mu y' + \mu P y$가 **곱의 미분 $(\mu y)'$와 정확히 같아지게** 만들 수 있습니다. $(\mu y)' = \mu y' + \mu' y$이므로 $\mu' = \mu P$이면 되고, 이 조건을 만족하는 함수가 $\mu = e^{\int P\,dx}$, 곧 적분인자입니다.
+
+좌변이 하나의 도함수가 되면 양변을 적분하는 것만으로 풀립니다. RC 회로의 충전, 혼합 탱크의 농도, 뉴턴 냉각 법칙이 모두 이 꼴입니다.
+
+## 핵심 공식
+
+표준형과 적분인자:
+
+$$
+y' + P(x)\,y = Q(x), \qquad \mu(x) = e^{\int P(x)\,dx}
+$$
+
+양변에 $\mu$를 곱하면
+
+$$
+\big(\mu y\big)' = \mu Q \quad\Longrightarrow\quad y = \frac{1}{\mu}\left(\int \mu Q\,dx + C\right)
+$$
+
+적분인자를 구할 때 $\int P\,dx$의 적분상수는 필요 없습니다(어떤 상수를 골라도 같은 해가 나옵니다).
+
+## 예제
+
+<Example>
+(1) $t y' + 2y = t^2$, $y(1) = \tfrac12$ ($t \gt 0$)을 푸세요.
+
+(2) $y' + 2xy = x$, $y(0) = 2$를 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 표준형으로 만든다">
+$y'$의 계수 $t$로 양변을 나눕니다.
+
+$$
+y' + \frac{2}{t}\,y = t \qquad \left(P = \frac{2}{t},\ Q = t\right)
+$$
+</Step>
+
+<Step n={2} title="(1) 적분인자를 구한다">
+$$
+\mu = e^{\int \frac{2}{t}dt} = e^{2\ln t} = t^2 \qquad (t \gt 0)
+$$
+</Step>
+
+<Step n={3} title="(1) 곱하고 적분한다">
+$$
+t^2 y' + 2t\,y = t^3 \quad\Longrightarrow\quad (t^2 y)' = t^3 \quad\Longrightarrow\quad t^2 y = \frac{t^4}{4} + C
+$$
+
+좌변이 정말 $(t^2y)'$인지 곱의 미분으로 확인해 보세요.
+</Step>
+
+<Step n={4} title="(1) 초기값으로 C를 정한다">
+$t = 1$, $y = \tfrac12$를 넣으면 $\tfrac12 = \tfrac14 + C$, $C = \tfrac14$ 입니다.
+
+$$
+y = \frac{t^4 + 1}{4t^2}
+$$
+</Step>
+
+<Step n={5} title="(2) 같은 순서로 푼다">
+이미 표준형이고 $P = 2x$이므로 $\mu = e^{x^2}$ 입니다.
+
+$$
+(e^{x^2}y)' = x e^{x^2} \quad\Longrightarrow\quad e^{x^2}y = \tfrac12 e^{x^2} + C \quad\Longrightarrow\quad y = \tfrac12 + Ce^{-x^2}
+$$
+
+$y(0) = 2$에서 $C = \tfrac32$ 입니다. 오른쪽 적분은 $u = x^2$ 치환으로 구했습니다.
+</Step>
+
+<Answer>
+(1) $y = \dfrac{t^4 + 1}{4t^2}$ (2) $y = \dfrac12 + \dfrac32 e^{-x^2}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="표준형으로 만들지 않고 P를 읽는다">
+예제 (1)에서 $P = 2$로 읽으면 적분인자가 $e^{2t}$가 되어 완전히 틀립니다. $y'$ 계수가 1인지 항상 먼저 확인하세요.
+</Mistake>
+
+<Mistake title="적분인자를 우변에 곱하지 않는다">
+$\mu$는 방정식 **양변**에 곱합니다. 좌변만 곱하면 등식이 깨집니다.
+</Mistake>
+
+<Mistake title="μ로 나눌 때 C를 나누지 않는다">
+$\mu y = F(x) + C$에서 $y = \frac{F(x)}{\mu} + C$로 쓰는 실수입니다. 상수 $C$도 $\mu$로 나눠야 하므로 $y = \frac{F(x) + C}{\mu}$ 입니다. 예제 (2)의 $Ce^{-x^2}$가 그 결과입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y' - 3y = 6$, $y(0) = 1$을 푸세요.
+</Fragment>
+
+$\mu = e^{-3x}$이고 $(e^{-3x}y)' = 6e^{-3x}$에서 $e^{-3x}y = -2e^{-3x} + C$, $y = -2 + Ce^{3x}$ 입니다. $y(0) = 1$에서 $C = 3$.
+
+**정답:** $y = 3e^{3x} - 2$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$y' + y = x$의 일반해를 구하세요.
+</Fragment>
+
+$\mu = e^x$이고 $(e^x y)' = xe^x$ 입니다. 우변은 부분적분으로 $\int xe^x dx = (x-1)e^x + C$ 입니다.
+
+**정답:** $y = x - 1 + Ce^{-x}$
+</Practice>
