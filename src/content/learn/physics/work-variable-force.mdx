@@ -15,7 +15,7 @@ related: [physics/energy-conservation]
 checks:
   - id: ex1
     claim: "F=3x²가 0~2 m에서 한 일 = 8 J, 1 kg 정지 물체면 v=4 m/s"
-    sympy: "(lambda x: integrate(3*x**2, (x,0,2)) == 8 and sqrt(2*8/1) == 4)(Symbol('x'))"
+    sympy: "(lambda x: integrate(3*x**2, (x,0,2)) == 8 and sqrt(Rational(2*8, 1)) == 4)(Symbol('x'))"
   - id: p1
     claim: "k=400 N/m 용수철을 0.05→0.10 m 늘리는 일 = 1.5 J"
     sympy: "Rational(1,2)*400*(Rational(1,10)**2 - Rational(1,20)**2) == Rational(3,2)"
