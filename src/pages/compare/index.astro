@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import { COMPARES } from "../../data/compare";
+import { breadcrumbLd } from "../../lib/jsonld";
+const crumbs = [{ name: "홈", path: "/" }, { name: "서비스 비교", path: "/compare/" }];
+---
+<BaseLayout title="대학생 공부 앱 비교 — ChatGPT, 콴다, 찰칵과 Qlip" description="대학생이 많이 비교하는 AI 공부 앱과 Qlip을 공식 홈페이지 기준으로 비교했어요. 대상, 다루는 문제, 해설 검증, 족보, 복습, 기기, 요금 차이를 정리했어요." path="/compare/" campaign="web_compare" jsonLd={[breadcrumbLd(crumbs)]}>
+  <PageHead crumbs={crumbs} eyebrow="서비스 비교" h1="대학생 공부 앱, 무엇이 다른가요?" lead="Qlip이 작성한 비교예요. 각 서비스의 공식 홈페이지를 기준으로, 누구를 위해 무엇을 하는지 차이를 정리했어요." />
+  <section class="section"><div class="container grid grid-3">
+    {COMPARES.map((c) => <a class="card" href={`/compare/${c.slug}/`}><h2 style="font-size:20px;margin-bottom:8px;">{c.name} vs Qlip</h2><p>{c.lead}</p></a>)}
+  </div></section>
+</BaseLayout>
