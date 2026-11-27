@@ -11,6 +11,8 @@ import type { ScreenName } from "../lib/screens";
 import Download from "../components/Download.astro";
 import { breadcrumbLd, faqLd } from "../lib/jsonld";
 import { FEATURES } from "../data/features";
+import { getCollection } from "astro:content";
+import { guidesFilter } from "../lib/learn";
 
 interface Props {
   slug: string;
@@ -36,6 +38,9 @@ const crumbs = [
   { name: feature.name, path },
 ];
 const others = FEATURES.filter((f) => f.slug !== p.slug);
+// Link a guide only once it is live, so no page points at a 404.
+const liveGuides = new Set((await getCollection("guides")).filter(guidesFilter).map((g) => `/guides/${g.id}/`));
+const related = p.related.filter((r) => !r.href.startsWith("/guides/") || liveGuides.has(r.href));
 ---
 <BaseLayout title={p.title} description={p.description} path={path} section="features" campaign={`web_feature_${p.slug.replace(/-/g, "_")}`}
   jsonLd={[breadcrumbLd(crumbs), faqLd(p.faq)]}>
@@ -90,7 +95,7 @@ const others = FEATURES.filter((f) => f.slug !== p.slug);
       </div>
       <h2 style="margin:56px 0 20px;font-size:22px;">함께 보면 좋은 페이지</h2>
       <ul class="chips">
-        {p.related.map((r) => <li><a class="chip" href={r.href}>{r.label}</a></li>)}
+        {related.map((r) => <li><a class="chip" href={r.href}>{r.label}</a></li>)}
         {others.map((f) => <li><a class="chip" href={`/features/${f.slug}/`}>{f.name}</a></li>)}
       </ul>
     </div>

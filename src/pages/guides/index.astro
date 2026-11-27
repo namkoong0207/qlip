@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import { guidesFilter } from "../../lib/learn";
+import { breadcrumbLd } from "../../lib/jsonld";
+const guides = (await getCollection("guides")).filter(guidesFilter).sort((a, b) => +b.data.updated - +a.data.updated);
+const crumbs = [{ name: "홈", path: "/" }, { name: "공부 가이드", path: "/guides/" }];
+---
+<BaseLayout title="대학생 공부 가이드 — 족보 공부법, 시험 계획, 공부 앱" description="대학생 시험공부를 위한 가이드: 해설 없는 족보로 공부하는 법, 기말고사 2주 계획, 공대생 아이패드 앱 고르기 등 실제로 써먹을 수 있는 방법을 정리해요." path="/guides/" section="guides" campaign="web_guides" noindex={guides.length === 0} jsonLd={[breadcrumbLd(crumbs)]}>
+  <PageHead crumbs={crumbs} eyebrow="공부 가이드" h1="대학생 공부 가이드" lead="족보, 시험 계획, 공부 도구처럼 대학 시험공부에서 매번 부딪히는 문제를 정리해요." />
+  <section class="section">
+    <div class="container">
+      {guides.length === 0 && <p class="lead">첫 가이드를 검수하고 있어요. 그동안 <a class="link-arrow" href="/learn/">학습 라이브러리</a>를 둘러보세요.</p>}
+      <div class="grid grid-2">
+        {guides.map((g) => (
+          <a class="card" href={`/guides/${g.id}/`}><h2 style="font-size:20px;margin-bottom:8px;">{g.data.h1}</h2><p>{g.data.description}</p></a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
