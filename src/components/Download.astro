@@ -1,0 +1,24 @@
+---
+/**
+ * The App Store badge, plus a QR code on desktop: someone who found Qlip by
+ * searching on a laptop needs a way onto their phone.
+ */
+import QRCode from "qrcode";
+import { SITE, appStoreUrl } from "../config/site";
+interface Props { campaign: string; loc: string; qr?: boolean }
+const { campaign, loc, qr = true } = Astro.props;
+const href = appStoreUrl(campaign);
+const qrSvg = qr ? await QRCode.toString(appStoreUrl(`${campaign}_qr`), { type: "svg", margin: 0, errorCorrectionLevel: "M" }) : "";
+---
+<div class="download">
+  <a class="store-badge" href={href} rel="noopener" data-track="app_store_click" data-loc={loc}>
+    <img src="/img/app-store-badge.svg" alt="App Store에서 Qlip 다운로드" width="156" height="52" />
+  </a>
+  {qr && (
+    <div class="qr" data-track="qr_view" data-loc={loc}>
+      <Fragment set:html={qrSvg} />
+      <span>휴대폰 카메라로<br />찍으면 App Store로<br />바로 이동해요</span>
+    </div>
+  )}
+</div>
+<p class="muted" style="margin-top:12px;">무료로 시작 · iPhone·iPad · {SITE.minOS}</p>

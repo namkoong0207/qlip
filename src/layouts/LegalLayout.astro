@@ -1,0 +1,15 @@
+---
+/**
+ * Terms, privacy, support, account deletion. Their bodies are the old site's
+ * HTML byte for byte (src/legal/*.html): these are the URLs App Store Connect
+ * and the app link to, and their wording is a legal text, not a design input.
+ */
+import BaseLayout from "./BaseLayout.astro";
+interface Props { title: string; description: string; path: string; body: string }
+const { title, description, path, body } = Astro.props;
+---
+<BaseLayout title={title} description={description} path={path} campaign="web_legal" stickyCta={false}>
+  <div class="container">
+    <article class="legal" set:html={body} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+/** Phone-only bar that appears after the first screen and can be dismissed for the visit. */
+import { appStoreUrl } from "../config/site";
+const { campaign } = Astro.props as { campaign: string };
+---
+<div class="sticky-cta" role="region" aria-label="앱 다운로드">
+  <p>대학생을 위한 AI 문제풀이<br /><span class="muted">무료로 시작해요</span></p>
+  <a class="btn btn-primary btn-sm" href={appStoreUrl(campaign)} rel="noopener" data-track="app_store_click" data-loc="sticky">앱 받기</a>
+  <button class="close" type="button" aria-label="닫기">×</button>
+</div>
+<script>
+  const bar = document.querySelector<HTMLElement>(".sticky-cta");
+  let dismissed = false;
+  try { dismissed = sessionStorage.getItem("qlip-sticky-closed") === "1"; } catch {}
+  if (bar && !dismissed) {
+    const onScroll = () => bar.classList.toggle("show", window.scrollY > window.innerHeight * 0.8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    bar.querySelector(".close")?.addEventListener("click", () => {
+      bar.remove();
+      window.removeEventListener("scroll", onScroll);
+      try { sessionStorage.setItem("qlip-sticky-closed", "1"); } catch {}
+    });
+  }
+</script>

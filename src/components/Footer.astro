@@ -1,0 +1,50 @@
+---
+import { SITE } from "../config/site";
+import { FEATURES } from "../data/features";
+import { SUBJECTS } from "../data/subjects";
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="/" class="brand"><img src="/assets/img/logo-mark.png" alt="" width="28" height="28" />Qlip</a>
+        <p>대학생을 위한 AI 문제풀이 앱. 전공 문제부터 해설 없는 족보까지, 이해될 때까지.</p>
+      </div>
+      <div>
+        <h2>기능</h2>
+        <ul>{FEATURES.map((f) => <li><a href={`/features/${f.slug}/`}>{f.name}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2>학습 라이브러리</h2>
+        <ul>
+          {SUBJECTS.map((s) => <li><a href={`/learn/${s.slug}/`}>{s.name}</a></li>)}
+          <li><a href="/guides/">공부 가이드</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Qlip</h2>
+        <ul>
+          <li><a href="/about/">소개</a></li>
+          <li><a href="/pricing/">요금제</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href={SITE.appStore.url} rel="noopener" data-track="app_store_click" data-loc="footer">App Store</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>안내</h2>
+        <ul>
+          <li><a href="/support.html">고객센터</a></li>
+          <li><a href="/terms.html">이용약관</a></li>
+          <li><a href="/privacy.html">개인정보처리방침</a></li>
+          <li><a href="/delete-account.html">계정 삭제</a></li>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} Qlip</span>
+      <span>사업자 정보: {SITE.business.name} · 대표 {SITE.business.owner} · 사업자등록번호 {SITE.business.registration} · {SITE.email}</span>
+    </div>
+  </div>
+</footer>

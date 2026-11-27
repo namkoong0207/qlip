@@ -1,0 +1,32 @@
+---
+import { appStoreUrl } from "../config/site";
+interface Props { section?: string; campaign: string }
+const { section, campaign } = Astro.props;
+const links = [
+  { href: "/features/", label: "기능", key: "features" },
+  { href: "/learn/", label: "학습 라이브러리", key: "learn" },
+  { href: "/guides/", label: "공부 가이드", key: "guides" },
+  { href: "/pricing/", label: "요금제", key: "pricing" },
+  { href: "/faq/", label: "FAQ", key: "faq" },
+];
+---
+<header class="site-nav">
+  <nav class="container nav-inner" aria-label="주 메뉴">
+    <a href="/" class="brand"><img src="/assets/img/logo-mark.png" alt="" width="28" height="28" />Qlip</a>
+    <div class="nav-links" id="nav-links">
+      {links.map((l) => (
+        <a href={l.href} aria-current={section === l.key ? "page" : undefined}>{l.label}</a>
+      ))}
+    </div>
+    <a class="btn btn-primary btn-sm nav-cta" href={appStoreUrl(`${campaign}_nav`)} data-track="app_store_click" data-loc="nav" rel="noopener">앱 받기</a>
+    <button class="nav-toggle" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="nav-links"><span></span></button>
+  </nav>
+</header>
+<script>
+  const t = document.querySelector<HTMLButtonElement>(".nav-toggle");
+  const l = document.getElementById("nav-links");
+  t?.addEventListener("click", () => {
+    const open = l!.classList.toggle("open");
+    t.setAttribute("aria-expanded", String(open));
+  });
+</script>
