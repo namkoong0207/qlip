@@ -1,0 +1,16 @@
+---
+import type { Faq } from "../data/faq";
+interface Props { items: Faq[] }
+const { items } = Astro.props;
+---
+<div class="faq">
+  {items.map((f) => (
+    <details id={`faq-${f.id}`} data-track-open="faq_open" data-item={f.id}>
+      <summary>{f.q}</summary>
+      <div class="answer">
+        <p>{f.a}</p>
+        {f.link && <p><a href={f.link.href}>{f.link.label} →</a></p>}
+      </div>
+    </details>
+  ))}
+</div>

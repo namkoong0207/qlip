@@ -1,0 +1,34 @@
+---
+/** A real app screenshot in a device frame, converted to WebP with fixed dimensions (no layout shift). */
+import { Image } from "astro:assets";
+import solution from "../assets/screens/solution.jpg";
+import followup from "../assets/screens/followup.jpg";
+import concept from "../assets/screens/concept.jpg";
+import jokbo from "../assets/screens/jokbo.jpg";
+import practice from "../assets/screens/practice.jpg";
+import review from "../assets/screens/review.jpg";
+import home from "../assets/screens/home.jpg";
+import ipadSolution from "../assets/screens/ipad-solution.jpg";
+import ipadJokbo from "../assets/screens/ipad-jokbo.jpg";
+import ipadHome from "../assets/screens/ipad-home.jpg";
+
+const SCREENS = { solution, followup, concept, jokbo, practice, review, home, ipadSolution, ipadJokbo, ipadHome };
+export type ScreenName = keyof typeof SCREENS;
+
+interface Props { name: ScreenName; alt: string; priority?: boolean }
+const { name, alt, priority = false } = Astro.props;
+const src = SCREENS[name];
+const isTablet = name.startsWith("ipad");
+---
+<div class={isTablet ? "tablet" : "phone"}>
+  <Image
+    src={src}
+    alt={alt}
+    widths={isTablet ? [800, 1600] : [330, 660]}
+    sizes={isTablet ? "(max-width: 900px) 92vw, 620px" : "(max-width: 900px) 78vw, 300px"}
+    format="webp"
+    quality={82}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+  />
+</div>
