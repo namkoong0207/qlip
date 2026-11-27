@@ -44,7 +44,7 @@ export const SITE = {
     id: "6802022408",
     url: "https://apps.apple.com/kr/app/qlip/id6802022408",
     /** App Store Connect campaign provider token. Campaign codes are ignored without it. */
-    providerToken: "",
+    providerToken: "128468965",
   },
 } as const;
 
