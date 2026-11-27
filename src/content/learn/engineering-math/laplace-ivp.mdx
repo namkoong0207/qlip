@@ -27,6 +27,8 @@ checks:
   - id: p2
     claim: "연습 2: y''+4y=8, y(0)=y'(0)=0의 해는 y=2-2cos2t"
     sympy: "(lambda t: simplify(diff(2-2*cos(2*t),t,2)+4*(2-2*cos(2*t))-8)==0 and (2-2*cos(2*t)).subs(t,0)==0 and diff(2-2*cos(2*t),t).subs(t,0)==0)(Symbol('t'))"
+prerequisites: [engineering-math/second-order-homogeneous]
+related: [engineering-math/undetermined-coefficients, engineering-math/first-order-linear-ode]
 provenance: original
 author: Qlip
 status: ai-verified

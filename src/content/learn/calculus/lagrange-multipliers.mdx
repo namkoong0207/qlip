@@ -21,6 +21,7 @@ checks:
   - id: p1
     claim: "x+y=4에서 x²+y²의 최솟값 8, (2, 2)"
     sympy: "(lambda x, y, l: solve([2*x - l, 2*y - l, x + y - 4], [x, y, l], dict=True) == [{x: 2, y: 2, l: 4}] and 2**2 + 2**2 == 8)(*symbols('x y l'))"
+prerequisites: [calculus/chain-rule]
 provenance: original
 author: Qlip
 status: ai-verified

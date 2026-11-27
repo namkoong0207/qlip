@@ -24,6 +24,8 @@ checks:
   - id: p2
     claim: "y″+4y=8cos x의 특수해 (8/3)cos x"
     sympy: "(lambda x: simplify(diff(Rational(8,3)*cos(x), x, 2) + 4*Rational(8,3)*cos(x) - 8*cos(x)) == 0)(Symbol('x'))"
+prerequisites: [engineering-math/second-order-homogeneous]
+related: [engineering-math/laplace-ivp]
 provenance: original
 author: Qlip
 status: ai-verified

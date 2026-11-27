@@ -24,6 +24,8 @@ checks:
   - id: p1
     claim: "τ=2.0 s 방전에서 전하가 절반이 되는 시간 = τ ln 2 ≈ 1.39 s"
     sympy: "Abs(N(2*log(2)) - 1.3863) < 1e-4 and simplify(exp(-log(2)) - Rational(1,2)) == 0"
+prerequisites: [engineering-math/first-order-linear-ode]
+related: [physics/gauss-law]
 provenance: original
 author: Qlip
 status: ai-verified

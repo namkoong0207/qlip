@@ -24,6 +24,7 @@ checks:
   - id: p2
     claim: "구형파(0~π에서 1, −π~0에서 −1)의 bₙ = 2(1−(−1)ⁿ)/(nπ)"
     sympy: "(lambda x, n: simplify(2*integrate(sin(n*x), (x, 0, pi))/pi - 2*(1 - (-1)**n)/(n*pi)) == 0)(Symbol('x'), Symbol('n', integer=True, positive=True))"
+prerequisites: [calculus/integration-by-parts]
 provenance: original
 author: Qlip
 status: ai-verified

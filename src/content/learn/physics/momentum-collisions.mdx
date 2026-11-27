@@ -21,6 +21,7 @@ checks:
   - id: p1
     claim: "탄동 진자: 0.010 kg, 400 m/s가 2.0 kg에 박히면 v≈1.99 m/s, 상승 높이≈0.202 m"
     sympy: "Abs(N(Rational(4)/Rational(201,100)) - 1.990) < 1e-3 and Abs(N((Rational(4)/Rational(201,100))**2/(2*Rational(98,10))) - 0.2021) < 1e-3"
+prerequisites: [physics/energy-conservation]
 provenance: original
 author: Qlip
 status: ai-verified

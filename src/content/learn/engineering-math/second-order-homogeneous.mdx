@@ -21,6 +21,7 @@ checks:
   - id: p2
     claim: "y″+2y′+5y=0, y(0)=1, y′(0)=1의 해 e^{−x}(cos2x+sin2x)"
     sympy: "(lambda x: simplify(diff(exp(-x)*(cos(2*x)+sin(2*x)), x, 2) + 2*diff(exp(-x)*(cos(2*x)+sin(2*x)), x) + 5*exp(-x)*(cos(2*x)+sin(2*x))) == 0 and (exp(-x)*(cos(2*x)+sin(2*x))).subs(x, 0) == 1 and diff(exp(-x)*(cos(2*x)+sin(2*x)), x).subs(x, 0) == 1)(Symbol('x'))"
+related: [engineering-math/undetermined-coefficients, engineering-math/laplace-ivp]
 provenance: original
 author: Qlip
 status: ai-verified

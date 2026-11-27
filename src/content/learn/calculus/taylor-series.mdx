@@ -24,6 +24,7 @@ checks:
   - id: p2
     claim: "arctan x = x − x³/3 + x⁵/5 − x⁷/7 + …"
     sympy: "(lambda x: series(atan(x), x, 0, 9).removeO() == x - x**3/3 + x**5/5 - x**7/7)(Symbol('x'))"
+related: [calculus/lhopital-rule]
 provenance: original
 author: Qlip
 status: ai-verified

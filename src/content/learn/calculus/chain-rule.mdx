@@ -24,6 +24,7 @@ checks:
   - id: p2
     claim: "f(x)=e^{sin 2x}일 때 f′(0) = 2"
     sympy: "(lambda x: diff(exp(sin(2*x)), x).subs(x, 0) == 2)(Symbol('x'))"
+related: [calculus/lagrange-multipliers]
 provenance: original
 author: Qlip
 status: ai-verified

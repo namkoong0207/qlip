@@ -30,6 +30,7 @@ checks:
   - id: p2
     claim: "pH 5.00을 만들려면 [A⁻]/[HA] ≈ 1.80"
     sympy: "Abs(N(10**(5 + log(Rational(18,10)*10**-5, 10))) - 1.80) < 1e-3"
+prerequisites: [chemistry/weak-acid-ph]
 provenance: original
 author: Qlip
 status: ai-verified

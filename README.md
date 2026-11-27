@@ -41,6 +41,8 @@ Qlip 공식 홈페이지. Astro 정적 사이트 → GitHub Pages(qlip.kr, Cloud
 
 5. 커밋 → main에 병합하면 자동 배포됩니다.
 
+본문에서 다른 라이브러리 글로 직접 링크했다면, 그 글도 공개된 뒤에 함께 공개하세요. 공개 전 글을 가리키는 링크가 있으면 `npm test`(CI)가 배포를 막습니다. frontmatter의 `prerequisites`·`related`는 공개된 글만 자동으로 보여 주므로 신경 쓰지 않아도 됩니다.
+
 가이드(`src/content/guides/*.mdx`)는 `status: draft` → `published`만 있습니다.
 
 ## 새 글 쓰기 원칙

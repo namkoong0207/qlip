@@ -27,6 +27,7 @@ checks:
   - id: p3
     claim: "∫_0^1 x² e^{−x} dx = 2 − 5/e"
     sympy: "(lambda x: simplify(integrate(x**2*exp(-x), (x, 0, 1)) - (2 - 5*exp(-1))) == 0)(Symbol('x'))"
+related: [engineering-math/fourier-series]
 provenance: original
 author: Qlip
 status: ai-verified

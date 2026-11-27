@@ -27,6 +27,7 @@ checks:
   - id: p3
     claim: "lim_{x→∞} x^{1/x} = 1"
     sympy: "(lambda x: limit(x**(1/x), x, oo) == 1)(Symbol('x', positive=True))"
+related: [calculus/taylor-series, calculus/chain-rule]
 provenance: original
 author: Qlip
 status: ai-verified

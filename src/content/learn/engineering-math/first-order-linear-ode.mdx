@@ -24,6 +24,7 @@ checks:
   - id: p2
     claim: "y′+y=x의 일반해 y=x−1+Ce^{−x}"
     sympy: "(lambda x, C: simplify(diff(x-1+C*exp(-x), x) + (x-1+C*exp(-x)) - x) == 0)(Symbol('x'), Symbol('C'))"
+related: [engineering-math/laplace-ivp, physics/rc-circuit]
 provenance: original
 author: Qlip
 status: ai-verified
