@@ -1,0 +1,100 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 130
+title: "르샤틀리에 원리 — 농도·압력·온도 변화와 반응지수 Q 비교"
+h1: "르샤틀리에 원리와 반응지수 Q"
+description: "평형에 있는 계에 농도·압력·온도 변화를 주었을 때 평형이 어느 쪽으로 이동하는지 르샤틀리에 원리와 반응지수 Q와 K 비교로 판단하는 방법을 예제로 해설해요. 촉매와 비활성 기체 오해 포함."
+summary:
+  - "평형에 변화를 주면 계는 그 변화를 줄이는 방향으로 이동한다(르샤틀리에 원리)."
+  - "반응지수 Q를 K와 비교해 Q < K면 정반응, Q > K면 역반응 쪽으로 진행한다."
+  - "온도만 K 값을 바꾼다. 흡열 반응은 온도를 올리면 K가 커진다. 촉매는 평형을 이동시키지 않는다."
+keyword: "르샤틀리에 원리 반응지수"
+level: core
+prerequisites: [chemistry/equilibrium-ice-table]
+checks:
+  - id: ex1
+    claim: "N₂O₄ ⇌ 2NO₂, K=0.36, [NO₂]=0.10, [N₂O₄]=0.050 → Q = 0.20 < K → 정반응"
+    sympy: "Rational(1,10)**2/Rational(5,100) == Rational(1,5) and Rational(1,5) < Rational(36,100)"
+  - id: p1
+    claim: "N₂+3H₂⇌2NH₃: 기체 몰수 4 → 2, 압력 증가 시 몰수가 적은 정반응 쪽"
+    sympy: "1 + 3 == 4 and 2 < 4"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 평형은 방해를 받으면 되받아친다
+
+평형에 있는 계에 물질을 더 넣거나, 압력을 높이거나, 온도를 바꾸면 계는 그 변화를 줄이는 쪽으로 반응을 진행해 새 평형을 찾습니다. 직관으로 판단하는 것이 르샤틀리에 원리이고, 숫자로 정확히 판단하는 방법이 현재 농도로 계산한 반응지수 $Q$를 $K$와 비교하는 것입니다. 하버 공정의 온도·압력 선택이 대표적인 응용입니다.
+
+## 핵심 공식
+
+$$
+Q = \frac{[\text{C}]^c[\text{D}]^d}{[\text{A}]^a[\text{B}]^b}\ \ (\text{현재 농도}), \qquad
+Q \lt K \Rightarrow \text{정반응}, \quad Q \gt K \Rightarrow \text{역반응}
+$$
+
+| 변화 | 이동 방향 | K 변화 |
+|---|---|---|
+| 반응물 추가 | 정반응 | 없음 |
+| 압력 증가(부피 감소) | 기체 몰수가 적은 쪽 | 없음 |
+| 온도 증가 | 흡열 쪽 | 있음 |
+| 촉매 | 이동 없음 (빨리 도달) | 없음 |
+
+## 예제
+
+<Example>
+$\text{N}_2\text{O}_4(g) \rightleftharpoons 2\text{NO}_2(g)$, $K_c = 0.36$인 용기에서 현재 $[\text{NO}_2] = 0.10\ \text{M}$, $[\text{N}_2\text{O}_4] = 0.050\ \text{M}$입니다. 반응은 어느 쪽으로 진행할까요?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="현재 농도로 Q를 구한다">
+$$
+Q = \frac{(0.10)^2}{0.050} = 0.20
+$$
+</Step>
+
+<Step n={2} title="K와 비교한다">
+$Q = 0.20 \lt K = 0.36$ 입니다. 생성물이 평형보다 적은 상태입니다.
+</Step>
+
+<Step n={3} title="진행 방향을 정한다">
+$Q$가 $K$에 가까워지려면 분자(생성물)가 늘어야 하므로 정반응 쪽, 즉 $\text{NO}_2$가 더 생기는 방향으로 진행합니다.
+</Step>
+
+<Answer>
+$Q = 0.20 \lt K$이므로 정반응($\text{NO}_2$ 생성) 쪽으로 진행
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="농도를 바꾸면 K도 바뀐다고 생각한다">
+농도·압력 변화는 평형 위치만 바꾸고 $K$는 그대로입니다. $K$를 바꾸는 것은 온도뿐입니다.
+</Mistake>
+
+<Mistake title="부피 일정에서 비활성 기체를 넣으면 이동한다고 본다">
+부피가 일정하면 각 기체의 농도(분압)가 그대로라 평형은 이동하지 않습니다.
+</Mistake>
+
+<Mistake title="촉매가 수득률을 높인다고 쓴다">
+촉매는 정·역반응을 똑같이 빠르게 해서 평형에 빨리 도달하게 할 뿐, 평형 조성은 바꾸지 않습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\text{N}_2(g) + 3\text{H}_2(g) \rightleftharpoons 2\text{NH}_3(g)$ ($\Delta H \lt 0$)에서 (1) 압력을 높이면 (2) 온도를 높이면 평형은 어느 쪽으로 이동할까요?
+</Fragment>
+
+(1) 기체 몰수가 4에서 2로 줄어드는 정반응 쪽. (2) 발열 반응이므로 열을 흡수하는 역반응 쪽, $K$ 감소.
+
+**정답:** (1) 정반응(NH₃ 증가) (2) 역반응(NH₃ 감소)
+</Practice>

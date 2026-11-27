@@ -1,0 +1,102 @@
+---
+subject: chemistry
+unit: kinetics-electrochem
+order: 190
+title: "아레니우스 식과 활성화 에너지 — 두 온도의 k로 Ea 구하기"
+h1: "아레니우스 식과 활성화 에너지"
+description: "속도 상수의 온도 의존성 k = A e^{−Ea/RT}와 두 온도 버전 ln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)를 정리하고, 온도 10 K 상승에 속도가 두 배가 될 때의 활성화 에너지와 다른 온도의 k를 예제로 해설해요."
+summary:
+  - "아레니우스 식 k = A e^{−Ea/RT}: 온도가 오르거나 활성화 에너지가 낮을수록 k가 커진다."
+  - "두 온도에서 ln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)로 Ea를 구하거나 새 온도의 k를 예측한다."
+  - "R = 8.314 J/(mol·K)를 쓰면 Ea는 J/mol로 나온다. 온도는 켈빈."
+keyword: "아레니우스 식 활성화 에너지"
+level: core
+prerequisites: [chemistry/rate-law]
+checks:
+  - id: ex1
+    claim: "300 K → 310 K에서 k가 2배: Ea = R ln2 / (1/300 − 1/310) ≈ 53.6 kJ/mol"
+    sympy: "Abs(N(Rational(8314,1000)*log(2)/(Rational(1,300) - Rational(1,310))) - 53594) < 5"
+  - id: p1
+    claim: "Ea = 50 kJ/mol, k(300 K) = 1.0×10⁻³: k(350 K) ≈ 1.75×10⁻²"
+    sympy: "Abs(N(Rational(1,1000)*exp(-50000/Rational(8314,1000)*(Rational(1,350) - Rational(1,300)))) - 0.01753) < 1e-4"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 문턱을 넘는 분자의 비율
+
+반응이 일어나려면 분자들이 활성화 에너지라는 문턱을 넘을 만큼 세게 부딪혀야 합니다. 온도가 오르면 이 문턱을 넘는 분자의 비율이 지수적으로 늘어 속도 상수가 크게 커집니다. 이것을 식으로 나타낸 것이 아레니우스 식입니다. 음식을 냉장 보관하는 이유, 촉매가 반응을 빠르게 하는 원리(활성화 에너지를 낮춤)가 여기서 설명됩니다.
+
+## 핵심 공식
+
+$$
+k = A\,e^{-E_a/RT}, \qquad \ln\frac{k_2}{k_1} = \frac{E_a}{R}\left(\frac{1}{T_1} - \frac{1}{T_2}\right)
+$$
+
+$R = 8.314\ \text{J/(mol·K)}$
+
+## 예제
+
+<Example>
+어떤 반응의 속도 상수가 $300\ \text{K}$에서 $310\ \text{K}$로 오르면 두 배가 됩니다. 활성화 에너지를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="두 온도 식에 넣는다">
+$\dfrac{k_2}{k_1} = 2$ 이므로
+
+$$
+\ln 2 = \frac{E_a}{8.314}\left(\frac{1}{300} - \frac{1}{310}\right)
+$$
+</Step>
+
+<Step n={2} title="괄호를 계산한다">
+$$
+\frac{1}{300} - \frac{1}{310} = \frac{10}{93000} \approx 1.075\times10^{-4}\ \text{K}^{-1}
+$$
+</Step>
+
+<Step n={3} title="Ea를 구한다">
+$$
+E_a = \frac{(8.314)(0.693)}{1.075\times10^{-4}} \approx 5.36\times10^4\ \text{J/mol} = 53.6\ \text{kJ/mol}
+$$
+
+"10도 오르면 속도가 두 배"라는 경험 법칙이 이 정도 활성화 에너지에 해당합니다.
+</Step>
+
+<Answer>
+$E_a \approx 53.6\ \text{kJ/mol}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="1/T₁ − 1/T₂ 순서를 바꾼다">
+$T_2 \gt T_1$이고 $k_2 \gt k_1$이면 괄호가 양수가 되어야 합니다. 순서를 바꾸면 $E_a$가 음수로 나옵니다.
+</Mistake>
+
+<Mistake title="섭씨 온도를 넣는다">
+$27\ ^\circ\text{C}$와 $37\ ^\circ\text{C}$를 그대로 넣으면 완전히 다른 값이 됩니다.
+</Mistake>
+
+<Mistake title="Ea 단위를 kJ로 R은 J로 섞는다">
+$E_a$를 kJ/mol로 넣으려면 $R = 0.008314\ \text{kJ/(mol·K)}$를 써야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$E_a = 50\ \text{kJ/mol}$인 반응의 속도 상수가 $300\ \text{K}$에서 $1.0\times10^{-3}\ \text{s}^{-1}$입니다. $350\ \text{K}$에서의 속도 상수는?
+</Fragment>
+
+$\ln\dfrac{k_2}{k_1} = \dfrac{50000}{8.314}\left(\dfrac{1}{300} - \dfrac{1}{350}\right) \approx 2.86$, $\dfrac{k_2}{k_1} \approx 17.5$.
+
+**정답:** $k_2 \approx 1.8\times10^{-2}\ \text{s}^{-1}$
+</Practice>

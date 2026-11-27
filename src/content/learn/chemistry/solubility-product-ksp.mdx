@@ -1,0 +1,102 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 170
+title: "용해도곱 Ksp — 몰 용해도 구하기, 공통 이온 효과 예제"
+h1: "용해도곱 Ksp와 몰 용해도"
+description: "난용성 염의 용해 평형에서 용해도곱 Ksp 식을 세우고 몰 용해도 s를 구하는 방법을 AgCl, PbI₂ 예제로 정리하고, 공통 이온이 있으면 용해도가 크게 줄어드는 공통 이온 효과를 해설해요."
+summary:
+  - "MₐXᵦ(s) ⇌ aMᵇ⁺ + bXᵃ⁻에서 Ksp = [M]ᵃ[X]ᵇ. 고체는 식에 넣지 않는다."
+  - "몰 용해도를 s로 두면 AgCl은 Ksp = s², PbI₂는 Ksp = (s)(2s)² = 4s³."
+  - "같은 이온이 이미 녹아 있으면(공통 이온) 용해도가 크게 줄어든다."
+keyword: "용해도곱 Ksp 계산"
+level: core
+prerequisites: [chemistry/equilibrium-ice-table]
+checks:
+  - id: ex1
+    claim: "AgCl Ksp 1.8×10⁻¹⁰ → s ≈ 1.34×10⁻⁵ M; PbI₂ Ksp 9.8×10⁻⁹ → s = (Ksp/4)^{1/3} ≈ 1.35×10⁻³ M"
+    sympy: "Abs(N(sqrt(Rational(18,10)*10**-10)) - 1.342e-5) < 1e-8 and Abs(N((Rational(98,10)*10**-9/4)**Rational(1,3)) - 1.348e-3) < 1e-6"
+  - id: p1
+    claim: "0.10 M NaCl 속 AgCl 용해도 ≈ 1.8×10⁻⁹ M"
+    sympy: "Rational(18,10)*Rational(1,10**10)/Rational(1,10) == Rational(18,10)*Rational(1,10**9)"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 아주 조금 녹는 염의 평형
+
+염화 은(AgCl)처럼 '녹지 않는다'고 부르는 염도 사실은 아주 조금 녹아 이온과 평형을 이룹니다. 이 평형상수가 용해도곱 $K_{sp}$이고, 여기서 실제로 몇 몰이 녹는지(몰 용해도)를 구할 수 있습니다. 침전이 생기는지 판단하기, 이온을 골라 침전시키는 분리, 신장 결석 같은 생체 현상이 모두 $K_{sp}$로 설명됩니다.
+
+## 핵심 공식
+
+$$
+\text{M}_a\text{X}_b(s) \rightleftharpoons a\,\text{M}^{b+} + b\,\text{X}^{a-}, \qquad K_{sp} = [\text{M}^{b+}]^a[\text{X}^{a-}]^b
+$$
+
+| 염의 꼴 | $K_{sp}$와 $s$ |
+|---|---|
+| MX (AgCl) | $K_{sp} = s^2$ |
+| MX₂ (PbI₂) | $K_{sp} = 4s^3$ |
+| M₂X₃ | $K_{sp} = 108s^5$ |
+
+## 예제
+
+<Example>
+(1) AgCl의 $K_{sp} = 1.8\times10^{-10}$일 때 몰 용해도는? (2) PbI₂의 $K_{sp} = 9.8\times10^{-9}$일 때 몰 용해도는?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 용해 평형과 s">
+$\text{AgCl}(s) \rightleftharpoons \text{Ag}^+ + \text{Cl}^-$, 녹은 만큼 $[\text{Ag}^+] = [\text{Cl}^-] = s$.
+</Step>
+
+<Step n={2} title="(1) 풀이">
+$$
+s^2 = 1.8\times10^{-10} \quad\Longrightarrow\quad s \approx 1.3\times10^{-5}\ \text{M}
+$$
+</Step>
+
+<Step n={3} title="(2) 계수가 지수와 농도 둘 다에 들어간다">
+$\text{PbI}_2(s) \rightleftharpoons \text{Pb}^{2+} + 2\text{I}^-$, $[\text{Pb}^{2+}] = s$, $[\text{I}^-] = 2s$.
+
+$$
+K_{sp} = s(2s)^2 = 4s^3 \quad\Longrightarrow\quad s = \sqrt[3]{\frac{9.8\times10^{-9}}{4}} \approx 1.3\times10^{-3}\ \text{M}
+$$
+</Step>
+
+<Answer>
+(1) $1.3\times10^{-5}\ \text{M}$ (2) $1.3\times10^{-3}\ \text{M}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="I⁻ 농도를 s로 둔다">
+PbI₂ 하나가 녹으면 I⁻이 두 개 나옵니다. $[\text{I}^-] = 2s$이고, $K_{sp}$에서 다시 제곱됩니다.
+</Mistake>
+
+<Mistake title="Ksp가 작으면 용해도도 항상 작다고 비교한다">
+꼴이 다른 염끼리는 $K_{sp}$만으로 비교할 수 없습니다. PbI₂의 $K_{sp}$는 AgCl보다 크지만, 비교하려면 몰 용해도를 계산해야 합니다.
+</Mistake>
+
+<Mistake title="공통 이온 문제에서 처음 농도를 빼먹는다">
+이미 녹아 있는 이온 농도를 ICE 표의 처음 값에 넣어야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$0.10\ \text{M}$ NaCl 용액에서 AgCl의 몰 용해도는?
+</Fragment>
+
+$[\text{Cl}^-] = 0.10 + s \approx 0.10$이므로 $s(0.10) = 1.8\times10^{-10}$.
+
+**정답:** $s \approx 1.8\times10^{-9}\ \text{M}$ (순수한 물보다 약 7000배 작음)
+</Practice>

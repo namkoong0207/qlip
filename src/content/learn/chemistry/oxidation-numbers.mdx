@@ -1,0 +1,101 @@
+---
+subject: chemistry
+unit: stoichiometry-gases
+order: 40
+title: "산화수 구하는 법 — 규칙 순서와 Cr₂O₇²⁻, MnO₄⁻ 예제"
+h1: "산화수 구하는 규칙"
+description: "원소와 이온의 산화수를 정하는 규칙(홑원소 0, 1족 +1, F −1, O −2, H +1, 합은 전하)을 우선순위대로 정리하고, 다이크로뮴산 이온·과망가니즈산 이온·싸이오황산 이온의 산화수를 예제로 해설해요."
+summary:
+  - "홑원소 물질은 0, 단원자 이온은 그 전하가 산화수다."
+  - "화합물에서 F는 −1, 1족 +1, 2족 +2, O는 대개 −2, H는 대개 +1이다(과산화물·금속 수소화물은 예외)."
+  - "모든 원자의 산화수 합 = 화학종 전체의 전하(중성 0, 이온은 그 전하)."
+keyword: "산화수 구하는 법"
+level: intro
+related: [chemistry/nernst-equation]
+checks:
+  - id: ex1
+    claim: "Cr₂O₇²⁻: 2x + 7(−2) = −2 → x = +6; MnO₄⁻: x + 4(−2) = −1 → +7"
+    sympy: "(lambda x: solve(2*x - 14 + 2, x) == [6] and solve(x - 8 + 1, x) == [7])(Symbol('x'))"
+  - id: p1
+    claim: "S₂O₃²⁻의 S 평균 산화수 +2, H₂O₂의 O는 −1"
+    sympy: "(lambda x: solve(2*x - 6 + 2, x) == [2] and solve(2*1 + 2*x, x) == [-1])(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 전자를 모두 한쪽에 몰아 준다면
+
+산화수는 결합의 전자를 모두 전기음성도가 큰 원자 쪽에 준다고 가정했을 때 각 원자가 갖게 되는 가상의 전하입니다. 반응에서 산화수가 오르면 산화(전자를 잃음), 내리면 환원(전자를 얻음)입니다. 산화·환원 반응식 맞추기, 전지 전위, 부식 문제가 모두 산화수에서 출발합니다.
+
+## 핵심 공식
+
+우선순위 순서대로 적용합니다.
+
+1. 홑원소 물질의 원자: $0$
+2. 단원자 이온: 이온의 전하
+3. F: $-1$ / 1족: $+1$ / 2족: $+2$
+4. H: $+1$ (금속 수소화물에서는 $-1$)
+5. O: $-2$ (과산화물에서는 $-1$)
+6. 모든 산화수의 합 = 전체 전하
+
+## 예제
+
+<Example>
+(1) $\text{Cr}_2\text{O}_7^{2-}$에서 Cr의 산화수 (2) $\text{MnO}_4^-$에서 Mn의 산화수를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 아는 원자의 산화수를 넣는다">
+O는 $-2$이므로 산소 7개의 합은 $-14$.
+</Step>
+
+<Step n={2} title="(1) 합을 전체 전하와 같게 둔다">
+$$
+2x + (-14) = -2 \quad\Longrightarrow\quad x = +6
+$$
+</Step>
+
+<Step n={3} title="(2) 같은 방법">
+$$
+x + 4(-2) = -1 \quad\Longrightarrow\quad x = +7
+$$
+
+Mn이 가질 수 있는 가장 높은 산화수라서, $\text{MnO}_4^-$는 강한 산화제입니다.
+</Step>
+
+<Answer>
+(1) Cr: $+6$ (2) Mn: $+7$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="이온 전하를 0으로 둔다">
+다원자 이온은 산화수의 합이 이온의 전하와 같아야 합니다. 합을 0으로 두면 $\text{MnO}_4^-$의 Mn이 $+8$이 됩니다.
+</Mistake>
+
+<Mistake title="과산화물의 O를 −2로 둔다">
+$\text{H}_2\text{O}_2$에서 O는 $-1$입니다. O–O 결합이 있으면 예외를 의심하세요.
+</Mistake>
+
+<Mistake title="원자 개수를 곱하지 않는다">
+$\text{Cr}_2$이면 Cr 두 개의 합이 $2x$입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+(1) 싸이오황산 이온 $\text{S}_2\text{O}_3^{2-}$에서 S의 (평균) 산화수 (2) $\text{H}_2\text{O}_2$에서 O의 산화수를 구하세요.
+</Fragment>
+
+(1) $2x + 3(-2) = -2$ (2) $2(+1) + 2x = 0$.
+
+**정답:** (1) $+2$ (2) $-1$
+</Practice>

@@ -1,0 +1,100 @@
+---
+subject: chemistry
+unit: stoichiometry-gases
+order: 25
+title: "몰농도와 희석 — M = mol/L, M₁V₁ = M₂V₂ 계산 예제"
+h1: "몰농도와 희석 계산"
+description: "용액의 몰농도 M = 용질 mol / 용액 L 계산과, 진한 용액을 묽힐 때 쓰는 M₁V₁ = M₂V₂를 예제로 해설해요. 용매 부피와 용액 부피 구분, mL 단위 실수, 용액 만드는 질량 계산 연습 문제 포함."
+summary:
+  - "몰농도 M = 용질의 몰수 ÷ 용액의 부피(L). 용매 부피가 아니라 완성된 용액 부피다."
+  - "희석해도 용질 몰수는 그대로이므로 M₁V₁ = M₂V₂."
+  - "필요한 용질 질량 = 몰농도 × 부피(L) × 몰질량."
+keyword: "몰농도 희석 계산"
+level: intro
+related: [chemistry/strong-acid-base-titration, chemistry/limiting-reactant]
+checks:
+  - id: ex1
+    claim: "NaCl 5.85 g을 녹여 250 mL → 0.400 M"
+    sympy: "Abs(N(Rational(585,100)/Rational(5844,100)/Rational(250,1000)) - 0.4004) < 1e-3"
+  - id: ex2
+    claim: "2.0 M 50 mL를 0.50 M로 희석하면 최종 부피 200 mL"
+    sympy: "Rational(2)*50/Rational(1,2) == 200"
+  - id: p1
+    claim: "0.10 M CuSO₄ 500 mL에 필요한 질량(159.6 g/mol) = 7.98 g"
+    sympy: "Rational(1,10)*Rational(1,2)*Rational(1596,10) == Rational(798,100)"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 1 L 안에 몇 몰이 들어 있나
+
+실험실에서는 시약을 대부분 용액으로 다루기 때문에, 원하는 몰수를 부피로 바꿔 주는 몰농도가 계산의 기본 단위입니다. 진한 원액을 물로 묽히면 부피는 늘지만 녹아 있는 용질의 몰수는 그대로라서, "몰수 = 농도 × 부피"가 희석 전후에 같다는 것만으로 희석 문제가 풀립니다.
+
+## 핵심 공식
+
+$$
+M = \frac{n_{\text{용질}}}{V_{\text{용액}}\ (\text{L})}, \qquad n = MV, \qquad M_1V_1 = M_2V_2
+$$
+
+## 예제
+
+<Example>
+(1) NaCl $5.85\ \text{g}$을 물에 녹여 용액 전체 부피를 $250\ \text{mL}$로 만들었습니다. 몰농도는? (NaCl 58.44 g/mol)
+(2) $2.0\ \text{M}$ 용액 $50\ \text{mL}$를 $0.50\ \text{M}$로 묽히려면 최종 부피를 얼마로 해야 할까요?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 몰수와 부피(L)">
+$n = \dfrac{5.85}{58.44} = 0.100\ \text{mol}$, $V = 0.250\ \text{L}$.
+</Step>
+
+<Step n={2} title="(1) 몰농도">
+$$
+M = \frac{0.100}{0.250} = 0.400\ \text{M}
+$$
+</Step>
+
+<Step n={3} title="(2) 희석 공식">
+$$
+(2.0)(50) = (0.50)\,V_2 \quad\Longrightarrow\quad V_2 = 200\ \text{mL}
+$$
+
+양변의 부피 단위가 같으면 mL 그대로 써도 됩니다. 넣을 물은 $200 - 50 = 150\ \text{mL}$ 정도입니다.
+</Step>
+
+<Answer>
+(1) $0.400\ \text{M}$ (2) 최종 부피 $200\ \text{mL}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="물 250 mL에 녹인 것으로 계산한다">
+몰농도의 분모는 용액 전체 부피입니다. 정확히 만들려면 부피 플라스크에 녹인 뒤 눈금까지 채웁니다.
+</Mistake>
+
+<Mistake title="mL를 L로 바꾸지 않고 몰수를 구한다">
+$n = MV$에서 $V$는 L입니다. $0.400 \times 250 = 100\ \text{mol}$처럼 터무니없는 값이 나오면 단위를 의심하세요.
+</Mistake>
+
+<Mistake title="희석 공식을 반응 계산에 쓴다">
+$M_1V_1 = M_2V_2$는 같은 용질을 묽힐 때만 씁니다. 산과 염기가 반응하는 적정은 계수비를 따져야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$0.10\ \text{M}$ 황산구리(CuSO₄, 159.6 g/mol) 용액 $500\ \text{mL}$를 만드는 데 필요한 질량은?
+</Fragment>
+
+$n = (0.10)(0.500) = 0.050\ \text{mol}$, 질량 $= 0.050 \times 159.6$.
+
+**정답:** 약 $7.98\ \text{g}$
+</Practice>

@@ -1,0 +1,107 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 120
+title: "평형상수와 ICE 표 — 평형 농도 구하기, H₂ + I₂ ⇌ 2HI 예제"
+h1: "평형상수와 ICE 표로 평형 농도 구하기"
+description: "평형상수 K 식을 세우는 법과, 처음(I)·변화(C)·평형(E) 농도를 표로 정리해 x를 구하는 ICE 표 풀이를 H₂ + I₂ ⇌ 2HI, N₂O₄ ⇌ 2NO₂ 예제로 단계별 해설해요. 계수를 지수로 쓰는 법 포함."
+summary:
+  - "aA + bB ⇌ cC + dD의 평형상수 K = [C]ᶜ[D]ᵈ / ([A]ᵃ[B]ᵇ). 순수한 고체·액체는 넣지 않는다."
+  - "ICE 표: 처음 농도, 계수비에 맞춘 변화량(−x, +2x …), 평형 농도를 적고 K 식에 넣어 x를 푼다."
+  - "x가 여러 개 나오면 농도가 음수가 되지 않는 값을 고른다."
+keyword: "평형상수 ICE 표"
+level: core
+related: [chemistry/le-chatelier, chemistry/weak-acid-ph]
+checks:
+  - id: ex1
+    claim: "H₂, I₂ 각 0.100 M, K=50.5: x ≈ 0.0780, [HI] ≈ 0.156 M, [H₂]=[I₂] ≈ 0.0220 M"
+    sympy: "(lambda x: Abs(N(solve(2*x/(Rational(1,10)-x) - sqrt(Rational(505,10)), x)[0]) - 0.07804) < 1e-4)(Symbol('x', positive=True))"
+  - id: p1
+    claim: "N₂O₄ 0.10 M, Kc=0.36: x = 0.060, [NO₂] = 0.12 M, [N₂O₄] = 0.040 M"
+    sympy: "(lambda x: solve(4*x**2/(Rational(1,10)-x) - Rational(36,100), x) == [Rational(3,50)])(Symbol('x', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 정반응과 역반응이 같은 속도가 된 상태
+
+가역 반응은 끝까지 가지 않고, 정반응과 역반응의 속도가 같아지는 지점에서 농도가 더 이상 변하지 않습니다. 이때의 농도 비율을 정해진 식으로 묶은 값이 평형상수 $K$이고, 온도가 같으면 처음 농도와 관계없이 일정합니다. 처음 농도와 $K$를 알면 ICE 표로 평형 농도를 거꾸로 구할 수 있습니다. 약산의 pH, 용해도, 공업 반응 수율이 모두 이 계산입니다.
+
+## 핵심 공식
+
+$$
+a\text{A} + b\text{B} \rightleftharpoons c\text{C} + d\text{D}, \qquad K_c = \frac{[\text{C}]^c[\text{D}]^d}{[\text{A}]^a[\text{B}]^b}
+$$
+
+ICE 표: Initial(처음), Change(계수비 × $x$), Equilibrium(처음 + 변화)
+
+## 예제
+
+<Example>
+$\text{H}_2(g) + \text{I}_2(g) \rightleftharpoons 2\text{HI}(g)$, $K_c = 50.5$입니다. $\text{H}_2$와 $\text{I}_2$를 각각 $0.100\ \text{M}$로 넣고 시작했을 때 평형 농도를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="ICE 표를 세운다">
+
+| | H₂ | I₂ | HI |
+|---|---|---|---|
+| I | 0.100 | 0.100 | 0 |
+| C | −x | −x | +2x |
+| E | 0.100 − x | 0.100 − x | 2x |
+</Step>
+
+<Step n={2} title="K 식에 넣는다">
+$$
+50.5 = \frac{(2x)^2}{(0.100 - x)^2}
+$$
+</Step>
+
+<Step n={3} title="양변에 제곱근을 씌워 푼다">
+완전제곱 꼴이라 이차방정식 없이 풀립니다.
+
+$$
+\frac{2x}{0.100 - x} = \sqrt{50.5} \approx 7.11 \quad\Longrightarrow\quad x \approx 0.0780
+$$
+</Step>
+
+<Step n={4} title="평형 농도를 쓰고 검산한다">
+$[\text{HI}] = 0.156\ \text{M}$, $[\text{H}_2] = [\text{I}_2] = 0.0220\ \text{M}$. $\dfrac{0.156^2}{0.0220^2} \approx 50$ ✓.
+</Step>
+
+<Answer>
+$[\text{HI}] \approx 0.156\ \text{M}$, $[\text{H}_2] = [\text{I}_2] \approx 0.0220\ \text{M}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="계수를 지수로 쓰지 않는다">
+$2\text{HI}$는 $K$ 식에서 $[\text{HI}]^2$이고, 변화량도 $+2x$입니다. 둘 중 하나만 반영하면 틀립니다.
+</Mistake>
+
+<Mistake title="고체나 순수한 액체를 K 식에 넣는다">
+$\text{CaCO}_3(s)$나 $\text{H}_2\text{O}(l)$은 농도가 일정해 식에 넣지 않습니다.
+</Mistake>
+
+<Mistake title="물리적으로 불가능한 x를 고른다">
+이차방정식 해 중 처음 농도보다 큰 $x$는 평형 농도를 음수로 만들어 버립니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\text{N}_2\text{O}_4(g) \rightleftharpoons 2\text{NO}_2(g)$, $K_c = 0.36$. 처음 $[\text{N}_2\text{O}_4] = 0.10\ \text{M}$일 때 평형 농도는?
+</Fragment>
+
+$\dfrac{(2x)^2}{0.10 - x} = 0.36$ → $4x^2 + 0.36x - 0.036 = 0$ → $x = 0.060$ (음수 해 제외).
+
+**정답:** $[\text{NO}_2] = 0.12\ \text{M}$, $[\text{N}_2\text{O}_4] = 0.040\ \text{M}$
+</Practice>
