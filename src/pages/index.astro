@@ -1,4 +1,6 @@
 ---
+import "../styles/motion.css";
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Screen from "../components/Screen.astro";
 import Download from "../components/Download.astro";
@@ -7,6 +9,12 @@ import PlanCards from "../components/PlanCards.astro";
 import { FAQ } from "../data/faq";
 import { SUBJECTS } from "../data/subjects";
 import { appLd, faqLd } from "../lib/jsonld";
+import appIcon from "../assets/app-icon.png";
+import home from "../assets/screens/home.jpg";
+import solution from "../assets/screens/solution.jpg";
+import followup from "../assets/screens/followup.jpg";
+import practice from "../assets/screens/practice.jpg";
+import review from "../assets/screens/review.jpg";
 
 const homeFaq = FAQ.filter((f) => f.home);
 const problems = [
@@ -16,6 +24,20 @@ const problems = [
   { t: "다시 찾기 어려운 예전 문제", d: "중간고사 때 푼 문제가 사진첩 어딘가에 묻혀 있어요." },
   { t: "시험 직전 복습", d: "틀렸던 문제만 모아 다시 보고 싶은데, 정리할 시간이 없어요." },
 ];
+const story = [
+  { img: home, num: "01 · 찍기", t: "문제를 찍으면, 시작이에요.", d: "카메라나 앨범에서 문제를 고르고 풀 부분만 잘라요. 사진에 문제가 여러 개면 풀 문제를 고르면 돼요.", alt: "Qlip 홈 화면. 카메라로 문제 찍기 버튼과 최근 문제가 보인다." },
+  { img: solution, num: "02 · 해설", t: "단계별 해설, 그리고 독립 검증.", d: "조건과 구하는 값을 정리한 뒤 개념과 수식을 담은 해설을 단계로 나눠요. 다른 AI가 처음부터 다시 풀어 대조하고, 통과하면 표시가 붙어요.", alt: "대학 물리 문제를 운동방정식, 장력 소거, 수치 대입 단계로 해설한 화면" },
+  { img: followup, num: "03 · 질문", t: "막힌 단계만 짚어서 물어보세요.", d: "이해 안 되는 단계를 누르면, 그 단계의 식과 맥락을 기억한 채 이해될 때까지 설명해요.", alt: "해설의 한 단계를 골라 질문하고 답을 받는 대화 화면" },
+  { img: practice, num: "04 · 다시 풀기", t: "해설을 가리고, 직접 다시.", d: "문제만 보고 풀어 본 뒤 맞았어요·다시 풀래요로 표시하세요. 다 풀면 틀린 문제만 골라 한 번 더 풀 수 있어요.", alt: "해설을 가린 채 다시 푸는 화면과 맞았어요, 다시 풀래요 버튼" },
+  { img: review, num: "05 · 복습", t: "시험 직전엔, 복습 탭 하나로.", d: "다시 풀 문제, 풀던 족보, 메모와 질문이 과목별로 모여요. 시험 전날 이것만 보면 돼요.", alt: "다시 풀 문제와 풀던 족보, 질문한 내용이 모인 복습 탭 화면" },
+];
+const marquee = [...SUBJECTS.map((s) => s.name), "회로이론", "열역학", "정역학", "미분방정식", "확률통계", "재료공학", "전자기학", "유기화학"];
+const verifySteps = [
+  { t: "문제 인식", d: "사진에서 조건·단위·구하는 값을 정리해요." },
+  { t: "해설 생성", d: "개념과 수식을 담은 단계별 해설을 써요." },
+  { t: "독립 검증", d: "다른 AI가 처음부터 다시 풀어 대조해요." },
+  { t: "결과 표시", d: "통과하면 표시하고, 확신이 없으면 그렇다고 적어요." },
+];
 ---
 <BaseLayout
   fullTitle="Qlip - 대학생 AI 문제풀이 앱 | 전공 문제·족보 단계별 해설"
@@ -24,46 +46,74 @@ const problems = [
   campaign="web_home"
   jsonLd={[appLd(), faqLd(homeFaq.map((f) => ({ q: f.q, a: f.a })))]}
 >
-  <!-- Hero -->
-  <section class="hero notebook">
-    <div class="container hero-grid">
-      <div>
-        <span class="eyebrow">iPhone · iPad 학습 앱</span>
-        <h1>대학생을 위한<br /><span class="grad-text">AI 문제풀이</span>, Qlip</h1>
-        <p class="lead">어려운 전공 문제부터 해설 없는 족보까지. 사진 한 장이면 단계별 해설을 만들고, 다른 AI가 처음부터 다시 풀어 검증해요. 막히는 단계는 이해될 때까지 물어보세요.</p>
-        <div class="hero-actions">
-          <Download campaign="web_home_hero" loc="hero" />
-        </div>
-        <ul class="hero-facts">
-          <li>매주 무료 15크레딧</li>
-          <li>족보 문항 나누기 무료</li>
-          <li>미적분학·공업수학·일반물리·일반화학·선형대수</li>
-        </ul>
+  <script slot="head" is:inline>
+    // Turn on scroll motion before first paint, unless the reader asked for less
+    // motion. If the motion script hasn't started within 3s (blocked, failed),
+    // fall back to the static page so nothing stays hidden.
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var r = document.documentElement;
+      r.classList.add("motion");
+      setTimeout(function () { if (!r.classList.contains("motion-ready")) r.classList.remove("motion"); }, 3000);
+    })();
+  </script>
+
+  <!-- Intro: the logo fills the screen, then gives way to the hero as you scroll -->
+  <section class="intro notebook" data-scrub="sticky">
+    <div class="intro-stage">
+      <div class="intro-glow" aria-hidden="true"></div>
+      <div class="intro-logo" aria-hidden="true">
+        <Image src={appIcon} alt="" class="intro-icon" widths={[300, 600]} sizes="300px" loading="eager" fetchpriority="high" />
+        <div class="intro-word">Qlip</div>
+        <div class="intro-tag">대학생을 위한 AI 문제풀이</div>
+        <div class="scroll-cue">스크롤</div>
       </div>
-      <div class="hero-stage">
-        <span class="hero-chip ok">✓ 검증 통과</span>
-        <span class="hero-chip ask">2번 단계가 왜 이렇게 되나요?</span>
-        <Screen name="solution" alt="Qlip이 대학 물리 문제를 단계별로 해설한 화면. 단계마다 수식과 설명이 있고 검증 통과 표시가 붙어 있다." priority />
+      <div class="intro-hero">
+        <div class="hero">
+          <div class="container hero-grid">
+            <div>
+              <span class="eyebrow">iPhone · iPad 학습 앱</span>
+              <h1>대학생을 위한<br /><span class="grad-text">AI 문제풀이</span>, Qlip</h1>
+              <p class="lead">어려운 전공 문제부터 해설 없는 족보까지. 사진 한 장이면 단계별 해설을 만들고, 다른 AI가 처음부터 다시 풀어 검증해요. 막히는 단계는 이해될 때까지 물어보세요.</p>
+              <div class="hero-actions">
+                <Download campaign="web_home_hero" loc="hero" />
+              </div>
+              <ul class="hero-facts">
+                <li>매주 무료 15크레딧</li>
+                <li>족보 문항 나누기 무료</li>
+                <li>미적분학·공업수학·일반물리·일반화학·선형대수</li>
+              </ul>
+            </div>
+            <div class="hero-stage">
+              <span class="hero-chip ok">✓ 검증 통과</span>
+              <span class="hero-chip ask">2번 단계가 왜 이렇게 되나요?</span>
+              <Screen name="solution" alt="Qlip이 대학 물리 문제를 단계별로 해설한 화면. 단계마다 수식과 설명이 있고 검증 통과 표시가 붙어 있다." />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- The problems students actually have -->
-  <section class="section">
+  <!-- A sentence that fills in as you read it, then the problems -->
+  <section class="section statement" data-scrub="enter">
     <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">대학 공부가 막히는 순간</span>
-        <h2>문제가 어려운 게 아니라,<br />물어볼 곳이 없었던 거예요.</h2>
-      </div>
+      <span class="eyebrow">대학 공부가 막히는 순간</span>
+      <p class="big" style="margin-top:18px;">문제가 어려운 게 아니라,<br />물어볼 곳이 없었던 거예요.</p>
+    </div>
+  </section>
+  <section class="section-tight" style="padding-top:0;">
+    <div class="container">
+      <h2 class="visually-hidden">대학생이 공부하며 막히는 다섯 가지</h2>
       <div class="grid grid-3">
         {problems.map((p, i) => (
-          <div class="card">
+          <div class="card" data-reveal style={`--d:${i % 3}`}>
             <span class="num">{String(i + 1).padStart(2, "0")}</span>
             <h3>{p.t}</h3>
             <p>{p.d}</p>
           </div>
         ))}
-        <a class="card" href="/learn/" style="background:var(--accent-soft);border-color:transparent;">
+        <a class="card" href="/learn/" data-reveal style="--d:2;background:var(--accent-soft);border-color:transparent;">
           <span class="num">FREE</span>
           <h3>개념부터 다시 보고 싶다면</h3>
           <p>미적분학·공업수학·일반물리·일반화학·선형대수의 핵심 개념과 예제 해설을 무료로 공개해요. <span class="link-arrow">학습 라이브러리</span></p>
@@ -72,29 +122,45 @@ const problems = [
     </div>
   </section>
 
-  <!-- AI solver -->
-  <section class="section section-soft">
-    <div class="container split">
-      <div>
-        <span class="eyebrow">AI 문제풀이</span>
-        <h2>찍으면, 단계별 해설.<br />막히면, 그 단계만 질문.</h2>
-        <p class="lead">답만 알려 주는 게 아니라, 어떤 개념을 왜 쓰는지부터 식을 세우고 값을 넣는 과정까지 단계로 나눠 보여 줘요.</p>
-        <ol class="steps">
-          <li><div><b>찍고 영역 고르기</b><span>카메라나 앨범에서 문제를 고르고 풀 부분만 잘라요.</span></div></li>
-          <li><div><b>분석 → 해설 → 독립 검증</b><span>조건·단위·구하는 값을 정리한 뒤 해설을 만들고, 다른 AI가 처음부터 다시 풀어 대조해요.</span></div></li>
-          <li><div><b>단계 질문</b><span>이해 안 되는 단계를 눌러 물어보면, 그 단계의 맥락을 기억한 채 설명해요.</span></div></li>
-          <li><div><b>과목에 저장</b><span>해설과 질문 기록이 과목별로 쌓여요.</span></div></li>
-        </ol>
-        <p style="margin-top:24px;"><a class="link-arrow" href="/features/ai-solver/">AI 문제풀이 자세히 보기</a></p>
+  <!-- Scrollytelling: the phone stays put while the steps scroll past -->
+  <section class="section section-soft" id="how">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">AI 문제풀이 · 이렇게 써요</span>
+        <h2>찍고, 이해하고,<br />시험 전날까지.</h2>
       </div>
-      <Screen name="followup" alt="해설의 특정 단계를 골라 질문하고 답을 받는 대화 화면" />
+      <div class="story" data-story>
+        <div class="story-device">
+          <div class="story-screens">
+            <div class="phone">
+              <div class="layer base"><Image src={solution} alt="" widths={[330, 660]} sizes="300px" format="webp" quality={82} /></div>
+              {story.map((s, i) => (
+                <div class={`layer layer-${i}`}>
+                  <Image src={s.img} alt={s.alt} widths={[330, 660]} sizes="(max-width: 900px) 52vw, 300px" format="webp" quality={82} loading="lazy" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <ol class="story-progress" aria-hidden="true">{story.map(() => <li />)}</ol>
+        </div>
+        <div class="story-steps">
+          {story.map((s, i) => (
+            <div class="story-step" data-step={i}>
+              <span class="num">{s.num}</span>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </div>
+          ))}
+          <p style="margin-top:8px;"><a class="link-arrow" href="/features/ai-solver/">AI 문제풀이 자세히 보기</a></p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Jokbo -->
   <section class="section">
     <div class="container split reverse">
-      <div>
+      <div data-reveal>
         <span class="eyebrow">족보 해설</span>
         <h2>해설 없는 족보를<br />문제집으로 바꿔요.</h2>
         <p class="lead">족보 사진이나 PDF를 올리면 문항별로 나눠 문제집을 만들어요. 나누기는 무료이고, 원하는 문항만 골라 해설을 받으면 돼요.</p>
@@ -106,44 +172,57 @@ const problems = [
         </ol>
         <p style="margin-top:24px;"><a class="link-arrow" href="/features/jokbo/">족보 해설 자세히 보기</a></p>
       </div>
-      <Screen name="jokbo" alt="족보를 문항별로 나눈 목록 화면. 문항마다 해설 진행 상태가 표시된다." />
+      <div data-reveal style="--d:1"><Screen name="jokbo" alt="족보를 문항별로 나눈 목록 화면. 문항마다 해설 진행 상태가 표시된다." /></div>
     </div>
   </section>
 
-  <!-- Practice & review -->
+  <!-- Trust: the verification pipeline plays itself while on screen -->
   <section class="section section-soft">
     <div class="container split">
-      <div>
-        <span class="eyebrow">다시 풀기 · 복습</span>
-        <h2>푼 문제로 끝나지 않게,<br />시험 직전까지.</h2>
-        <p class="lead">해설을 가리고 직접 다시 풀어 보고, 맞았어요·다시 풀래요로 표시하세요. 틀린 문제, 풀던 족보, 메모와 질문이 복습 탭에 모여요.</p>
+      <div data-reveal>
+        <span class="eyebrow">정직하게, Qlip에 대해</span>
+        <h2>AI 해설을,<br />다른 AI가 다시 검증해요.</h2>
+        <p class="lead">하나가 풀면 다른 시각에서 처음부터 다시 풀어 대조해요. 어긋나면 지적을 반영해 한 번 더 풀고, 그래도 확신이 서지 않으면 숨기지 않고 해설 위에 적어요. 검증이 정답을 보증하지는 않지만, 확인하지 못한 것을 확인했다고 말하지는 않아요.</p>
         <ul class="steps">
-          <li><div><b>과목별 저장</b><span>문제와 족보를 과목 폴더에 모아요.</span></div></li>
-          <li><div><b>다시 풀기</b><span>다 풀면 결과를 보여 주고, 틀린 문제만 골라 한 번 더 풀 수 있어요.</span></div></li>
-          <li><div><b>복습 탭</b><span>다시 풀 문제 · 풀던 족보 · 메모 · 질문을 한곳에서.</span></div></li>
+          <li><div><b>실패하면 돌려드려요</b><span>사진을 읽지 못했거나 중간에 멈춘 해설, 신고한 오답은 크레딧을 돌려드려요.</span></div></li>
+          <li><div><b>내 기록은 내 것</b><span>저장한 문제와 필기는 내 iCloud에. 이용 기록은 길어야 90일, 탈퇴하면 바로 삭제돼요.</span></div></li>
         </ul>
-        <p style="margin-top:24px;"><a class="link-arrow" href="/features/review/">다시 풀기·복습 자세히 보기</a></p>
       </div>
-      <Screen name="review" alt="다시 풀 문제와 풀던 족보, 메모가 모인 복습 탭 화면" />
+      <div class="verify" data-autoplay="1100" aria-label="해설 검증 과정">
+        {verifySteps.map((v, i) => (
+          <div class="verify-node" data-node>
+            <div class="dot">{i + 1}</div>
+            <div><b>{v.t}</b><span>{v.d}</span></div>
+          </div>
+        ))}
+        <div class="verify-badge">✓ 검증 통과</div>
+      </div>
     </div>
   </section>
 
-  <!-- Subjects -->
+  <!-- Subjects: a moving ribbon, then the links -->
   <section class="section">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="eyebrow">지원 과목</span>
         <h2>대학 이공계 전공 문제에 맞췄어요.</h2>
-        <p>아래 과목은 무료 학습 라이브러리에서 개념과 예제 해설도 볼 수 있어요. 회로이론·열역학·정역학 같은 다른 전공 문제도 앱에서 해설해요.</p>
+        <p>아래 과목은 무료 학습 라이브러리에서 개념과 예제 해설도 볼 수 있어요. 다른 이공계 전공 문제도 앱에서 해설해요.</p>
       </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {[...marquee, ...marquee].map((m) => <span>{m}</span>)}
+      </div>
+    </div>
+    <div class="container">
       <div class="grid grid-3">
-        {SUBJECTS.map((s) => (
-          <a class="card" href={`/learn/${s.slug}/`}>
+        {SUBJECTS.map((s, i) => (
+          <a class="card" href={`/learn/${s.slug}/`} data-reveal style={`--d:${i % 3}`}>
             <h3>{s.name}</h3>
             <p>{s.short}</p>
           </a>
         ))}
-        <div class="card" style="background:var(--bg-soft);">
+        <div class="card" data-reveal style="--d:2;background:var(--bg-soft);">
           <h3>그 밖의 이공계 전공</h3>
           <p>회로이론 · 열역학 · 정역학 · 확률통계 · 재료공학 …</p>
         </div>
@@ -151,57 +230,38 @@ const problems = [
     </div>
   </section>
 
-  <!-- iPad -->
+  <!-- iPad: tilts up and grows into place as it scrolls in -->
   <section class="section section-soft">
-    <div class="container split">
-      <div>
-        <span class="eyebrow">iPad</span>
-        <h2>iPad에선 더 넓게,<br />직접 쓰면서.</h2>
-        <ul class="steps">
-          <li><div><b>문제와 해설을 나란히</b><span>문제를 보면서 해설을 읽고, 단계를 옆에 둔 채 질문해요.</span></div></li>
-          <li><div><b>목록 옆에 바로 열기</b><span>족보·과목·복습에서 고른 항목이 옆 칸에 열려요.</span></div></li>
-          <li><div><b>Apple Pencil로 다시 풀기</b><span>문제 옆에 직접 쓰면 자동 저장되고 iPhone의 ‘내 풀이’에서도 보여요.</span></div></li>
-        </ul>
-        <p style="margin-top:24px;"><a class="link-arrow" href="/features/ipad/">iPad에서 쓰는 법</a></p>
-      </div>
-      <Screen name="ipadSolution" alt="iPad에서 왼쪽에 문제, 오른쪽에 단계별 해설을 나란히 띄운 화면" />
-    </div>
-  </section>
-
-  <!-- Trust -->
-  <section class="section">
     <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">정직하게, Qlip에 대해</span>
-        <h2>AI 해설을, 다른 AI가 다시 검증해요.</h2>
-        <p>하나가 풀면 다른 시각에서 처음부터 다시 풀어 대조해요. 어긋나면 지적을 반영해 한 번 더 풀고, 그래도 확신이 서지 않으면 숨기지 않고 해설 위에 적어요. 검증이 정답을 보증하지는 않지만, 확인하지 못한 것을 확인했다고 말하지는 않아요.</p>
+      <div class="section-head center" data-reveal>
+        <span class="eyebrow">iPad</span>
+        <h2>iPad에선 더 넓게, 직접 쓰면서.</h2>
+        <p>문제와 해설을 나란히 보고, 족보·과목·복습 목록 옆에 바로 열고, Apple Pencil로 문제 옆에 직접 다시 풀어요. 필기는 자동 저장되고 iPhone의 ‘내 풀이’에서도 보여요.</p>
       </div>
-      <div class="grid grid-4">
-        <div class="card"><span class="num">SCOPE</span><h3>대학 수준</h3><p>고등학교 문제집이 아니라 대학 전공 문제에 맞춘 해설 형식이에요.</p></div>
-        <div class="card"><span class="num">DISPLAY</span><h3>깨지지 않는 수식</h3><p>흐릿한 사진 대신 교과서처럼 다시 조판해요. 그림이 필요한 문제만 원본을 함께 보여 줘요.</p></div>
-        <div class="card"><span class="num">REFUND</span><h3>실패하면 돌려드려요</h3><p>사진을 읽지 못했거나 중간에 멈춘 해설, 신고한 오답은 크레딧을 돌려드려요.</p></div>
-        <div class="card"><span class="num">PRIVACY</span><h3>내 기록은 내 것</h3><p>저장한 문제와 필기는 내 iCloud에. 이용 기록은 길어야 90일, 탈퇴하면 바로 삭제돼요.</p></div>
+      <div class="tablet-scrub" data-scrub="enter" style="max-width:900px;margin:0 auto;">
+        <Screen name="ipadSolution" alt="iPad에서 왼쪽에 문제, 오른쪽에 단계별 해설을 나란히 띄운 화면" />
       </div>
+      <p style="text-align:center;margin-top:28px;"><a class="link-arrow" href="/features/ipad/">iPad에서 쓰는 법</a></p>
     </div>
   </section>
 
   <!-- Pricing summary -->
-  <section class="section section-soft">
+  <section class="section">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="eyebrow">요금제</span>
         <h2>무료로 시작하고,<br />시험 기간엔 필요한 만큼.</h2>
         <p>문제 해설 1개는 3크레딧, 질문 1개는 1크레딧이에요. 족보 문항 나누기는 하루 10번까지 무료예요.</p>
       </div>
-      <PlanCards />
+      <div data-reveal><PlanCards /></div>
       <p style="margin-top:24px;"><a class="link-arrow" href="/pricing/">크레딧 팩과 자세한 사용량 보기</a></p>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section">
+  <section class="section section-soft">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="eyebrow">자주 묻는 질문</span>
         <h2>궁금한 것부터 답할게요.</h2>
       </div>
@@ -212,11 +272,15 @@ const problems = [
 
   <!-- Final CTA -->
   <section class="section notebook final-cta">
-    <div class="container">
-      <span class="eyebrow">Qlip · App Store</span>
+    <div class="container" data-reveal>
+      <Image src={appIcon} alt="" widths={[96, 192]} sizes="96px" style="width:96px;height:auto;margin:0 auto 18px;border-radius:22%;" loading="lazy" />
       <h2>이해될 때까지,<br />물어볼 수 있는 해설.</h2>
       <p class="lead" style="max-width:560px;margin:0 auto;">가입하면 매주 무료 크레딧이 들어와요. 이번 시험에 나올 문제 하나부터 찍어 보세요.</p>
       <Download campaign="web_home_final" loc="final" />
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import "../scripts/motion";
+</script>
