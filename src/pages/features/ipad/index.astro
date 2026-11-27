@@ -1,0 +1,41 @@
+---
+import FeatureLayout from "../../../layouts/FeatureLayout.astro";
+import Screen from "../../../components/Screen.astro";
+---
+<FeatureLayout
+  slug="ipad"
+  title="아이패드 대학생 공부 앱 — 문제와 해설 나란히, Apple Pencil 다시 풀기"
+  description="iPad에서는 문제와 단계별 해설을 나란히 보고, 목록 옆에 바로 열고, Apple Pencil로 문제 옆에 직접 다시 풀어요. 공대생 아이패드 학습 앱 Qlip."
+  h1="iPad에선 더 넓게, 직접 쓰면서"
+  lead="iPad용 Qlip은 iPhone 화면을 늘린 것이 아니에요. 큰 화면에 맞게 목록과 내용을 나란히 두고, 문제를 보면서 해설을 읽고, Apple Pencil로 바로 다시 풀 수 있게 만들었어요."
+  screen="ipadSolution"
+  screenAlt="iPad 가로 화면에서 왼쪽에 원본 문제, 오른쪽에 단계별 해설을 나란히 보여 주는 화면"
+  steps={[
+    { t: "목록 옆에 바로 열기", d: "족보·과목·복습에서 고른 항목이 옆 칸에 열려 목록을 오가지 않아도 돼요." },
+    { t: "문제와 해설을 나란히", d: "원본 문제를 보면서 해설을 읽고, 단계를 옆에 둔 채 질문해요." },
+    { t: "Apple Pencil로 다시 풀기", d: "문제 옆 빈 공간에 직접 풀면 자동 저장되고, iPhone의 ‘내 풀이’에서도 보여요." },
+  ]}
+  can={[
+    "족보 문항 목록과 해설을 나란히 보며 시험 대비",
+    "iPhone과 같은 계정·기록을 iCloud로 동기화",
+  ]}
+  cannot={[
+    "iPadOS 26.2 이상이 필요해요.",
+    "Pencil 필기를 AI가 읽어 채점하지는 않아요. 필기는 내 기록으로 저장돼요.",
+  ]}
+  cost="iPad에서도 iPhone과 같은 크레딧을 함께 써요. 기기를 추가해도 따로 결제하지 않아요."
+  faq={[
+    { q: "iPhone에서 산 구독을 iPad에서도 쓸 수 있나요?", a: "같은 Apple ID와 Qlip 계정이면 iPad에서도 그대로 쓸 수 있어요." },
+    { q: "필기한 내용은 어디에 저장되나요?", a: "Apple Pencil 필기는 내 iCloud에 저장되고 iPhone의 ‘내 풀이’에서도 볼 수 있어요." },
+  ]}
+  related={[
+    { href: "/guides/ipad-apps-for-engineering-students/", label: "공대생 아이패드 필수 앱" },
+  ]}
+>
+  <section class="section section-soft">
+    <div class="container">
+      <h2 style="margin-bottom:24px;">족보도 iPad에서 한눈에</h2>
+      <Screen name="ipadJokbo" alt="iPad에서 족보 문항 목록과 선택한 문항의 해설을 나란히 보는 화면" />
+    </div>
+  </section>
+</FeatureLayout>

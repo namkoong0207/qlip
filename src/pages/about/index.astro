@@ -1,0 +1,64 @@
+---
+/**
+ * The page an assistant is most likely to read when asked "what is Qlip?".
+ * Facts first, in sentences, from the same data the rest of the site uses.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import Download from "../../components/Download.astro";
+import { SITE } from "../../config/site";
+import { PLANS, won } from "../../data/pricing";
+import { FEATURES } from "../../data/features";
+import { SUBJECTS } from "../../data/subjects";
+import { appLd, breadcrumbLd } from "../../lib/jsonld";
+const crumbs = [{ name: "홈", path: "/" }, { name: "소개", path: "/about/" }];
+const facts: [string, string][] = [
+  ["서비스", `${SITE.appStoreName} (App Store 이름), 앱 이름 Qlip`],
+  ["대상", "대학생, 특히 이공계 전공생"],
+  ["핵심 기능", FEATURES.map((f) => f.name).join(" · ")],
+  ["주요 과목", `${SUBJECTS.map((s) => s.name).join(" · ")} · 회로이론 · 열역학 등 이공계 전공`],
+  ["기기", `iPhone · iPad (${SITE.minOS}). Android는 개발 중`],
+  ["가격", `무료(매주 ${PLANS[0].weeklyCredits}크레딧) · Pro 월 ${won(PLANS[1].monthlyKRW!)} · Max 월 ${won(PLANS[2].monthlyKRW!)} · 7일권 · 크레딧 팩`],
+  ["다운로드", SITE.appStore.url],
+  ["공식 홈페이지", SITE.url],
+  ["문의", SITE.email],
+  ["운영", `${SITE.business.name} · 대표 ${SITE.business.owner} · 사업자등록번호 ${SITE.business.registration}`],
+];
+---
+<BaseLayout title="Qlip 소개 — 대학생을 위한 AI 문제풀이 앱" description={SITE.identity} path="/about/" section="about" campaign="web_about" jsonLd={[breadcrumbLd(crumbs), appLd()]}>
+  <PageHead crumbs={crumbs} eyebrow="소개" h1="Qlip은 대학생을 위한 AI 문제풀이 앱입니다" lead={SITE.identity} />
+
+  <section class="section">
+    <div class="container">
+      <h2 style="margin-bottom:20px;">한눈에 보기</h2>
+      <div class="table-wrap">
+        <table>
+          <tbody>{facts.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container split" style="align-items:start;">
+      <div>
+        <h2>왜 만들었나요</h2>
+        <p style="margin-top:14px;">Qlip은 대학생 개발자가 직접 만들고 운영해요. 대학 공부에서 가장 자주 막히는 곳은 답만 있고 과정이 없는 답지, 해설 없는 족보, 그리고 범용 AI의 답이 맞는지 확인할 방법이 없다는 점이었어요.</p>
+        <p style="margin-top:12px;">그래서 세 가지를 원칙으로 삼았어요. 해설은 다른 AI가 처음부터 다시 풀어 검증하고, 확인하지 못한 것은 확인하지 못했다고 말한다. 대학 전공 문제와 족보에 맞춘다. 푼 문제가 시험 직전까지 남아 다시 풀 수 있게 한다.</p>
+      </div>
+      <div>
+        <h2>학습 라이브러리 제작 원칙</h2>
+        <ul class="steps">
+          <li><div><b>직접 만든 문제만</b><span>예제와 연습 문제는 처음부터 직접 작성해요. 교재·족보·사용자가 올린 문제는 공개하지 않아요.</span></div></li>
+          <li><div><b>AI 초안, 사람 검수</b><span>해설 초안은 Qlip의 해설·검증 파이프라인으로 만들고, 정답을 수식 계산으로 다시 확인한 뒤 사람이 검수하고 공개해요. 각 글에 검수자와 수정일을 적어요.</span></div></li>
+          <li><div><b>한 개념, 한 페이지</b><span>검색어만 바꾼 비슷한 페이지를 늘리지 않아요. 비슷한 문제는 같은 페이지의 예제와 연습 문제로 넣어요.</span></div></li>
+          <li><div><b>틀리면 고쳐요</b><span>오류를 {SITE.email}로 알려 주시면 확인 후 고치고 수정일을 갱신해요.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container"><Download campaign="web_about" loc="about" /></div>
+  </section>
+</BaseLayout>

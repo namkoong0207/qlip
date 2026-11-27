@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import PlanCards from "../../components/PlanCards.astro";
+import Download from "../../components/Download.astro";
+import FaqList from "../../components/FaqList.astro";
+import { PLANS, CREDIT_PACKS, CREDIT_COSTS, PRICING_CHECKED, won } from "../../data/pricing";
+import { FAQ } from "../../data/faq";
+import { appLd, breadcrumbLd } from "../../lib/jsonld";
+const crumbs = [{ name: "홈", path: "/" }, { name: "요금제", path: "/pricing/" }];
+const faqs = FAQ.filter((f) => f.group === "credits");
+const free = PLANS[0];
+---
+<BaseLayout title="요금제 — 무료 크레딧, Pro·Max, 시험 기간 7일권" description={`Qlip은 무료로 시작해요. 매주 ${free.weeklyCredits}크레딧, 해설 1개 3크레딧, 족보 문항 나누기 무료. Pro 월 ${won(PLANS[1].monthlyKRW!)}, Max 월 ${won(PLANS[2].monthlyKRW!)}, 시험 기간 7일권과 크레딧 팩까지 한눈에.`} path="/pricing/" section="pricing" campaign="web_pricing" jsonLd={[breadcrumbLd(crumbs), appLd()]}>
+  <PageHead crumbs={crumbs} eyebrow="요금제" h1="무료로 시작하고, 시험 기간엔 필요한 만큼" lead={`가입하면 7일마다 ${free.weeklyCredits}크레딧이 채워져요. 더 필요하면 월 구독, 시험 기간 7일권, 만료 없는 크레딧 팩 중에 고르세요. 결제와 해지는 모두 App Store에서 해요.`} />
+
+  <section class="section">
+    <div class="container">
+      <PlanCards />
+      <h2 style="margin:64px 0 20px;font-size:26px;">한눈에 비교</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">등급</th><th scope="col">매주 크레딧</th><th scope="col">월 구독</th><th scope="col">7일권</th><th scope="col">해설 기준 주당</th></tr></thead>
+          <tbody>
+            {PLANS.map((p) => (
+              <tr>
+                <th scope="row">{p.name}</th>
+                <td>{p.weeklyCredits}</td>
+                <td>{p.monthlyKRW ? won(p.monthlyKRW) : "—"}</td>
+                <td>{p.passKRW ? won(p.passKRW) : "—"}</td>
+                <td>약 {Math.floor(p.weeklyCredits / 3)}개</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:10px;">7일권은 산 날부터 7일 동안 해당 등급의 크레딧을 쓰고 자동으로 갱신되지 않아요. 가격은 대한민국 App Store 기준이며 {PRICING_CHECKED}에 확인했어요.</p>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <h2>크레딧은 이렇게 써요</h2>
+        <p>실제 AI 비용에 맞춰 행동마다 크레딧이 달라요. 실패한 해설과 신고한 오답은 돌려드려요.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">행동</th><th scope="col">크레딧</th><th scope="col">참고</th></tr></thead>
+          <tbody>{CREDIT_COSTS.map((c) => <tr><th scope="row">{c.action}</th><td>{c.credits}</td><td>{c.note}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <div class="grid grid-2" style="margin-top:32px;">
+        <div class="card">
+          <h3>무료 {free.weeklyCredits}크레딧으로 할 수 있는 것</h3>
+          <p>예: 문제 해설 3개(9) + 단계 질문 6개(6). 족보는 하루 10번까지 크레딧 없이 문항별로 나눠 둘 수 있어요.</p>
+        </div>
+        <div class="card">
+          <h3>쓰는 순서</h3>
+          <p>매주 채워지는 크레딧을 먼저 쓰고, 따로 산 크레딧은 마지막에 써요. 따로 산 크레딧은 만료되지 않아요. 유료 상품을 사면 그날부터 새 주기가 시작되고, 남은 무료 크레딧은 첫 주에 더해 드려요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>크레딧 팩</h2><p>구독 없이 필요한 만큼만. 만료되지 않아요.</p></div>
+      <div class="grid grid-3">
+        {CREDIT_PACKS.map((c) => (
+          <div class="card plan">
+            <h3>{c.credits}크레딧</h3>
+            <div class="price">{won(c.priceKRW)}</div>
+            <p>해설 약 {Math.floor(c.credits / 3)}개 분량</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <h2 style="margin-bottom:24px;">요금 관련 질문</h2>
+      <FaqList items={faqs} />
+      <div style="margin-top:48px;"><Download campaign="web_pricing" loc="pricing" /></div>
+    </div>
+  </section>
+</BaseLayout>

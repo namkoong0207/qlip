@@ -12,8 +12,8 @@ import ipadSolution from "../assets/screens/ipad-solution.jpg";
 import ipadJokbo from "../assets/screens/ipad-jokbo.jpg";
 import ipadHome from "../assets/screens/ipad-home.jpg";
 
-const SCREENS = { solution, followup, concept, jokbo, practice, review, home, ipadSolution, ipadJokbo, ipadHome };
-export type ScreenName = keyof typeof SCREENS;
+import type { ScreenName } from "../lib/screens";
+const SCREENS: Record<ScreenName, ImageMetadata> = { solution, followup, concept, jokbo, practice, review, home, ipadSolution, ipadJokbo, ipadHome };
 
 interface Props { name: ScreenName; alt: string; priority?: boolean }
 const { name, alt, priority = false } = Astro.props;

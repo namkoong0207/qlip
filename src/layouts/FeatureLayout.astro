@@ -1,0 +1,106 @@
+---
+/**
+ * One feature page: what it does, how to use it, what it can't do yet, what it
+ * costs, questions, and where to go next. The "can't do" list is deliberate —
+ * a page that admits limits is one people (and assistants) can trust.
+ */
+import BaseLayout from "./BaseLayout.astro";
+import PageHead from "../components/PageHead.astro";
+import Screen from "../components/Screen.astro";
+import type { ScreenName } from "../lib/screens";
+import Download from "../components/Download.astro";
+import { breadcrumbLd, faqLd } from "../lib/jsonld";
+import { FEATURES } from "../data/features";
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  h1: string;
+  lead: string;
+  screen: ScreenName;
+  screenAlt: string;
+  steps: { t: string; d: string }[];
+  can: string[];
+  cannot: string[];
+  cost: string;
+  faq: { q: string; a: string }[];
+  related: { href: string; label: string }[];
+}
+const p = Astro.props;
+const path = `/features/${p.slug}/`;
+const feature = FEATURES.find((f) => f.slug === p.slug)!;
+const crumbs = [
+  { name: "홈", path: "/" },
+  { name: "기능", path: "/features/" },
+  { name: feature.name, path },
+];
+const others = FEATURES.filter((f) => f.slug !== p.slug);
+---
+<BaseLayout title={p.title} description={p.description} path={path} section="features" campaign={`web_feature_${p.slug.replace(/-/g, "_")}`}
+  jsonLd={[breadcrumbLd(crumbs), faqLd(p.faq)]}>
+  <PageHead crumbs={crumbs} eyebrow={feature.name} h1={p.h1} lead={p.lead}>
+    <div style="margin-top:28px;"><Download campaign={`web_feature_${p.slug.replace(/-/g, "_")}`} loc="feature_head" /></div>
+  </PageHead>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <h2>이렇게 써요</h2>
+        <ol class="steps">
+          {p.steps.map((s) => <li><div><b>{s.t}</b><span>{s.d}</span></div></li>)}
+        </ol>
+        <slot name="after-steps" />
+      </div>
+      <Screen name={p.screen} alt={p.screenAlt} priority />
+    </div>
+  </section>
+
+  <slot />
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="grid grid-2">
+        <div class="card">
+          <h2 style="font-size:22px;margin-bottom:12px;">할 수 있는 것</h2>
+          <ul class="steps" style="margin-top:0;">{p.can.map((c) => <li><div><span>{c}</span></div></li>)}</ul>
+        </div>
+        <div class="card">
+          <h2 style="font-size:22px;margin-bottom:12px;">아직 한계가 있는 것</h2>
+          <ul class="steps" style="margin-top:0;">{p.cannot.map((c) => <li><div><span>{c}</span></div></li>)}</ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px;">
+        <h2 style="font-size:22px;margin-bottom:8px;">크레딧</h2>
+        <p>{p.cost} <a class="link-arrow" href="/pricing/">요금제 보기</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 style="margin-bottom:24px;">자주 묻는 질문</h2>
+      <div class="faq">
+        {p.faq.map((f, i) => (
+          <details data-track-open="faq_open" data-item={`${p.slug}-${i}`}>
+            <summary>{f.q}</summary>
+            <div class="answer"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+      <h2 style="margin:56px 0 20px;font-size:22px;">함께 보면 좋은 페이지</h2>
+      <ul class="chips">
+        {p.related.map((r) => <li><a class="chip" href={r.href}>{r.label}</a></li>)}
+        {others.map((f) => <li><a class="chip" href={`/features/${f.slug}/`}>{f.name}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section notebook final-cta">
+    <div class="container">
+      <h2>무료로 시작해 보세요</h2>
+      <p class="lead">가입하면 매주 15크레딧이 들어와요.</p>
+      <Download campaign={`web_feature_${p.slug.replace(/-/g, "_")}_final`} loc="feature_final" />
+    </div>
+  </section>
+</BaseLayout>
