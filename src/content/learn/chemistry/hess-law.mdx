@@ -1,0 +1,129 @@
+---
+subject: chemistry
+unit: thermochemistry
+order: 100
+title: "헤스 법칙 — 반응식 조합으로 엔탈피 구하기, 예제 풀이"
+h1: "헤스 법칙으로 반응 엔탈피 구하기"
+description: "엔탈피가 상태함수라는 성질에서 나오는 헤스 법칙으로, 직접 측정하기 어려운 반응의 ΔH를 연소열 반응식들을 뒤집고 곱하고 더해 구하는 방법을 예제로 해설해요. 생성 엔탈피 공식 연습 포함."
+summary:
+  - "엔탈피는 상태함수라 반응을 몇 단계로 나눠도 전체 ΔH는 같다(헤스 법칙)."
+  - "반응식을 뒤집으면 ΔH의 부호가 바뀌고, 계수를 n배 하면 ΔH도 n배가 된다."
+  - "표준 생성 엔탈피로는 ΔH°rxn = Σ(생성물 ΔH°f) − Σ(반응물 ΔH°f)로 바로 계산한다."
+keyword: "헤스 법칙 문제"
+level: core
+checks:
+  - id: ex1
+    claim: "C + 2H₂ → CH₄의 ΔH = −393.5 + 2(−285.8) − (−890.3) = −74.8 kJ"
+    sympy: "Rational(-3935,10) + 2*Rational(-2858,10) - Rational(-8903,10) == Rational(-748,10)"
+  - id: p1
+    claim: "C₂H₄ + H₂ → C₂H₆의 ΔH = −1411.0 − 285.8 + 1559.8 = −137.0 kJ"
+    sympy: "Rational(-14110,10) + Rational(-2858,10) - Rational(-15598,10) == -137"
+  - id: p2
+    claim: "CH₄ 연소 ΔH° = −393.5 + 2(−285.8) − (−74.8) = −890.3 kJ"
+    sympy: "Rational(-3935,10) + 2*Rational(-2858,10) - Rational(-748,10) == Rational(-8903,10)"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 출발점과 도착점만 같으면 경로는 상관없다
+
+산 정상까지의 높이 차는 어느 등산로로 올라가든 같습니다. 엔탈피도 이런 **상태함수**여서, 반응물에서 생성물로 가는 엔탈피 변화 $\Delta H$는 반응이 한 번에 일어나든 여러 단계를 거치든 같습니다. 이것이 헤스 법칙입니다.
+
+그래서 흑연과 수소에서 메테인을 직접 만드는 반응처럼 실험으로 재기 어려운 $\Delta H$도, 쉽게 잴 수 있는 반응들(주로 연소 반응)의 $\Delta H$를 조합해 계산할 수 있습니다.
+
+## 핵심 공식
+
+반응식을 조작할 때의 규칙:
+
+$$
+\text{역반응: } \Delta H \rightarrow -\Delta H, \qquad \text{계수} \times n: \ \Delta H \rightarrow n\,\Delta H, \qquad \text{식을 더하면 } \Delta H \text{도 더한다}
+$$
+
+표준 생성 엔탈피를 쓰는 형태:
+
+$$
+\Delta H^\circ_{\text{rxn}} = \sum n\,\Delta H^\circ_f(\text{생성물}) - \sum n\,\Delta H^\circ_f(\text{반응물})
+$$
+
+원소의 가장 안정한 형태(예: $\text{O}_2(g)$, $\text{C}(\text{흑연})$)의 $\Delta H^\circ_f = 0$ 입니다.
+
+## 예제
+
+<Example>
+다음 자료를 이용해 $\text{C}(s) + 2\text{H}_2(g) \rightarrow \text{CH}_4(g)$의 $\Delta H$를 구하세요.
+
+1. $\text{C}(s) + \text{O}_2(g) \rightarrow \text{CO}_2(g)$, $\Delta H_1 = -393.5\ \text{kJ}$
+2. $\text{H}_2(g) + \tfrac12\text{O}_2(g) \rightarrow \text{H}_2\text{O}(l)$, $\Delta H_2 = -285.8\ \text{kJ}$
+3. $\text{CH}_4(g) + 2\text{O}_2(g) \rightarrow \text{CO}_2(g) + 2\text{H}_2\text{O}(l)$, $\Delta H_3 = -890.3\ \text{kJ}$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="목표 반응에서 각 물질의 위치를 본다">
+목표 반응의 반응물은 $\text{C}$와 $2\text{H}_2$, 생성물은 $\text{CH}_4$입니다. 각 물질이 한 번씩만 나오는 식을 기준으로 방향과 배수를 정합니다.
+</Step>
+
+<Step n={2} title="식을 뒤집고 곱한다">
+- 식 1: $\text{C}$가 반응물 쪽에 1개 → 그대로, $\Delta H = -393.5$
+- 식 2: $\text{H}_2$가 반응물 쪽에 2개 필요 → 2배, $\Delta H = 2(-285.8) = -571.6$
+- 식 3: $\text{CH}_4$가 생성물 쪽에 와야 함 → 뒤집기, $\Delta H = +890.3$
+</Step>
+
+<Step n={3} title="더해서 지워지는지 확인한다">
+$$
+\text{C} + \text{O}_2 + 2\text{H}_2 + \text{O}_2 + \text{CO}_2 + 2\text{H}_2\text{O} \rightarrow \text{CO}_2 + 2\text{H}_2\text{O} + \text{CH}_4 + 2\text{O}_2
+$$
+
+양쪽의 $2\text{O}_2$, $\text{CO}_2$, $2\text{H}_2\text{O}$가 지워지고 $\text{C} + 2\text{H}_2 \rightarrow \text{CH}_4$만 남습니다.
+</Step>
+
+<Step n={4} title="ΔH를 더한다">
+$$
+\Delta H = -393.5 - 571.6 + 890.3 = -74.8\ \text{kJ}
+$$
+
+이 값은 메테인의 표준 생성 엔탈피와 같습니다(목표 반응이 바로 생성 반응이기 때문).
+</Step>
+
+<Answer>
+$\Delta H = -74.8\ \text{kJ}$ (발열)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="식을 뒤집고 ΔH 부호를 바꾸지 않는다">
+식 3을 뒤집었는데 $-890.3$을 그대로 더하면 $-1855.4\ \text{kJ}$이라는 엉뚱한 값이 나옵니다.
+</Mistake>
+
+<Mistake title="계수를 곱하고 ΔH는 곱하지 않는다">
+식 2를 두 배로 썼으면 $\Delta H$도 두 배입니다. 식과 $\Delta H$를 한 줄에 함께 적어 두면 놓치지 않습니다.
+</Mistake>
+
+<Mistake title="물의 상태(l, g)를 구분하지 않는다">
+$\text{H}_2\text{O}(l)$과 $\text{H}_2\text{O}(g)$의 생성 엔탈피는 약 $44\ \text{kJ/mol}$ 차이가 납니다. 상태가 다른 식을 섞어 지우면 오차가 생깁니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+연소열 $\text{C}_2\text{H}_4$ $-1411.0$, $\text{H}_2$ $-285.8$, $\text{C}_2\text{H}_6$ $-1559.8\ \text{kJ/mol}$ (생성물 $\text{CO}_2(g)$, $\text{H}_2\text{O}(l)$)을 이용해 $\text{C}_2\text{H}_4 + \text{H}_2 \rightarrow \text{C}_2\text{H}_6$의 $\Delta H$를 구하세요.
+</Fragment>
+
+에틸렌과 수소의 연소식은 그대로, 에테인의 연소식은 뒤집어 더합니다. $-1411.0 - 285.8 + 1559.8$.
+
+**정답:** $\Delta H = -137.0\ \text{kJ}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$\Delta H^\circ_f$: $\text{CH}_4(g)$ $-74.8$, $\text{CO}_2(g)$ $-393.5$, $\text{H}_2\text{O}(l)$ $-285.8\ \text{kJ/mol}$일 때 메테인 연소 반응의 $\Delta H^\circ$를 구하세요.
+</Fragment>
+
+$\Delta H^\circ = [-393.5 + 2(-285.8)] - [-74.8 + 2(0)]$. 예제의 결과와 일관되게 $\Delta H_3$이 다시 나옵니다.
+
+**정답:** $\Delta H^\circ = -890.3\ \text{kJ}$
+</Practice>

@@ -1,0 +1,138 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 150
+title: "약산의 pH 계산 — ICE 표, x가 작다는 근사와 5% 규칙"
+h1: "약산 용액의 pH 구하기"
+description: "약산 HA의 pH를 ICE 표와 Ka 식으로 구하는 방법을 정리하고, 'x가 작다' 근사를 언제 써도 되는지 5% 규칙으로 확인하는 과정을 예제로 해설해요. 근사가 틀리는 경우와 약염기 연습 문제 포함."
+summary:
+  - "약산은 일부만 이온화하므로 ICE 표로 평형 농도를 세우고 Ka = x²/(C − x)를 푼다."
+  - "x가 처음 농도의 5%보다 작으면 C − x ≈ C로 근사해 x ≈ √(Ka·C)로 빠르게 구한다."
+  - "근사 후 반드시 x/C를 확인하고, 5%를 넘으면 이차방정식을 풀어야 한다."
+keyword: "약산 pH 계산"
+level: core
+checks:
+  - id: ex1
+    claim: "0.10 M 아세트산(Ka=1.8×10⁻⁵): [H⁺]≈1.33×10⁻³, pH≈2.87~2.88, 이온화 ≈1.3%"
+    sympy: "(lambda x: Abs(N(solve(x**2/(Rational(1,10)-x) - Rational(18,10)*10**-5, x)[0]) - 1.3327e-3) < 1e-6 and Abs(N(-log(sqrt(Rational(18,10)*10**-6), 10)) - 2.8724) < 1e-3)(Symbol('x', positive=True))"
+  - id: p1
+    claim: "0.010 M HF(Ka=6.8×10⁻⁴): 근사 pH 2.58은 틀리고 정확한 pH ≈ 2.64 (이온화 ≈23%)"
+    sympy: "(lambda x: Abs(N(-log(solve(x**2/(Rational(1,100)-x) - Rational(68,10)*10**-4, x)[0], 10)) - 2.640) < 1e-3 and N(solve(x**2/(Rational(1,100)-x) - Rational(68,10)*10**-4, x)[0]/Rational(1,100)) > 0.2)(Symbol('x', positive=True))"
+  - id: p2
+    claim: "0.20 M NH₃(Kb=1.8×10⁻⁵) pH ≈ 11.28"
+    sympy: "Abs(N(14 + log(sqrt(Rational(18,10)*10**-5*Rational(2,10)), 10)) - 11.278) < 1e-3"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 일부만 이온화하는 산
+
+염산 같은 강산은 물에서 거의 100% 이온화하므로 $[\text{H}^+]$가 산의 농도와 같습니다. 아세트산 같은 **약산**은 일부만 이온화하고, 이온화한 쪽과 하지 않은 쪽이 평형을 이룹니다. 그 평형의 정도를 나타내는 값이 산 해리 상수 $K_a$입니다. $K_a$가 작을수록 약한 산입니다.
+
+약산의 pH를 구하는 문제는 결국 평형 농도를 구하는 문제이고, 그 표준 도구가 ICE 표(처음 Initial, 변화 Change, 평형 Equilibrium)입니다.
+
+## 핵심 공식
+
+$$
+\text{HA} \rightleftharpoons \text{H}^+ + \text{A}^-, \qquad K_a = \frac{[\text{H}^+][\text{A}^-]}{[\text{HA}]} = \frac{x^2}{C - x}
+$$
+
+근사($x \ll C$)와 확인 규칙:
+
+$$
+x \approx \sqrt{K_aC}, \qquad \frac{x}{C}\times100\% \lt 5\% \ \text{이면 근사 사용 가능}
+$$
+
+$$
+\text{pH} = -\log[\text{H}^+], \qquad \text{pH} + \text{pOH} = 14\ (25\ ^\circ\text{C})
+$$
+
+## 예제
+
+<Example>
+$0.10\ \text{M}$ 아세트산 용액의 pH와 이온화 백분율을 구하세요. ($K_a = 1.8\times10^{-5}$)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="ICE 표를 세운다">
+
+| | HA | H⁺ | A⁻ |
+|---|---|---|---|
+| 처음 (M) | 0.10 | 0 | 0 |
+| 변화 (M) | −x | +x | +x |
+| 평형 (M) | 0.10 − x | x | x |
+
+물의 자동 이온화로 생기는 $\text{H}^+$($10^{-7}$ M)는 무시합니다.
+</Step>
+
+<Step n={2} title="Ka 식에 넣는다">
+$$
+1.8\times10^{-5} = \frac{x^2}{0.10 - x}
+$$
+</Step>
+
+<Step n={3} title="x가 작다고 근사해 푼다">
+$K_a$가 매우 작으므로 $0.10 - x \approx 0.10$으로 둡니다.
+
+$$
+x \approx \sqrt{(1.8\times10^{-5})(0.10)} = \sqrt{1.8\times10^{-6}} \approx 1.34\times10^{-3}\ \text{M}
+$$
+</Step>
+
+<Step n={4} title="5% 규칙으로 근사를 확인한다">
+$$
+\frac{1.34\times10^{-3}}{0.10}\times100\% \approx 1.3\% \lt 5\%
+$$
+
+근사가 정당합니다. (이차방정식을 정확히 풀면 $x = 1.33\times10^{-3}$으로 거의 같습니다.)
+</Step>
+
+<Step n={5} title="pH를 구한다">
+$$
+\text{pH} = -\log(1.34\times10^{-3}) \approx 2.87
+$$
+</Step>
+
+<Answer>
+$\text{pH} \approx 2.87$, 이온화 백분율 약 $1.3\%$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="약산의 농도를 그대로 [H⁺]로 쓴다">
+$0.10\ \text{M}$을 $[\text{H}^+]$로 쓰면 pH가 $1.0$이 되어 강산처럼 계산됩니다. 약산은 반드시 평형으로 풉니다.
+</Mistake>
+
+<Mistake title="근사한 뒤 확인하지 않는다">
+$K_a$가 크거나 농도가 묽으면 $x$가 커서 근사가 깨집니다. 연습 1처럼 5%를 넘으면 이차방정식 $x^2 + K_ax - K_aC = 0$을 풀어야 합니다.
+</Mistake>
+
+<Mistake title="약염기에서 pOH를 pH로 쓴다">
+약염기는 같은 방법으로 $[\text{OH}^-]$를 구하므로 결과는 pOH입니다. $14$에서 빼야 pH가 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$0.010\ \text{M}$ 플루오린화 수소산(HF) 용액의 pH를 구하세요. ($K_a = 6.8\times10^{-4}$) 근사가 통하는지도 확인하세요.
+</Fragment>
+
+근사하면 $x \approx \sqrt{6.8\times10^{-6}} \approx 2.6\times10^{-3}$이고 $x/C \approx 26\%$라 5%를 크게 넘습니다. 이차방정식 $x^2 + 6.8\times10^{-4}x - 6.8\times10^{-6} = 0$을 풀면 $x \approx 2.29\times10^{-3}\ \text{M}$ 입니다.
+
+**정답:** $\text{pH} \approx 2.64$ (근사로 구한 2.58은 틀림)
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$0.20\ \text{M}$ 암모니아 용액의 pH를 구하세요. ($K_b = 1.8\times10^{-5}$)
+</Fragment>
+
+$[\text{OH}^-] \approx \sqrt{(1.8\times10^{-5})(0.20)} = 1.9\times10^{-3}\ \text{M}$ (0.95%, 근사 가능). $\text{pOH} \approx 2.72$.
+
+**정답:** $\text{pH} \approx 11.28$
+</Practice>
