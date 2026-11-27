@@ -1,0 +1,155 @@
+---
+subject: calculus
+unit: integration
+order: 20
+title: "부분적분 공식과 예제 — u와 dv 고르는 법, 단계별 해설"
+h1: "부분적분: 공식과 u·dv 고르는 법"
+description: "부분적분 공식 ∫u dv = uv − ∫v du를 언제, 어떻게 쓰는지 정리했어요. u를 고르는 LIATE 순서, ∫x e^{2x} dx 단계별 해설, 정적분 계산, 자주 하는 실수와 연습 문제."
+summary:
+  - "부분적분은 곱의 미분법을 거꾸로 쓴 공식으로, ∫u dv = uv − ∫v du이다."
+  - "미분하면 단순해지는 쪽을 u로 고른다. 순서는 로그 → 역삼각 → 다항 → 삼각 → 지수(LIATE)."
+  - "새로 생긴 적분 ∫v du가 원래보다 쉬워졌는지가 선택이 맞았는지의 기준이다."
+keyword: "부분적분 공식 예제"
+level: core
+checks:
+  - id: ex1
+    claim: "∫x e^{2x} dx = (2x−1)e^{2x}/4 + C (미분하면 피적분함수)"
+    sympy: "(lambda x: simplify(diff((2*x-1)*exp(2*x)/4, x) - x*exp(2*x)) == 0)(Symbol('x'))"
+  - id: ex2
+    claim: "∫_0^π x sin x dx = π"
+    sympy: "(lambda x: integrate(x*sin(x), (x, 0, pi)) == pi)(Symbol('x'))"
+  - id: p1
+    claim: "∫x ln x dx = x²ln x/2 − x²/4 + C"
+    sympy: "(lambda x: simplify(diff(x**2*log(x)/2 - x**2/4, x) - x*log(x)) == 0)(Symbol('x', positive=True))"
+  - id: p2
+    claim: "∫_1^e ln x dx = 1"
+    sympy: "(lambda x: integrate(log(x), (x, 1, E)) == 1)(Symbol('x', positive=True))"
+  - id: p3
+    claim: "∫_0^1 x² e^{−x} dx = 2 − 5/e"
+    sympy: "(lambda x: simplify(integrate(x**2*exp(-x), (x, 0, 1)) - (2 - 5*exp(-1))) == 0)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 곱의 미분을 거꾸로
+
+두 함수의 곱을 미분하면 $(uv)' = u'v + uv'$ 입니다. 양변을 적분하고 정리하면 부분적분 공식이 나옵니다. 그래서 부분적분은 **피적분함수가 두 함수의 곱이고, 한쪽은 미분하면 단순해지고 다른 쪽은 적분하기 쉬울 때** 쓰는 방법입니다.
+
+치환적분이 "속에 있는 함수의 도함수가 곁에 있는" 꼴에 쓰인다면, 부분적분은 $x e^{x}$, $x\sin x$, $\ln x$, $e^x \cos x$처럼 그런 관계가 없는 곱에 씁니다. 대학 미적분학 시험에서는 어떤 적분 기법을 쓸지 고르는 판단 자체가 채점 포인트인 경우가 많습니다.
+
+## 핵심 공식
+
+$$
+\int u\, dv = uv - \int v\, du
+$$
+
+정적분에서는 경계값을 $uv$ 항에도 적용합니다.
+
+$$
+\int_a^b u\, dv = \Big[\,uv\,\Big]_a^b - \int_a^b v\, du
+$$
+
+**u를 고르는 순서 (LIATE):** 로그함수(L) → 역삼각함수(I) → 다항함수(A) → 삼각함수(T) → 지수함수(E). 앞쪽일수록 $u$로, 뒤쪽일수록 $dv$로 둡니다. 절대 규칙은 아니고, 실패하면 바꿔 보는 출발점입니다.
+
+## 예제
+
+<Example>
+다음을 계산하세요.
+
+(1) $\displaystyle \int x\, e^{2x}\, dx$ (2) $\displaystyle \int_0^{\pi} x \sin x\, dx$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) u와 dv를 고른다">
+다항함수 $x$는 미분하면 $1$이 되어 사라지고, $e^{2x}$는 적분해도 모양이 그대로입니다. LIATE 순서에서도 다항(A)이 지수(E)보다 앞입니다.
+
+$$
+u = x,\quad dv = e^{2x}\,dx \qquad\Longrightarrow\qquad du = dx,\quad v = \tfrac{1}{2}e^{2x}
+$$
+</Step>
+
+<Step n={2} title="(1) 공식에 넣는다">
+$$
+\int x e^{2x}\,dx = x\cdot\tfrac{1}{2}e^{2x} - \int \tfrac{1}{2}e^{2x}\,dx = \tfrac{1}{2}x e^{2x} - \tfrac{1}{4}e^{2x} + C
+$$
+
+새로 생긴 적분 $\int \tfrac12 e^{2x}dx$에는 $x$가 없으므로 선택이 맞았습니다. 정리하면 $\dfrac{(2x-1)e^{2x}}{4} + C$ 입니다.
+</Step>
+
+<Step n={3} title="(1) 미분해서 검산한다">
+$$
+\frac{d}{dx}\left[\frac{(2x-1)e^{2x}}{4}\right] = \frac{2e^{2x} + 2(2x-1)e^{2x}}{4} = x e^{2x}
+$$
+
+피적분함수가 그대로 나오므로 맞습니다. 부정적분은 언제나 이렇게 확인할 수 있습니다.
+</Step>
+
+<Step n={4} title="(2) 정적분에 적용한다">
+$u = x$, $dv = \sin x\,dx$로 두면 $du = dx$, $v = -\cos x$ 입니다.
+
+$$
+\int_0^{\pi} x\sin x\,dx = \Big[-x\cos x\Big]_0^{\pi} + \int_0^{\pi}\cos x\,dx = (-\pi\cdot(-1) - 0) + \Big[\sin x\Big]_0^{\pi} = \pi + 0
+$$
+</Step>
+
+<Answer>
+(1) $\displaystyle \int x e^{2x}\,dx = \frac{(2x-1)\,e^{2x}}{4} + C$ (2) $\displaystyle \int_0^{\pi} x\sin x\,dx = \pi$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="u와 dv를 반대로 고른다">
+$u = e^{2x}$, $dv = x\,dx$로 두면 $v = \tfrac{x^2}{2}$가 되어 새 적분 $\int \tfrac{x^2}{2}\cdot 2e^{2x}dx$가 원래보다 어려워집니다. 새 적분이 더 복잡해졌다면 즉시 선택을 바꾸세요.
+</Mistake>
+
+<Mistake title="v를 구할 때 계수를 잊는다">
+$\int e^{2x}dx = \tfrac{1}{2}e^{2x}$입니다. $\tfrac12$을 빠뜨리면 이후 모든 항의 계수가 두 배로 틀립니다. 치환한 지수함수·삼각함수를 적분할 때 특히 주의하세요.
+</Mistake>
+
+<Mistake title="정적분에서 uv 항에 경계값을 넣지 않는다">
+$\int_a^b u\,dv$에서 $uv$에도 $\big[\;\big]_a^b$를 적용해야 합니다. 부정적분처럼 $uv$를 그대로 두고 뒤의 적분에만 경계값을 넣는 실수가 흔합니다.
+</Mistake>
+
+<Mistake title="ln x처럼 '곱이 아닌' 적분에서 부분적분을 떠올리지 못한다">
+$\int \ln x\,dx$는 곱이 없어 보이지만 $u = \ln x$, $dv = 1\cdot dx$로 두면 바로 풀립니다. 역삼각함수 $\int \arctan x\,dx$도 같은 방법입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\displaystyle \int x \ln x\, dx$를 계산하세요.
+</Fragment>
+
+LIATE에서 로그(L)가 먼저이므로 $u = \ln x$, $dv = x\,dx$로 두면 $du = \tfrac{1}{x}dx$, $v = \tfrac{x^2}{2}$ 입니다.
+
+$$
+\int x\ln x\,dx = \frac{x^2}{2}\ln x - \int \frac{x}{2}\,dx
+$$
+
+**정답:** $\dfrac{x^2 \ln x}{2} - \dfrac{x^2}{4} + C$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$\displaystyle \int_1^{e} \ln x\, dx$를 계산하세요.
+</Fragment>
+
+$u = \ln x$, $dv = dx$로 두면 $\big[x\ln x\big]_1^e - \int_1^e 1\,dx = (e - 0) - (e - 1)$ 입니다.
+
+**정답:** $1$
+</Practice>
+
+<Practice n={3}>
+<Fragment slot="problem">
+$\displaystyle \int_0^{1} x^2 e^{-x}\, dx$를 계산하세요. (힌트: 부분적분을 두 번 합니다.)
+</Fragment>
+
+$u = x^2$, $dv = e^{-x}dx$로 한 번, 남은 $\int 2x e^{-x}dx$에 다시 한 번 적용하면 부정적분은 $-(x^2 + 2x + 2)e^{-x}$ 입니다. $x=1$에서 $-5e^{-1}$, $x=0$에서 $-2$이므로 차는 $2 - \tfrac{5}{e}$ 입니다.
+
+**정답:** $2 - \dfrac{5}{e} \approx 0.161$
+</Practice>

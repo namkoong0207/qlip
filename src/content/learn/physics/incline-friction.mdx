@@ -1,0 +1,159 @@
+---
+subject: physics
+unit: kinematics-dynamics
+order: 40
+title: "경사면 마찰 문제 풀이 — 자유물체도, 가속도 공식, 예제"
+h1: "경사면과 마찰력: 자유물체도로 가속도 구하기"
+description: "경사면 위 물체에 작용하는 중력, 수직항력, 마찰력을 자유물체도로 나누고 뉴턴 제2법칙으로 가속도를 구하는 방법을 예제와 함께 해설해요. 정지·운동 마찰 구분과 흔한 부호 실수까지."
+summary:
+  - "좌표축을 경사면에 나란하게 잡으면 중력은 mg sinθ(경사 방향)와 mg cosθ(수직 방향)로 나뉜다."
+  - "수직항력은 N = mg cosθ이고, 운동 마찰력은 μk·N으로 운동 반대 방향을 향한다."
+  - "미끄러져 내려갈 때 a = g(sinθ − μk cosθ), 밀어 올릴 때 a = g(sinθ + μk cosθ)로 감속한다."
+keyword: "경사면 마찰력 문제"
+level: core
+checks:
+  - id: ex-a
+    claim: "θ=30°, μk=0.20, g=9.8일 때 내려가는 가속도 ≈ 3.20 m/s²"
+    sympy: "Abs(N(Rational(98,10)*(sin(pi/6) - Rational(1,5)*cos(pi/6))) - 3.2026) < 1e-3"
+  - id: ex-normal
+    claim: "m=2.0 kg의 수직항력 ≈ 16.97 N, 마찰력 ≈ 3.39 N"
+    sympy: "Abs(N(2*Rational(98,10)*cos(pi/6)) - 16.974) < 1e-2 and Abs(N(Rational(1,5)*2*Rational(98,10)*cos(pi/6)) - 3.395) < 1e-2"
+  - id: ex-v
+    claim: "정지 상태에서 3.0 m 내려간 뒤 속력 ≈ 4.38 m/s, 걸린 시간 ≈ 1.37 s"
+    sympy: "Abs(N(sqrt(2*3*Rational(98,10)*(sin(pi/6) - Rational(1,5)*cos(pi/6)))) - 4.384) < 1e-2 and Abs(N(sqrt(2*3/(Rational(98,10)*(sin(pi/6) - Rational(1,5)*cos(pi/6))))) - 1.369) < 1e-2"
+  - id: p1
+    claim: "6.0 m/s로 밀어 올리면 감속도 ≈ 6.60 m/s², 2.73 m 올라가서 멈춘다"
+    sympy: "Abs(N(Rational(98,10)*(sin(pi/6) + Rational(1,5)*cos(pi/6))) - 6.597) < 1e-2 and Abs(N(36/(2*Rational(98,10)*(sin(pi/6) + Rational(1,5)*cos(pi/6)))) - 2.728) < 1e-2"
+  - id: p2
+    claim: "25° 경사에서 정지해 있으려면 μs ≥ tan25° ≈ 0.466"
+    sympy: "Abs(N(tan(rad(25))) - 0.4663) < 1e-3"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 힘을 경사면 방향으로 나누기
+
+경사면 문제가 어렵게 느껴지는 이유는 힘이 수평·수직이 아니라 비스듬히 작용하기 때문입니다. 해결책은 **좌표축을 경사면에 맞추는 것**입니다. $x$축을 경사면을 따라, $y$축을 경사면에 수직으로 잡으면 수직항력과 마찰력은 축과 나란해지고, 중력 하나만 두 성분으로 나누면 됩니다.
+
+물체는 경사면을 뚫고 들어가거나 떠오르지 않으므로 $y$ 방향 알짜힘은 $0$이고, 여기서 수직항력이 정해집니다. 마찰력은 수직항력에 비례하므로, 결국 **수직항력 → 마찰력 → $x$ 방향 운동방정식** 순서로 풀립니다.
+
+마찰은 두 종류입니다. 물체가 멈춰 있을 때의 **정지 마찰력**은 필요한 만큼만 작용하며 최대값이 $\mu_s N$이고, 미끄러지는 동안의 **운동 마찰력**은 항상 $\mu_k N$입니다.
+
+## 핵심 공식
+
+경사각 $\theta$, 질량 $m$일 때 중력의 두 성분:
+
+$$
+F_{\parallel} = mg\sin\theta \;(\text{경사 아래 방향}), \qquad F_{\perp} = mg\cos\theta \;(\text{면을 누르는 방향})
+$$
+
+수직항력과 마찰력:
+
+$$
+N = mg\cos\theta, \qquad f_k = \mu_k N, \qquad f_s \le \mu_s N
+$$
+
+미끄러져 내려갈 때와, 위로 밀려 올라가는 동안의 가속도 크기:
+
+$$
+a_{\downarrow} = g(\sin\theta - \mu_k\cos\theta), \qquad a_{\uparrow,\ \text{감속}} = g(\sin\theta + \mu_k\cos\theta)
+$$
+
+## 예제
+
+<Example>
+질량 $2.0\ \text{kg}$인 상자가 경사각 $30^\circ$인 경사면 위에서 정지 상태로부터 미끄러져 내려갑니다. 운동 마찰 계수는 $\mu_k = 0.20$, $g = 9.8\ \text{m/s}^2$입니다.
+
+(a) 상자의 가속도를 구하세요. (b) $3.0\ \text{m}$ 내려갔을 때의 속력과 걸린 시간을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="자유물체도를 그리고 축을 정한다">
+상자에 작용하는 힘은 중력 $mg$(연직 아래), 수직항력 $N$(면에 수직, 바깥), 운동 마찰력 $f_k$(운동 반대 방향, 즉 경사면 위쪽) 세 개입니다. $x$축은 경사면 **아래** 방향을 $+$로 잡습니다. 물체가 움직이는 방향을 $+$로 잡으면 가속도가 양수로 나와 해석하기 쉽습니다.
+</Step>
+
+<Step n={2} title="수직 방향에서 수직항력과 마찰력을 구한다">
+$y$ 방향으로는 가속하지 않으므로
+
+$$
+N = mg\cos 30^\circ = (2.0)(9.8)(0.866) \approx 16.97\ \text{N}
+$$
+
+$$
+f_k = \mu_k N = (0.20)(16.97) \approx 3.39\ \text{N}
+$$
+</Step>
+
+<Step n={3} title="경사 방향으로 뉴턴 제2법칙을 쓴다">
+$$
+ma = mg\sin\theta - f_k = mg\sin\theta - \mu_k mg\cos\theta
+$$
+
+질량이 약분되므로
+
+$$
+a = g(\sin 30^\circ - 0.20\cos 30^\circ) = 9.8\,(0.500 - 0.173) \approx 3.20\ \text{m/s}^2
+$$
+
+질량이 답에 남지 않는다는 점도 기억해 두세요. 마찰 계수가 같으면 무거운 상자와 가벼운 상자는 같은 가속도로 내려갑니다.
+</Step>
+
+<Step n={4} title="등가속도 운동 공식으로 속력과 시간을 구한다">
+처음 속력 $v_0 = 0$, 이동 거리 $s = 3.0\ \text{m}$이므로
+
+$$
+v = \sqrt{2as} = \sqrt{2(3.20)(3.0)} \approx 4.38\ \text{m/s}, \qquad t = \sqrt{\frac{2s}{a}} = \sqrt{\frac{6.0}{3.20}} \approx 1.37\ \text{s}
+$$
+</Step>
+
+<Step n={5} title="극단적인 경우로 확인한다">
+$\mu_k = 0$이면 $a = g\sin\theta = 4.9\ \text{m/s}^2$로 마찰 없는 경사면 결과가 되고, $\theta = 90^\circ$이면 $a = g$로 자유낙하가 됩니다. 답이 두 경우 사이에 있으므로 자연스럽습니다.
+</Step>
+
+<Answer>
+(a) $a \approx 3.2\ \text{m/s}^2$ (경사면 아래 방향) (b) $v \approx 4.4\ \text{m/s}$, $t \approx 1.4\ \text{s}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="수직항력을 mg로 둔다">
+수평면에서는 $N = mg$이지만 경사면에서는 $N = mg\cos\theta$입니다. 경사면을 밀거나 당기는 다른 힘이 있으면 그 수직 성분까지 더해야 하므로, 매번 $y$ 방향 힘의 합으로 구하는 습관이 안전합니다.
+</Mistake>
+
+<Mistake title="sin과 cos을 바꿔 쓴다">
+경사각이 $0$에 가까우면 경사 방향 성분이 $0$이 되어야 합니다. $\theta \to 0$일 때 $0$이 되는 쪽이 $\sin\theta$이므로 경사 방향은 $mg\sin\theta$입니다. 헷갈리면 이렇게 극단값을 넣어 확인하세요.
+</Mistake>
+
+<Mistake title="마찰력 방향을 항상 경사 위쪽으로 둔다">
+운동 마찰력은 **운동 방향의 반대**입니다. 물체를 위로 밀어 올리는 동안에는 마찰력이 경사 아래 방향이라 중력 성분과 같은 방향으로 감속시킵니다. 그래서 올라갈 때와 내려갈 때 가속도 크기가 다릅니다.
+</Mistake>
+
+<Mistake title="정지 마찰력을 항상 μsN으로 계산한다">
+$\mu_s N$은 정지 마찰력의 **최댓값**입니다. 물체가 멈춰 있으면 정지 마찰력은 $mg\sin\theta$와 정확히 같은 크기만큼만 작용합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+같은 경사면($30^\circ$, $\mu_k = 0.20$)에서 상자를 경사면 위쪽으로 $6.0\ \text{m/s}$로 밀어 올렸습니다. 손을 뗀 뒤 몇 m 올라가서 멈출까요?
+</Fragment>
+
+올라가는 동안 중력 성분과 마찰력이 모두 경사 아래 방향입니다. 감속도 $a = g(\sin 30^\circ + 0.20\cos 30^\circ) \approx 6.60\ \text{m/s}^2$이고, $v^2 = v_0^2 - 2as$에서 $v=0$이면 $s = \dfrac{v_0^2}{2a} = \dfrac{36}{13.2}$ 입니다.
+
+**정답:** 약 $2.7\ \text{m}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+경사각 $25^\circ$인 경사면에 놓인 물체가 미끄러지지 않으려면 정지 마찰 계수 $\mu_s$가 최소 얼마여야 할까요?
+</Fragment>
+
+정지해 있으려면 필요한 마찰력 $mg\sin\theta$가 최대 정지 마찰력 $\mu_s mg\cos\theta$ 이하여야 합니다. 정리하면 $\mu_s \ge \tan\theta$ 입니다.
+
+**정답:** $\mu_s \ge \tan 25^\circ \approx 0.47$
+</Practice>

@@ -1,0 +1,152 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 160
+title: "완충 용액 pH 계산 — 헨더슨-하셀바흐 식과 예제 풀이"
+h1: "완충 용액과 헨더슨-하셀바흐 식"
+description: "약산과 그 짝염기로 만든 완충 용액의 pH를 헨더슨-하셀바흐 식으로 계산하는 방법을 예제로 해설해요. 강산을 넣었을 때의 pH 변화, 식을 쓸 수 없는 경우, 자주 하는 실수까지."
+summary:
+  - "완충 용액은 약산(HA)과 그 짝염기(A⁻)가 함께 있어 산·염기를 조금 넣어도 pH가 거의 변하지 않는 용액이다."
+  - "pH = pKa + log([A⁻]/[HA]). 두 농도가 같으면 pH = pKa이다."
+  - "강산을 넣으면 A⁻가 같은 몰수만큼 HA로 바뀌므로, 몰수로 화학량론을 먼저 계산한 뒤 식에 넣는다."
+keyword: "완충 용액 pH 계산"
+level: core
+checks:
+  - id: ex-pka
+    claim: "Ka=1.8×10⁻⁵의 pKa ≈ 4.74"
+    sympy: "Abs(N(-log(Rational(18,10)*10**-5, 10)) - 4.7447) < 1e-3"
+  - id: ex-ph
+    claim: "0.20 M HA + 0.30 M A⁻ 완충 용액 pH ≈ 4.92"
+    sympy: "Abs(N(-log(Rational(18,10)*10**-5, 10) + log(Rational(3,2), 10)) - 4.9208) < 1e-3"
+  - id: ex-hcl
+    claim: "0.010 mol HCl을 넣으면 HA 0.21, A⁻ 0.29 mol → pH ≈ 4.88"
+    sympy: "Rational(20,100)+Rational(1,100) == Rational(21,100) and Rational(30,100)-Rational(1,100) == Rational(29,100) and Abs(N(-log(Rational(18,10)*10**-5, 10) + log(Rational(29,21), 10)) - 4.8849) < 1e-3"
+  - id: ex-water
+    claim: "같은 HCl을 순수한 물 1.0 L에 넣으면 pH = 2.00"
+    sympy: "simplify(-log(Rational(1,100), 10)) == 2"
+  - id: p1
+    claim: "0.10 M NH₃ + 0.15 M NH₄Cl (Kb=1.8×10⁻⁵) pH ≈ 9.08"
+    sympy: "Abs(N(14 - (-log(Rational(18,10)*10**-5, 10) + log(Rational(15,10), 10))) - 9.0792) < 1e-3"
+  - id: p2
+    claim: "pH 5.00을 만들려면 [A⁻]/[HA] ≈ 1.80"
+    sympy: "Abs(N(10**(5 + log(Rational(18,10)*10**-5, 10))) - 1.80) < 1e-3"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: pH를 붙잡아 두는 용액
+
+순수한 물에 강산을 조금만 넣어도 pH는 크게 떨어집니다. 그런데 **약산 HA와 그 짝염기 A⁻가 비슷한 양으로 함께 있는 용액**에서는 들어온 $\text{H}^+$를 A⁻가 받아 HA로 바꾸고, 들어온 $\text{OH}^-$는 HA가 중화합니다. 강한 산·염기가 약한 산·염기로 바뀌어 버리므로 pH가 조금밖에 변하지 않습니다. 이것이 완충 작용이고, 혈액(탄산–탄산수소 이온)과 실험실 완충 용액이 이 원리로 pH를 유지합니다.
+
+완충 용액의 pH는 약산의 평형식에서 바로 나옵니다. 약산과 짝염기가 둘 다 충분히 많으면 이온화로 변하는 양을 무시할 수 있어서, 넣어 준 농도를 그대로 평형 농도로 쓸 수 있습니다. 그 결과가 헨더슨-하셀바흐 식입니다.
+
+## 핵심 공식
+
+약산의 산 해리 상수에서 출발합니다.
+
+$$
+K_a = \frac{[\text{H}^+][\text{A}^-]}{[\text{HA}]}
+$$
+
+양변에 $-\log$를 취하고 정리하면 헨더슨-하셀바흐 식이 됩니다.
+
+$$
+\text{pH} = \text{p}K_a + \log\frac{[\text{A}^-]}{[\text{HA}]}
+$$
+
+같은 용액 안에서는 부피가 같으므로 농도비 대신 **몰수비**를 넣어도 됩니다. 염기 쪽 완충 용액(B와 BH⁺)은 $\text{pOH} = \text{p}K_b + \log\dfrac{[\text{BH}^+]}{[\text{B}]}$로 구한 뒤 $\text{pH} = 14 - \text{pOH}$ (25 °C)를 씁니다.
+
+## 예제
+
+<Example>
+아세트산($\text{CH}_3\text{COOH}$) $0.20\ \text{M}$과 아세트산 나트륨($\text{CH}_3\text{COONa}$) $0.30\ \text{M}$이 들어 있는 용액 $1.0\ \text{L}$가 있습니다. 아세트산의 $K_a = 1.8\times10^{-5}$입니다.
+
+(a) 이 용액의 pH를 구하세요. (b) 여기에 $\text{HCl}$ $0.010\ \text{mol}$을 넣으면 pH는 얼마가 될까요? (부피 변화는 무시합니다.)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="pKa를 구한다">
+$$
+\text{p}K_a = -\log(1.8\times10^{-5}) \approx 4.74
+$$
+</Step>
+
+<Step n={2} title="(a) 헨더슨-하셀바흐 식에 넣는다">
+아세트산 나트륨은 완전히 해리하므로 $[\text{A}^-] = 0.30\ \text{M}$, $[\text{HA}] = 0.20\ \text{M}$ 입니다.
+
+$$
+\text{pH} = 4.74 + \log\frac{0.30}{0.20} = 4.74 + 0.18 \approx 4.92
+$$
+
+짝염기가 약산보다 많으므로 pH가 pKa보다 약간 높게 나온 것이 맞습니다.
+</Step>
+
+<Step n={3} title="(b) 강산과 짝염기의 반응을 몰수로 먼저 계산한다">
+들어온 $\text{H}^+$는 A⁻와 완전히 반응합니다: $\text{A}^- + \text{H}^+ \rightarrow \text{HA}$.
+
+| | HA | A⁻ |
+|---|---|---|
+| 반응 전 (mol) | 0.20 | 0.30 |
+| 변화 (mol) | +0.010 | −0.010 |
+| 반응 후 (mol) | 0.21 | 0.29 |
+
+평형식에 넣기 전에 이 **화학량론 단계**를 반드시 먼저 합니다.
+</Step>
+
+<Step n={4} title="(b) 새 비율로 pH를 구한다">
+$$
+\text{pH} = 4.74 + \log\frac{0.29}{0.21} = 4.74 + 0.14 \approx 4.88
+$$
+</Step>
+
+<Step n={5} title="완충 효과를 비교해 본다">
+같은 $0.010\ \text{mol}$ HCl을 순수한 물 $1.0\ \text{L}$에 넣으면 $[\text{H}^+] = 0.010\ \text{M}$이므로 pH는 $7.00 \to 2.00$, 다섯 단위나 떨어집니다. 완충 용액에서는 $4.92 \to 4.88$, 약 $0.04$만 변했습니다.
+</Step>
+
+<Answer>
+(a) $\text{pH} \approx 4.92$ (b) $\text{pH} \approx 4.88$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="강산을 넣은 뒤 화학량론 없이 바로 식에 넣는다">
+HCl을 넣었다고 $[\text{H}^+]$에 $0.010$을 더하는 식으로 계산하면 안 됩니다. 강산은 먼저 A⁻와 반응해 없어지고, 그 결과로 바뀐 HA·A⁻의 양을 식에 넣어야 합니다.
+</Mistake>
+
+<Mistake title="로그 안의 분자·분모를 뒤집는다">
+식은 $\log\dfrac{[\text{염기}]}{[\text{산}]}$입니다. 짝염기가 많으면 pH가 pKa보다 **높아야** 한다는 점으로 확인하세요.
+</Mistake>
+
+<Mistake title="약산만 있는 용액에도 이 식을 쓴다">
+A⁻가 없으면 $\log$의 분자가 $0$이 되어 식이 성립하지 않습니다. 약산만 있는 용액은 ICE 표와 $x^2/(C-x) = K_a$로 풀어야 합니다. 반대로 약산이 거의 다 중화되어 한쪽이 매우 적을 때(비율이 $0.1$~$10$을 벗어날 때)도 근사가 나빠집니다.
+</Mistake>
+
+<Mistake title="염기 완충 용액에서 pOH를 pH로 착각한다">
+NH₃/NH₄⁺처럼 $K_b$가 주어지면 식에서 나오는 값은 pOH입니다. 마지막에 $14$에서 빼는 단계를 잊지 마세요. 또는 $\text{p}K_a = 14 - \text{p}K_b$로 바꿔 pH 식을 바로 써도 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\text{NH}_3$ $0.10\ \text{M}$과 $\text{NH}_4\text{Cl}$ $0.15\ \text{M}$이 섞인 용액의 pH를 구하세요. ($\text{NH}_3$의 $K_b = 1.8\times10^{-5}$, 25 °C)
+</Fragment>
+
+$\text{p}K_b \approx 4.74$이고 $\text{pOH} = 4.74 + \log\dfrac{0.15}{0.10} \approx 4.92$ 입니다. $\text{pH} = 14 - 4.92$.
+
+**정답:** $\text{pH} \approx 9.08$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+아세트산($K_a = 1.8\times10^{-5}$)과 아세트산 나트륨으로 pH $5.00$인 완충 용액을 만들려면 $[\text{A}^-]/[\text{HA}]$ 비를 얼마로 해야 할까요?
+</Fragment>
+
+$5.00 = 4.74 + \log r$에서 $\log r = 0.26$, $r = 10^{0.26}$ 입니다.
+
+**정답:** 약 $1.8$ (짝염기를 약산의 약 1.8배)
+</Practice>
