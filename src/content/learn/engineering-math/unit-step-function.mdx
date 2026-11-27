@@ -1,0 +1,113 @@
+---
+subject: engineering-math
+unit: laplace
+order: 11
+title: "단위계단함수와 제2이동정리 — 스위치가 켜지는 입력 다루기"
+h1: "단위계단함수와 제2이동정리"
+description: "t = a에서 켜지는 입력을 단위계단함수 u(t−a)로 나타내고, 제2이동정리 L{f(t−a)u(t−a)} = e^{−as}F(s)로 변환·역변환하는 방법을 예제로 해설해요. 시간 이동을 맞추지 않는 실수까지."
+summary:
+  - "u(t−a)는 t < a에서 0, t ≥ a에서 1인 함수로, 시간 a에 켜지는 스위치를 나타낸다."
+  - "제2이동정리: L{f(t−a)u(t−a)} = e^{−as}F(s). 역변환에서 e^{−as}가 보이면 a만큼 늦춰진 신호다."
+  - "변환하기 전에 f를 반드시 (t−a)의 함수로 고쳐 써야 한다."
+keyword: "단위계단함수 제2이동정리"
+level: core
+prerequisites: [engineering-math/laplace-transform-table]
+related: [engineering-math/dirac-delta]
+checks:
+  - id: ex1
+    claim: "L{(t−2)u(t−2)} = e^{−2s}/s²"
+    sympy: "(lambda t, s: simplify(laplace_transform(Heaviside(t-2)*(t-2), t, s, noconds=True) - exp(-2*s)/s**2) == 0)(*symbols('t s', positive=True))"
+  - id: ex2
+    claim: "y′+y=u(t−1), y(0)=0의 해 y=(1−e^{−(t−1)})u(t−1)"
+    sympy: "(lambda t, s: simplify(inverse_laplace_transform(exp(-s)/(s*(s+1)), s, t) - (1 - exp(-(t-1)))*Heaviside(t-1)) == 0)(Symbol('t', positive=True), Symbol('s'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 신호를 원하는 시각에 켜고 끈다
+
+회로에서 스위치를 2초 뒤에 켜거나, 기계에 힘을 잠깐만 가하는 상황은 구간마다 식이 다른 함수입니다. 단위계단함수 $u(t - a)$를 곱하면 "$t = a$ 전에는 0, 후에는 켜짐"을 하나의 식으로 쓸 수 있습니다. 라플라스 변환에서는 이 시간 지연이 $e^{-as}$라는 간단한 곱셈이 됩니다.
+
+## 핵심 공식
+
+$$
+u(t-a) = \begin{cases} 0 & t \lt a \\ 1 & t \ge a \end{cases}, \qquad \mathcal L\{u(t-a)\} = \frac{e^{-as}}{s}
+$$
+
+$$
+\mathcal L\{f(t-a)\,u(t-a)\} = e^{-as}F(s)
+$$
+
+구간 함수: $a \le t \lt b$에서만 켜진 신호는 $u(t-a) - u(t-b)$를 곱합니다.
+
+## 예제
+
+<Example>
+(1) $\mathcal L\{(t-2)\,u(t-2)\}$를 구하세요. (2) $y' + y = u(t-1)$, $y(0) = 0$을 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) f(t−2) 꼴인지 확인한다">
+$f(t) = t$를 2만큼 늦춘 꼴이므로 $F(s) = \dfrac{1}{s^2}$에 $e^{-2s}$를 곱합니다.
+
+$$
+\mathcal L\{(t-2)u(t-2)\} = \frac{e^{-2s}}{s^2}
+$$
+</Step>
+
+<Step n={2} title="(2) 변환한다">
+$$
+sY + Y = \frac{e^{-s}}{s} \quad\Longrightarrow\quad Y = e^{-s}\cdot\frac{1}{s(s+1)}
+$$
+</Step>
+
+<Step n={3} title="(2) e^{−s}를 떼고 나머지를 역변환한다">
+$\dfrac{1}{s(s+1)} = \dfrac1s - \dfrac{1}{s+1}$ 이므로 $g(t) = 1 - e^{-t}$.
+</Step>
+
+<Step n={4} title="(2) 1만큼 늦춘다">
+제2이동정리로 $t$를 $t - 1$로 바꾸고 $u(t-1)$을 곱합니다.
+
+$$
+y(t) = \big(1 - e^{-(t-1)}\big)\,u(t-1)
+$$
+
+$t \lt 1$에서는 입력이 없어 $y = 0$이고, 그 뒤로 1을 향해 차오릅니다.
+</Step>
+
+<Answer>
+(1) $\dfrac{e^{-2s}}{s^2}$ (2) $y = \big(1 - e^{-(t-1)}\big)u(t-1)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="t·u(t−2)를 바로 e^{−2s}/s²로 쓴다">
+$t\,u(t-2)$는 $f(t-2)$ 꼴이 아닙니다. $t = (t-2) + 2$로 고쳐 $\dfrac{e^{-2s}}{s^2} + \dfrac{2e^{-2s}}{s}$로 계산해야 합니다.
+</Mistake>
+
+<Mistake title="역변환에서 t를 t−a로 바꾸는 것을 잊는다">
+$e^{-as}$를 떼고 구한 $g(t)$를 반드시 $g(t-a)u(t-a)$로 고쳐야 합니다.
+</Mistake>
+
+<Mistake title="u(t−a)를 빠뜨려 t < a에서도 값이 있게 쓴다">
+답에 $u(t-1)$이 없으면 입력이 켜지기 전에도 반응이 있는 것처럼 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$t = 0$부터 $t = 3$까지만 크기 5로 켜졌다 꺼지는 입력 $f(t)$의 라플라스 변환을 구하세요.
+</Fragment>
+
+$f(t) = 5\big(u(t) - u(t-3)\big)$ 이므로 $\dfrac{5}{s} - \dfrac{5e^{-3s}}{s}$.
+
+**정답:** $\dfrac{5\,(1 - e^{-3s})}{s}$
+</Practice>

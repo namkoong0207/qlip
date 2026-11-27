@@ -1,0 +1,103 @@
+---
+subject: chemistry
+unit: equilibrium-acid-base
+order: 140
+title: "강산·강염기 pH와 중화 적정 — 남는 몰수로 pH 구하기"
+h1: "강산·강염기 pH와 중화 적정 계산"
+description: "강산·강염기는 완전히 이온화하므로 농도로 바로 pH를 구하고, 산과 염기를 섞을 때는 몰수로 중화 반응을 먼저 계산해 남은 쪽으로 pH를 구하는 방법을 예제로 해설해요. 적정으로 농도 구하기 포함."
+summary:
+  - "강산 HA는 [H⁺] = 산의 농도, 강염기 MOH는 [OH⁻] = 염기 농도(Ba(OH)₂는 2배)."
+  - "산과 염기를 섞으면 먼저 몰수로 H⁺ + OH⁻ → H₂O를 계산하고, 남은 쪽의 농도를 전체 부피로 나눈다."
+  - "당량점에서는 산의 몰수 = 염기의 몰수(계수 고려)이므로 M₁V₁ = M₂V₂로 미지 농도를 구한다."
+keyword: "중화 적정 pH 계산"
+level: core
+prerequisites: [chemistry/molarity-dilution]
+related: [chemistry/weak-acid-ph]
+checks:
+  - id: ex1
+    claim: "0.10 M HCl 50 mL + 0.10 M NaOH 30 mL: 남는 H⁺ 0.0020 mol / 0.080 L = 0.025 M, pH ≈ 1.60"
+    sympy: "Rational(5,1000) - Rational(3,1000) == Rational(2,1000) and Abs(N(-log(Rational(2,1000)/Rational(80,1000), 10)) - 1.602) < 1e-3"
+  - id: p1
+    claim: "HCl 25.0 mL를 0.100 M NaOH 30.0 mL로 중화 → HCl 0.120 M"
+    sympy: "Rational(300,10)*Rational(1,10)/25 == Rational(12,100)"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 먼저 중화시키고, 남은 것으로 pH
+
+강산과 강염기는 물에서 거의 100% 이온화하므로 평형 계산이 필요 없고, 농도가 곧 $[\text{H}^+]$ 또는 $[\text{OH}^-]$입니다. 둘을 섞으면 $\text{H}^+$와 $\text{OH}^-$가 1:1로 만나 물이 되고, 남은 쪽이 pH를 정합니다. 이때 **몰수**로 계산하고, 마지막에 **섞은 뒤 전체 부피**로 나누는 것이 핵심입니다.
+
+## 핵심 공식
+
+$$
+\text{pH} = -\log[\text{H}^+], \qquad \text{pOH} = -\log[\text{OH}^-], \qquad \text{pH} + \text{pOH} = 14\ (25\ ^\circ\text{C})
+$$
+
+$$
+\text{당량점: } n_{\text{H}^+} = n_{\text{OH}^-} \;\Longrightarrow\; M_aV_a = M_bV_b\ \ (\text{1가 산·염기})
+$$
+
+## 예제
+
+<Example>
+$0.10\ \text{M}$ HCl $50\ \text{mL}$에 $0.10\ \text{M}$ NaOH $30\ \text{mL}$를 넣었을 때 용액의 pH를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="몰수로 바꾼다">
+$n_{\text{H}^+} = (0.10)(0.050) = 0.0050\ \text{mol}$, $n_{\text{OH}^-} = (0.10)(0.030) = 0.0030\ \text{mol}$.
+</Step>
+
+<Step n={2} title="중화 반응을 계산한다">
+$\text{H}^+ + \text{OH}^- \rightarrow \text{H}_2\text{O}$로 $0.0030\ \text{mol}$씩 없어지고, $\text{H}^+$이 $0.0020\ \text{mol}$ 남습니다.
+</Step>
+
+<Step n={3} title="전체 부피로 나눈다">
+$$
+[\text{H}^+] = \frac{0.0020}{0.050 + 0.030} = 0.025\ \text{M}
+$$
+</Step>
+
+<Step n={4} title="pH">
+$$
+\text{pH} = -\log(0.025) \approx 1.60
+$$
+</Step>
+
+<Answer>
+$\text{pH} \approx 1.60$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="농도끼리 바로 뺀다">
+$0.10 - 0.10 = 0$이라 중성이라고 하면 틀립니다. 부피가 다르니 몰수로 계산해야 합니다.
+</Mistake>
+
+<Mistake title="한쪽 부피로만 나눈다">
+섞으면 부피가 $80\ \text{mL}$가 됩니다. $50\ \text{mL}$로 나누면 농도가 커져 pH가 낮게 나옵니다.
+</Mistake>
+
+<Mistake title="2가 염기의 OH⁻ 개수를 빠뜨린다">
+$\text{Ba(OH)}_2$ $0.0050\ \text{M}$은 $[\text{OH}^-] = 0.010\ \text{M}$입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+농도를 모르는 HCl $25.0\ \text{mL}$를 중화하는 데 $0.100\ \text{M}$ NaOH가 $30.0\ \text{mL}$ 들었습니다. HCl의 농도는?
+</Fragment>
+
+$M_a(25.0) = (0.100)(30.0)$.
+
+**정답:** $0.120\ \text{M}$
+</Practice>

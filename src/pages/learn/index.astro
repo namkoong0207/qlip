@@ -10,13 +10,13 @@ const recent = [...entries].sort((a, b) => +b.data.updated - +a.data.updated).sl
 ---
 <BaseLayout
   title="대학 전공 학습 라이브러리 — 미적분학·공업수학·일반물리·일반화학·선형대수"
-  description="대학 이공계 전공 개념을 공식, 직접 만든 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 정리한 무료 학습 라이브러리. 모든 글은 정답을 다시 계산하고 사람이 검수한 뒤 공개해요."
+  description="대학 이공계 전공 개념을 공식, 직접 만든 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 정리한 무료 학습 라이브러리. 모든 글의 정답은 수식 계산으로 다시 확인한 뒤 공개해요."
   path="/learn/"
   section="learn"
   campaign="web_learn_index"
   jsonLd={[breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs])]}
 >
-  <PageHead crumbs={[{ name: "홈", path: "/" }, ...crumbs]} eyebrow="무료 · 검수 완료 콘텐츠" h1="대학 전공 학습 라이브러리" lead="시험에 자주 나오는 전공 개념을 공식, 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 한 페이지에 정리했어요. 예제는 모두 직접 만든 문제이고, 정답을 다시 계산해 확인한 뒤 사람이 검수해 공개해요." />
+  <PageHead crumbs={[{ name: "홈", path: "/" }, ...crumbs]} eyebrow="무료 · 정답 검산 완료" h1="대학 전공 학습 라이브러리" lead="시험에 자주 나오는 전공 개념을 공식, 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 한 페이지에 정리했어요. 예제는 모두 직접 만든 문제이고, 정답을 수식 계산으로 다시 확인한 뒤 공개해요." />
   <section class="section">
     <div class="container">
       <div class="grid grid-3">

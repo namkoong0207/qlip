@@ -1,0 +1,102 @@
+---
+subject: engineering-math
+unit: second-order-ode
+order: 7
+title: "코시-오일러 방정식 — y = xᵐ 대입, 보조방정식 세 경우"
+h1: "코시-오일러 방정식 풀기"
+description: "x²y″ + axy′ + by = 0 꼴의 코시-오일러 방정식을 y = xᵐ을 대입해 보조방정식 m² + (a−1)m + b = 0으로 푸는 방법을 실근, 중근, 복소근 세 경우로 정리하고 예제를 해설해요."
+summary:
+  - "x²y″ + axy′ + by = 0에 y = xᵐ을 넣으면 m(m−1) + am + b = 0이 된다."
+  - "서로 다른 실근이면 C₁x^{m₁} + C₂x^{m₂}, 중근이면 (C₁ + C₂ ln x)xᵐ, 복소근 α±βi면 x^α(C₁cos(β ln x) + C₂sin(β ln x))."
+  - "x = eᵗ로 치환하면 상수계수 방정식이 되는 것과 같은 결과다."
+keyword: "코시 오일러 방정식"
+level: core
+prerequisites: [engineering-math/second-order-homogeneous]
+checks:
+  - id: ex1
+    claim: "x²y″−2xy′−4y=0: m=4, −1이고 x⁴, x⁻¹이 해"
+    sympy: "(lambda x, m: set(solve(m*(m-1)-2*m-4, m)) == {4, -1} and simplify(x**2*diff(x**4,x,2)-2*x*diff(x**4,x)-4*x**4) == 0 and simplify(x**2*diff(1/x,x,2)-2*x*diff(1/x,x)-4/x) == 0)(Symbol('x', positive=True), Symbol('m'))"
+  - id: p1
+    claim: "x²y″+xy′+y=0의 해 cos(ln x), sin(ln x)"
+    sympy: "(lambda x: simplify(x**2*diff(cos(log(x)),x,2)+x*diff(cos(log(x)),x)+cos(log(x))) == 0 and simplify(x**2*diff(sin(log(x)),x,2)+x*diff(sin(log(x)),x)+sin(log(x))) == 0)(Symbol('x', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 계수가 x의 거듭제곱과 짝을 이룬다
+
+$x^2y''$, $xy'$, $y$처럼 미분 횟수와 $x$의 차수가 같은 방정식에서는 $y = x^m$이 잘 맞습니다. $x^m$을 한 번 미분하면 차수가 하나 줄고, 앞의 $x$가 다시 하나 올려 주어 모든 항이 $x^m$으로 맞춰지기 때문입니다. 원형 막의 진동, 구 대칭 열전도, 응력 해석에서 나타납니다.
+
+## 핵심 공식
+
+$$
+x^2y'' + axy' + by = 0, \quad y = x^m \;\Longrightarrow\; m(m-1) + am + b = 0
+$$
+
+| 근 | 일반해 ($x \gt 0$) |
+|---|---|
+| 서로 다른 실근 $m_1, m_2$ | $C_1x^{m_1} + C_2x^{m_2}$ |
+| 중근 $m$ | $(C_1 + C_2\ln x)\,x^m$ |
+| 복소근 $\alpha \pm \beta i$ | $x^\alpha\big(C_1\cos(\beta\ln x) + C_2\sin(\beta\ln x)\big)$ |
+
+## 예제
+
+<Example>
+$x^2y'' - 2xy' - 4y = 0$ ($x \gt 0$)의 일반해를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="y = xᵐ을 대입한다">
+$y' = mx^{m-1}$, $y'' = m(m-1)x^{m-2}$ 이므로
+
+$$
+\big[m(m-1) - 2m - 4\big]x^m = 0
+$$
+</Step>
+
+<Step n={2} title="보조방정식을 푼다">
+$$
+m^2 - 3m - 4 = (m - 4)(m + 1) = 0 \quad\Longrightarrow\quad m = 4,\ -1
+$$
+</Step>
+
+<Step n={3} title="일반해를 쓰고 하나를 검산한다">
+$y = C_1x^4 + C_2x^{-1}$. 예를 들어 $x^4$을 넣으면 $12x^4 - 8x^4 - 4x^4 = 0$ 입니다.
+</Step>
+
+<Answer>
+$y = C_1x^4 + \dfrac{C_2}{x}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="보조방정식을 상수계수처럼 쓴다">
+$x^2y''$를 $m^2$으로 바꾸면 틀립니다. $m(m-1)$입니다. 상수계수 방정식의 특성방정식과 헷갈리기 쉽습니다.
+</Mistake>
+
+<Mistake title="중근에서 x를 곱한다">
+상수계수 방정식의 중근은 $xe^{rx}$이지만, 코시-오일러의 중근은 $\ln x\cdot x^m$입니다.
+</Mistake>
+
+<Mistake title="복소근에서 cos(βx)로 쓴다">
+각은 $\beta x$가 아니라 $\beta\ln x$입니다. $x = e^t$ 치환을 떠올리면 이유가 보입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$x^2y'' + xy' + y = 0$ ($x \gt 0$)의 일반해를 구하세요.
+</Fragment>
+
+$m(m-1) + m + 1 = m^2 + 1 = 0$, $m = \pm i$ ($\alpha = 0$, $\beta = 1$).
+
+**정답:** $y = C_1\cos(\ln x) + C_2\sin(\ln x)$
+</Practice>

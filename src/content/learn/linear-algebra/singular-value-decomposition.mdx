@@ -1,0 +1,103 @@
+---
+subject: linear-algebra
+unit: decompositions
+order: 190
+title: "특잇값 분해(SVD) — AᵀA의 고유값으로 특잇값 구하기, 예제"
+h1: "특잇값 분해(SVD)"
+description: "모든 행렬을 A = UΣVᵀ(회전·늘이기·회전)로 나누는 특잇값 분해를 정리하고, AᵀA의 고유값의 제곱근으로 특잇값을, 고유벡터로 V를 구하는 과정을 2×2 예제로 해설해요. 계수와 근사 활용 포함."
+summary:
+  - "모든 m×n 행렬은 A = UΣVᵀ로 분해된다. U, V는 직교행렬, Σ는 특잇값 σᵢ ≥ 0을 대각에 둔 행렬."
+  - "특잇값은 AᵀA의 고유값의 제곱근이고, V의 열은 AᵀA의 단위 고유벡터다."
+  - "0이 아닌 특잇값의 개수가 rank이고, 큰 특잇값만 남기면 가장 좋은 저계수 근사가 된다."
+keyword: "특잇값 분해 SVD"
+level: advanced
+prerequisites: [linear-algebra/orthogonal-diagonalization]
+checks:
+  - id: ex1
+    claim: "A=[[3,0],[4,5]]: AᵀA=[[25,20],[20,25]], 고유값 45, 5 → 특잇값 3√5, √5"
+    sympy: "Matrix([[3,0],[4,5]]).T*Matrix([[3,0],[4,5]]) == Matrix([[25,20],[20,25]]) and Matrix([[25,20],[20,25]]).eigenvals() == {45:1, 5:1} and sqrt(45) == 3*sqrt(5)"
+  - id: ex2
+    claim: "특잇값 곱 = |det A| = 15, 제곱합 = 성분 제곱합 50"
+    sympy: "3*sqrt(5)*sqrt(5) == Abs(Matrix([[3,0],[4,5]]).det()) and 45 + 5 == 9 + 16 + 25"
+  - id: p1
+    claim: "[[1,1],[1,1]]: AᵀA 고유값 4, 0 → 특잇값 2, 0, rank 1"
+    sympy: "(Matrix([[1,1],[1,1]]).T*Matrix([[1,1],[1,1]])).eigenvals() == {4:1, 0:1} and Matrix([[1,1],[1,1]]).rank() == 1"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 모든 행렬은 회전, 늘이기, 회전이다
+
+대각화는 정사각 행렬 일부에만 되지만, 특잇값 분해는 **모든** 행렬에 됩니다. 어떤 선형변환이든 (1) 입력 공간을 회전하고 (2) 축 방향으로 늘이거나 줄인 뒤 (3) 출력 공간에서 다시 회전하는 세 단계로 나눌 수 있다는 뜻입니다. 늘이는 배율이 특잇값입니다. 이미지 압축, 추천 시스템, 주성분 분석, 의사역행렬이 모두 SVD를 씁니다.
+
+## 핵심 공식
+
+$$
+A = U\Sigma V^T, \qquad \sigma_i = \sqrt{\lambda_i(A^TA)}, \qquad A\mathbf v_i = \sigma_i\mathbf u_i
+$$
+
+- $V$의 열: $A^TA$의 단위 고유벡터
+- $U$의 열: $\mathbf u_i = \frac{1}{\sigma_i}A\mathbf v_i$ ($\sigma_i \gt 0$)
+- rank $A$ = 0이 아닌 특잇값의 개수
+
+## 예제
+
+<Example>
+$A = \begin{pmatrix} 3 & 0 \\ 4 & 5 \end{pmatrix}$의 특잇값과 $V$를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="AᵀA를 구한다">
+$$
+A^TA = \begin{pmatrix} 3 & 4 \\ 0 & 5 \end{pmatrix}\begin{pmatrix} 3 & 0 \\ 4 & 5 \end{pmatrix} = \begin{pmatrix} 25 & 20 \\ 20 & 25 \end{pmatrix}
+$$
+</Step>
+
+<Step n={2} title="고유값과 특잇값">
+$\lambda^2 - 50\lambda + 225 = 0$에서 $\lambda = 45, 5$. 특잇값은 $\sigma_1 = \sqrt{45} = 3\sqrt5$, $\sigma_2 = \sqrt5$.
+</Step>
+
+<Step n={3} title="V의 열">
+$\lambda = 45$: $\frac{1}{\sqrt2}(1, 1)$, $\lambda = 5$: $\frac{1}{\sqrt2}(1, -1)$.
+</Step>
+
+<Step n={4} title="검산한다">
+특잇값의 곱 $3\sqrt5\cdot\sqrt5 = 15 = |\det A|$, 제곱합 $45 + 5 = 50$ = 모든 성분의 제곱합($9 + 16 + 25$) ✓.
+</Step>
+
+<Answer>
+$\sigma_1 = 3\sqrt5$, $\sigma_2 = \sqrt5$, $V = \dfrac{1}{\sqrt2}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="A의 고유값을 특잇값으로 쓴다">
+특잇값은 $A^TA$의 고유값의 **제곱근**입니다. 이 예제의 $A$의 고유값은 3, 5로 특잇값과 다릅니다.
+</Mistake>
+
+<Mistake title="U를 V와 따로 아무렇게나 구한다">
+$U$의 열은 $\frac{1}{\sigma_i}A\mathbf v_i$로 $V$와 짝을 맞춰야 합니다. $AA^T$의 고유벡터를 따로 구하면 부호가 어긋날 수 있습니다.
+</Mistake>
+
+<Mistake title="특잇값을 내림차순으로 정렬하지 않는다">
+관례상 $\sigma_1 \ge \sigma_2 \ge \cdots$로 정렬하고, $V$, $U$의 열도 같은 순서로 맞춥니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$B = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$의 특잇값과 계수를 구하세요.
+</Fragment>
+
+$B^TB = \begin{pmatrix} 2 & 2 \\ 2 & 2 \end{pmatrix}$의 고유값은 $4, 0$.
+
+**정답:** 특잇값 $2, 0$, 계수 1
+</Practice>

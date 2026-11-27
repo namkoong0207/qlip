@@ -1,0 +1,100 @@
+---
+subject: engineering-math
+unit: fourier-pde
+order: 21
+title: "푸리에 변환 — 정의, e^{−a|x|}와 사각 펄스 변환 예제"
+h1: "푸리에 변환: 주기가 없는 신호의 주파수 분석"
+description: "주기함수의 푸리에 급수를 주기가 없는 함수로 넓힌 푸리에 변환의 정의 F(ω) = ∫f(x)e^{−iωx}dx를 정리하고, 지수 감쇠 함수와 사각 펄스의 변환을 단계별로 해설해요. 정의 규약 차이 주의점 포함."
+summary:
+  - "푸리에 변환 F(ω) = ∫_{−∞}^{∞} f(x)e^{−iωx}dx는 신호에 각 주파수 ω가 얼마나 들어 있는지 알려 준다."
+  - "우함수의 변환은 실수 코사인 변환이 되어 계산이 쉬워진다."
+  - "교재마다 앞의 상수(1, 1/2π, 1/√2π)와 지수의 부호가 달라서, 쓰는 정의를 먼저 확인해야 한다."
+keyword: "푸리에 변환 예제"
+level: advanced
+prerequisites: [engineering-math/fourier-series]
+checks:
+  - id: ex1
+    claim: "f=e^{−a|x|}의 변환 = 2a/(a²+ω²) (우함수: 2∫₀^∞ e^{−ax}cos ωx dx)"
+    sympy: "(lambda x, a, w: simplify(2*integrate(exp(-a*x)*cos(w*x), (x,0,oo), conds='none') - 2*a/(a**2+w**2)) == 0)(Symbol('x', positive=True), Symbol('a', positive=True), Symbol('w', positive=True))"
+  - id: p1
+    claim: "|x|<1에서 1인 사각 펄스의 변환 = 2 sin ω/ω"
+    sympy: "(lambda x, w: simplify(integrate(cos(w*x), (x,-1,1)) - 2*sin(w)/w) == 0)(Symbol('x', real=True), Symbol('w', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 주기를 무한히 늘인 푸리에 급수
+
+푸리에 급수는 주기함수를 이산적인 주파수 $n$들의 합으로 나눴습니다. 주기를 무한히 길게 늘이면 주파수 간격이 촘촘해져 합이 적분이 되고, 계수 $a_n, b_n$ 대신 연속적인 함수 $F(\omega)$가 나옵니다. 이것이 푸리에 변환입니다. 소리·영상 압축, 필터 설계, 편미분방정식 풀이, 양자역학까지 쓰이는 곳이 매우 넓습니다.
+
+## 핵심 공식
+
+$$
+F(\omega) = \int_{-\infty}^{\infty} f(x)\,e^{-i\omega x}\,dx, \qquad f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)\,e^{i\omega x}\,d\omega
+$$
+
+$f$가 우함수이면 $F(\omega) = 2\displaystyle\int_0^\infty f(x)\cos\omega x\,dx$ (실수)
+
+## 예제
+
+<Example>
+$f(x) = e^{-a|x|}$ ($a \gt 0$)의 푸리에 변환을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="대칭성을 쓴다">
+$f(-x) = f(x)$인 우함수이므로 사인 성분이 사라지고 코사인 변환만 남습니다.
+
+$$
+F(\omega) = 2\int_0^\infty e^{-ax}\cos\omega x\,dx
+$$
+</Step>
+
+<Step n={2} title="표준 적분을 쓴다">
+$\displaystyle\int_0^\infty e^{-ax}\cos\omega x\,dx = \frac{a}{a^2 + \omega^2}$ (부분적분 두 번 또는 $\text{Re}\int_0^\infty e^{-(a - i\omega)x}dx$로 구함)
+</Step>
+
+<Step n={3} title="결과를 정리하고 해석한다">
+$$
+F(\omega) = \frac{2a}{a^2 + \omega^2}
+$$
+
+$a$가 클수록(신호가 빨리 사라질수록) $F$가 넓게 퍼집니다. 시간에서 좁은 신호는 주파수에서 넓다는 일반 원리의 예입니다.
+</Step>
+
+<Answer>
+$F(\omega) = \dfrac{2a}{a^2 + \omega^2}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="정의의 상수·부호를 섞는다">
+$\frac{1}{\sqrt{2\pi}}$을 붙이는 교재, 지수에 $+i$를 쓰는 교재가 있습니다. 변환과 역변환 공식을 같은 교재 기준으로 짝지어 쓰세요.
+</Mistake>
+
+<Mistake title="|x|를 한 번에 적분한다">
+$e^{-a|x|}$는 $x \gt 0$과 $x \lt 0$에서 식이 다릅니다. 구간을 나누거나 우함수 성질을 써야 합니다.
+</Mistake>
+
+<Mistake title="ω = 0을 따로 보지 않는다">
+사각 펄스의 $\frac{2\sin\omega}{\omega}$는 $\omega = 0$에서 극한값 2로 정의합니다. 펄스의 넓이와 같습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$|x| \lt 1$에서 $1$, 그 밖에서 $0$인 사각 펄스의 푸리에 변환을 구하세요.
+</Fragment>
+
+우함수이므로 $\displaystyle\int_{-1}^{1}\cos\omega x\,dx = \frac{2\sin\omega}{\omega}$.
+
+**정답:** $F(\omega) = \dfrac{2\sin\omega}{\omega}$ ($\omega = 0$에서는 $2$)
+</Practice>

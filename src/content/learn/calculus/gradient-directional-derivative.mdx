@@ -1,0 +1,114 @@
+---
+subject: calculus
+unit: multivariable
+order: 46
+title: "그래디언트와 방향도함수 — 공식, 가장 가파른 방향, 예제"
+h1: "그래디언트와 방향도함수"
+description: "다변수 함수의 그래디언트 ∇f와, 원하는 방향으로의 변화율인 방향도함수 D_u f = ∇f·u를 정리하고, 함수가 가장 빨리 증가하는 방향과 최대 변화율을 예제로 해설해요. 단위벡터 실수 포함."
+summary:
+  - "그래디언트 ∇f = (f_x, f_y)는 함수가 가장 빠르게 증가하는 방향을 가리킨다."
+  - "단위벡터 u 방향의 방향도함수는 D_u f = ∇f · u이다. 방향 벡터는 반드시 길이 1로 바꾼다."
+  - "최대 변화율은 |∇f|이고, ∇f에 수직인 방향으로는 변화율이 0(등고선 방향)이다."
+keyword: "방향도함수 그래디언트"
+level: core
+prerequisites: [calculus/multivariable-chain-rule]
+related: [calculus/lagrange-multipliers]
+checks:
+  - id: ex1
+    claim: "f=x²+3xy, (1,2): ∇f=(8,3), (3,4) 방향 D=36/5, 최대 변화율 √73"
+    sympy: "(lambda x, y: Matrix([diff(x**2+3*x*y,x), diff(x**2+3*x*y,y)]).subs({x:1,y:2}) == Matrix([8,3]) and Rational(8*3+3*4,5) == Rational(36,5) and sqrt(64+9) == sqrt(73))(*symbols('x y'))"
+  - id: p1
+    claim: "f=x eʸ, (2,0), (1,1) 방향: D = 3/√2 = 3√2/2"
+    sympy: "(lambda x, y: (Matrix([diff(x*exp(y),x), diff(x*exp(y),y)]).subs({x:2,y:0}).T*Matrix([1,1])/sqrt(2))[0] == 3*sqrt(2)/2)(*symbols('x y'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 산에서 어느 방향으로 걸어야 가장 가파른가
+
+산 위에 서 있다고 생각해 보세요. 동쪽으로 걸으면 조금 오르고, 북쪽으로 걸으면 많이 오르고, 어떤 방향으로는 평평합니다. 방향마다 다른 이 기울기가 **방향도함수**이고, 가장 가파르게 오르는 방향과 그 기울기를 한꺼번에 담은 벡터가 **그래디언트**입니다. 경사하강법(머신러닝), 열의 흐름, 전기장($\vec E = -\nabla V$)이 모두 그래디언트로 쓰입니다.
+
+## 핵심 공식
+
+$$
+\nabla f = \left(\frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y}\right), \qquad
+D_{\mathbf u} f = \nabla f\cdot\mathbf u\quad(|\mathbf u| = 1)
+$$
+
+$$
+\max_{\mathbf u} D_{\mathbf u}f = |\nabla f|\ \ (\mathbf u\ \text{가}\ \nabla f\ \text{방향일 때})
+$$
+
+## 예제
+
+<Example>
+$f(x, y) = x^2 + 3xy$에 대해 점 $(1, 2)$에서
+
+(1) 벡터 $(3, 4)$ 방향의 방향도함수 (2) 가장 빠르게 증가하는 방향과 그 변화율을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="그래디언트를 구한다">
+$f_x = 2x + 3y$, $f_y = 3x$ 이므로
+
+$$
+\nabla f(1, 2) = (2 + 6,\ 3) = (8,\ 3)
+$$
+</Step>
+
+<Step n={2} title="(1) 방향을 단위벡터로 바꾼다">
+$|(3, 4)| = 5$ 이므로 $\mathbf u = \left(\dfrac35, \dfrac45\right)$.
+</Step>
+
+<Step n={3} title="(1) 내적한다">
+$$
+D_{\mathbf u}f = 8\cdot\frac35 + 3\cdot\frac45 = \frac{24 + 12}{5} = \frac{36}{5}
+$$
+</Step>
+
+<Step n={4} title="(2) 최대 증가 방향과 크기">
+가장 빠르게 증가하는 방향은 $\nabla f = (8, 3)$ 방향이고, 그 변화율은
+
+$$
+|\nabla f| = \sqrt{64 + 9} = \sqrt{73} \approx 8.54
+$$
+
+(1)의 값 $7.2$가 이보다 작은 것도 확인할 수 있습니다.
+</Step>
+
+<Answer>
+(1) $\dfrac{36}{5}$ (2) 방향 $(8, 3)$, 최대 변화율 $\sqrt{73}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="방향 벡터를 단위벡터로 바꾸지 않는다">
+$(3, 4)$를 그대로 내적하면 $36$이 나와 5배 커집니다. 방향도함수는 반드시 길이 1인 벡터로 계산합니다.
+</Mistake>
+
+<Mistake title="그래디언트를 점에서 계산하지 않는다">
+$\nabla f = (2x + 3y, 3x)$를 구한 뒤 점을 넣는 것을 잊고 식 그대로 내적하는 경우가 있습니다.
+</Mistake>
+
+<Mistake title="최대 변화율을 ∇f 벡터로 답한다">
+'방향'을 물으면 벡터 $\nabla f$, '최대 변화율'을 물으면 크기 $|\nabla f|$입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$f(x, y) = x e^y$의 점 $(2, 0)$에서 $(1, 1)$ 방향의 방향도함수를 구하세요.
+</Fragment>
+
+$\nabla f = (e^y,\ xe^y) = (1,\ 2)$, $\mathbf u = \left(\dfrac{1}{\sqrt2}, \dfrac{1}{\sqrt2}\right)$ 이므로 $\dfrac{1 + 2}{\sqrt2}$.
+
+**정답:** $\dfrac{3}{\sqrt2} = \dfrac{3\sqrt2}{2}$
+</Practice>

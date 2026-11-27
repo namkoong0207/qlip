@@ -1,0 +1,108 @@
+---
+subject: chemistry
+unit: thermochemistry
+order: 110
+title: "엔트로피와 깁스 자유에너지 — ΔG = ΔH − TΔS, 자발성 판단 예제"
+h1: "깁스 자유에너지로 자발성 판단하기"
+description: "반응의 자발성을 ΔG = ΔH − TΔS로 판단하는 방법을 정리하고, 암모니아 합성의 ΔG°, 자발성이 바뀌는 온도, 평형상수 K = e^{−ΔG°/RT}를 예제로 해설해요. kJ와 J 단위 실수 포함."
+summary:
+  - "ΔG < 0이면 자발적, ΔG > 0이면 비자발적, ΔG = 0이면 평형이다."
+  - "ΔG = ΔH − TΔS. ΔH와 ΔS의 부호가 같으면 온도에 따라 자발성이 바뀌고, 그 경계 온도는 T = ΔH/ΔS."
+  - "표준 상태의 ΔG°와 평형상수는 ΔG° = −RT ln K로 연결된다."
+keyword: "깁스 자유에너지 자발성"
+level: core
+prerequisites: [chemistry/hess-law]
+related: [chemistry/nernst-equation, chemistry/equilibrium-ice-table]
+checks:
+  - id: ex1
+    claim: "ΔH=−92.2 kJ, ΔS=−198.7 J/K, 298 K: ΔG ≈ −33.0 kJ, 경계 온도 ≈ 464 K"
+    sympy: "Abs(N(Rational(-922,10) - 298*Rational(-1987,10000)) - (-32.99)) < 0.01 and Abs(N(Rational(922,10)/Rational(1987,10000)) - 464.0) < 0.1"
+  - id: p1
+    claim: "ΔG° = −33.0 kJ, 298 K: K = e^{33000/(8.314·298)} ≈ 6.1×10⁵"
+    sympy: "Abs(N(exp(33000/(Rational(8314,1000)*298))) - 6.09e5) < 0.01e5"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 에너지와 무질서도의 줄다리기
+
+반응이 저절로 일어나는지(자발성)는 두 경향의 경쟁으로 정해집니다. 에너지를 방출하려는 경향(ΔH가 음수)과, 더 무질서해지려는 경향(ΔS가 양수)입니다. 깁스 자유에너지는 이 둘을 온도로 저울질한 값이라, 부호만 보면 자발성을 판단할 수 있습니다. 온도가 높을수록 엔트로피 항 $T\Delta S$의 영향이 커집니다.
+
+## 핵심 공식
+
+$$
+\Delta G = \Delta H - T\Delta S, \qquad \Delta G^\circ = -RT\ln K
+$$
+
+| $\Delta H$ | $\Delta S$ | 자발성 |
+|---|---|---|
+| − | + | 모든 온도에서 자발 |
+| + | − | 모든 온도에서 비자발 |
+| − | − | 낮은 온도에서 자발 |
+| + | + | 높은 온도에서 자발 |
+
+## 예제
+
+<Example>
+$\text{N}_2(g) + 3\text{H}_2(g) \rightarrow 2\text{NH}_3(g)$는 $\Delta H^\circ = -92.2\ \text{kJ}$, $\Delta S^\circ = -198.7\ \text{J/K}$입니다. 298 K에서 $\Delta G^\circ$를 구하고, 자발성이 바뀌는 온도를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="단위를 맞춘다">
+$\Delta S^\circ = -198.7\ \text{J/K} = -0.1987\ \text{kJ/K}$.
+</Step>
+
+<Step n={2} title="ΔG°를 계산한다">
+$$
+\Delta G^\circ = -92.2 - (298)(-0.1987) = -92.2 + 59.2 = -33.0\ \text{kJ}
+$$
+
+음수이므로 298 K에서 자발적입니다.
+</Step>
+
+<Step n={3} title="경계 온도를 구한다">
+$\Delta H$, $\Delta S$ 모두 음수라 낮은 온도에서만 자발적입니다. $\Delta G = 0$이 되는 온도는
+
+$$
+T = \frac{\Delta H}{\Delta S} = \frac{-92.2}{-0.1987} \approx 464\ \text{K}
+$$
+
+(엔탈피·엔트로피가 온도에 따라 거의 변하지 않는다고 가정)
+</Step>
+
+<Answer>
+$\Delta G^\circ \approx -33.0\ \text{kJ}$ (298 K에서 자발), 약 464 K 이상에서 비자발
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="kJ와 J를 섞는다">
+$\Delta H$는 kJ, $\Delta S$는 J/K로 주어지는 경우가 많습니다. 하나로 맞추지 않으면 엔트로피 항이 1000배 커집니다.
+</Mistake>
+
+<Mistake title="자발적이면 빠르다고 생각한다">
+ΔG는 반응이 일어날 수 있는지만 알려 주고 속도는 알려 주지 않습니다. 다이아몬드→흑연은 자발적이지만 매우 느립니다.
+</Mistake>
+
+<Mistake title="섭씨 온도를 넣는다">
+$T$는 켈빈입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+예제의 $\Delta G^\circ = -33.0\ \text{kJ}$로 298 K에서 평형상수 $K$를 구하세요. ($R = 8.314\ \text{J/(mol·K)}$)
+</Fragment>
+
+$\ln K = -\dfrac{\Delta G^\circ}{RT} = \dfrac{33000}{(8.314)(298)} \approx 13.3$.
+
+**정답:** $K \approx 6\times10^5$
+</Practice>

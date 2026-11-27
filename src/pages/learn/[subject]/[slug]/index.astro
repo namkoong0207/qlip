@@ -55,15 +55,15 @@ const campaign = `web_learn_${d.subject.replace(/-/g, "_")}`;
   noindex={!reviewed}
   jsonLd={[
     breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs]),
-    articleLd({ title: d.title, description: d.description, path, published: d.created, modified: d.updated, author: d.author, reviewer: d.review?.by, learning: { subject: subject.name, level: d.level } }),
+    articleLd({ title: d.title, description: d.description, path, published: d.created, modified: d.updated, author: d.author, reviewer: d.review?.credential ? d.review.by : undefined, learning: { subject: subject.name, level: d.level } }),
   ]}
 >
   {!reviewed && <div class="draft-banner" role="note">검수 전 미리보기 — 운영 사이트에는 공개되지 않아요 (status: {d.status})</div>}
   <PageHead crumbs={crumbs} eyebrow={`${subject.name}${unit ? ` · ${unit.name}` : ""}`} h1={d.h1}>
     <p class="learn-meta">
-      {d.review ? <span class="badge-verified">✓ 검수 완료</span> : <span>검수 대기</span>}
+      {d.review ? <span class="badge-verified">✓ 정답 검산 완료</span> : <span>공개 전</span>}
       <span>작성 {d.author}</span>
-      {d.review && <span>검수 {d.review.by}{d.review.credential ? ` (${d.review.credential})` : ""}</span>}
+      {d.review?.credential && <span>검수 {d.review.by} ({d.review.credential})</span>}
       <span>최종 수정 <time datetime={d.updated.toISOString().slice(0, 10)}>{fmt(d.updated)}</time></span>
     </p>
   </PageHead>
@@ -96,7 +96,7 @@ const campaign = `web_learn_${d.subject.replace(/-/g, "_")}`;
       </section>
 
       <p class="muted learn-foot">
-        이 페이지의 예제와 연습 문제는 Qlip이 직접 만든 문제예요. AI로 초안을 만들고 정답을 수식 계산으로 다시 확인했어요{reviewed ? ", 그리고 사람이 검수한 뒤 공개했어요" : ". 아직 사람의 검수 전이에요"}.
+        이 페이지의 예제와 연습 문제는 Qlip이 직접 만든 문제예요. AI로 초안을 만들고, 모든 정답을 수식 계산(SymPy)으로 다시 확인한 뒤 공개했어요{reviewed ? "" : " (아직 공개 전)"}.
         오류를 발견하면 <a href={`mailto:support@qlip.kr?subject=${encodeURIComponent(`[학습 라이브러리 오류] ${d.h1}`)}`}>support@qlip.kr</a>로 알려 주세요.
       </p>
     </article>

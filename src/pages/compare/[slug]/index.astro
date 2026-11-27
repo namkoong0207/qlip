@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHead from "../../../components/PageHead.astro";
+import Download from "../../../components/Download.astro";
+import { COMPARES, CHECKED, type Compare } from "../../../data/compare";
+import { articleLd, breadcrumbLd, faqLd } from "../../../lib/jsonld";
+
+export function getStaticPaths() {
+  return COMPARES.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: Compare };
+const path = `/compare/${c.slug}/`;
+const crumbs = [{ name: "홈", path: "/" }, { name: "서비스 비교", path: "/compare/" }, { name: `${c.name} vs Qlip`, path }];
+const checked = new Date(CHECKED);
+// 이/가: Hangul with a final consonant takes 이 (찰칵이), otherwise 가 (콴다가, ChatGPT가).
+const last = c.name.charCodeAt(c.name.length - 1);
+const ga = last >= 0xac00 && last <= 0xd7a3 && (last - 0xac00) % 28 !== 0 ? "이" : "가";
+---
+<BaseLayout title={c.title} description={c.description} path={path} ogType="article" campaign={`web_compare_${c.slug}`}
+  jsonLd={[breadcrumbLd(crumbs), articleLd({ title: c.title, description: c.description, path, published: checked, modified: checked, author: "Qlip" }), faqLd(c.faq)]}>
+  <PageHead crumbs={crumbs} eyebrow="서비스 비교" h1={c.h1} lead={c.lead}>
+    <p class="learn-meta"><span>작성 Qlip</span><span>{c.name} 정보는 <a href={c.source} rel="nofollow noopener" style="color:inherit">공식 홈페이지</a> 기준, {CHECKED.replace(/-/g, ".")} 확인</span></p>
+  </PageHead>
+
+  <div class="container" style="padding-top:40px;padding-bottom:96px;">
+    <article class="prose" style="max-width:920px;">
+      <p class="muted">이 비교는 Qlip이 작성했어요. 두 서비스의 풀이 정확도를 같은 조건에서 시험한 결과는 아니며, 공식 홈페이지에서 확인한 기능과 대상을 기준으로 정리했어요. 기능과 가격은 바뀔 수 있으니 최신 정보는 각 서비스에서 확인하세요.</p>
+
+      <h2>한눈에 비교</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col"></th><th scope="col">Qlip</th><th scope="col">{c.name}</th></tr></thead>
+          <tbody>{c.rows.map((r) => <tr><th scope="row">{r.label}</th><td>{r.qlip}</td><td>{r.other}</td></tr>)}</tbody>
+        </table>
+      </div>
+
+      <h2>{c.name}{ga} 더 잘 맞는 부분</h2>
+      <ul>{c.otherStrengths.map((s) => <li>{s}</li>)}</ul>
+
+      <h2>Qlip이 다른 점</h2>
+      <ul>{c.qlipStrengths.map((s) => <li>{s}</li>)}</ul>
+
+      <h2>누구에게 맞을까요</h2>
+      <ul><li>{c.whoFor.other}</li><li>{c.whoFor.qlip}</li></ul>
+
+      <h2>자주 묻는 질문</h2>
+      <div class="faq">
+        {c.faq.map((f, i) => (
+          <details data-track-open="faq_open" data-item={`compare-${c.slug}-${i}`}><summary>{f.q}</summary><div class="answer"><p>{f.a}</p></div></details>
+        ))}
+      </div>
+
+      <aside class="learn-cta">
+        <h2>Qlip, 무료로 써 보세요</h2>
+        <p>가입하면 매주 15크레딧이 들어와요. 전공 문제 하나, 족보 한 장으로 직접 비교해 보세요.</p>
+        <Download campaign={`web_compare_${c.slug}`} loc="compare_cta" />
+      </aside>
+      <p style="margin-top:32px;">다른 비교: {COMPARES.filter((o) => o.slug !== c.slug).map((o, i) => <>{i > 0 && " · "}<a href={`/compare/${o.slug}/`}>{o.name} vs Qlip</a></>)}</p>
+    </article>
+  </div>
+</BaseLayout>

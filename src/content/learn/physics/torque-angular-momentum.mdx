@@ -1,0 +1,103 @@
+---
+subject: physics
+unit: rotation-oscillation
+order: 90
+title: "토크와 각운동량 보존 — τ = Iα, 피겨 회전·도르래 예제"
+h1: "토크와 각운동량 보존"
+description: "회전 운동의 뉴턴 제2법칙 τ = Iα와, 외부 토크가 없을 때 각운동량 L = Iω가 보존되는 원리를 정리하고, 팔을 오므리는 피겨 선수와 질량 있는 도르래 예제를 단계별로 해설해요."
+summary:
+  - "토크 τ = rF sinθ는 힘이 물체를 회전시키는 능력이고, τ = Iα는 회전의 뉴턴 제2법칙이다."
+  - "외부 토크가 없으면 각운동량 L = Iω가 보존된다: I₁ω₁ = I₂ω₂."
+  - "도르래에 질량이 있으면 양쪽 장력이 달라지고, 그 차이가 도르래를 돌리는 토크가 된다."
+keyword: "각운동량 보존 토크"
+level: core
+prerequisites: [physics/rotational-inertia]
+related: [physics/connected-objects]
+checks:
+  - id: ex1
+    claim: "I 4→1.6 kg·m², 2 rev/s → 5 rev/s, 운동에너지 2.5배"
+    sympy: "Rational(4*2)/Rational(16,10) == 5 and (Rational(16,10)*5**2)/(4*2**2) == Rational(5,2)"
+  - id: p1
+    claim: "원판 도르래(2 kg, I=½MR²)에 1 kg 매달면 a = g/2 = 4.9 m/s², T = 4.9 N"
+    sympy: "(lambda a, T, R: solve([1*Rational(98,10) - T - 1*a, T*R - Rational(1,2)*2*R**2*(a/R)], [a, T]) == {a: Rational(49,10), T: Rational(49,10)})(*symbols('a T R', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 회전에도 뉴턴 법칙과 보존 법칙이 있다
+
+문을 열 때 경첩에서 먼 곳을 미는 이유는, 같은 힘이라도 회전축에서 멀수록 **토크**가 크기 때문입니다. 토크는 회전 가속을 만들고, 그 관계는 $F = ma$와 똑같은 모양의 $\tau = I\alpha$입니다. 그리고 바깥에서 토크가 작용하지 않으면 **각운동량** $L = I\omega$가 보존됩니다. 피겨 선수가 팔을 오므리면 빨리 도는 것, 행성이 태양 가까이에서 빨라지는 것이 모두 각운동량 보존입니다.
+
+## 핵심 공식
+
+$$
+\tau = rF\sin\theta, \qquad \tau_{\text{알짜}} = I\alpha, \qquad L = I\omega
+$$
+
+$$
+\tau_{\text{외부}} = 0 \;\Longrightarrow\; I_1\omega_1 = I_2\omega_2
+$$
+
+## 예제
+
+<Example>
+회전 관성 $4.0\ \text{kg·m}^2$인 피겨 선수가 팔을 벌린 채 초당 2회전을 합니다. 팔을 오므려 회전 관성이 $1.6\ \text{kg·m}^2$이 되면 회전 속도는? 회전 운동에너지는 몇 배가 될까요?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="보존 조건을 확인한다">
+얼음과의 마찰을 무시하면 회전축 둘레의 외부 토크가 없으므로 각운동량이 보존됩니다.
+</Step>
+
+<Step n={2} title="각운동량 보존식을 쓴다">
+$$
+(4.0)(2) = (1.6)\,\omega_2 \quad\Longrightarrow\quad \omega_2 = 5\ \text{rev/s}
+$$
+
+단위가 양변에서 같으므로 rev/s 그대로 계산해도 됩니다.
+</Step>
+
+<Step n={3} title="운동에너지를 비교한다">
+$$
+\frac{K_2}{K_1} = \frac{\frac12(1.6)(5)^2}{\frac12(4.0)(2)^2} = \frac{40}{16} = 2.5
+$$
+
+에너지는 보존되지 않았습니다. 늘어난 에너지는 선수가 팔을 당기며 한 일에서 왔습니다.
+</Step>
+
+<Answer>
+초당 5회전, 회전 운동에너지는 2.5배
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="각운동량과 운동에너지를 둘 다 보존한다">
+팔을 오므리는 과정에서 근육이 일을 하므로 운동에너지는 늘어납니다. 보존되는 것은 각운동량입니다.
+</Mistake>
+
+<Mistake title="토크에서 sin θ를 빠뜨린다">
+힘이 회전축 방향을 향하면 토크는 0입니다. 팔과 힘 사이의 각도를 확인하세요.
+</Mistake>
+
+<Mistake title="질량 있는 도르래 양쪽 장력을 같게 둔다">
+도르래가 각가속을 하려면 양쪽 장력 차이가 토크를 만들어야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+질량 $2.0\ \text{kg}$, 반지름 $R$인 원판 도르래(마찰 없는 축)에 감긴 줄 끝에 $1.0\ \text{kg}$ 추가 매달려 떨어집니다. 추의 가속도와 줄의 장력은?
+</Fragment>
+
+추: $mg - T = ma$. 도르래: $TR = \frac12MR^2\cdot\frac aR$, 즉 $T = \frac12Ma = a$. 두 식에서 $9.8 = 2a$.
+
+**정답:** $a = 4.9\ \text{m/s}^2$, $T = 4.9\ \text{N}$
+</Practice>

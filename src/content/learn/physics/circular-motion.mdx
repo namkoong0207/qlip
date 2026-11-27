@@ -1,0 +1,98 @@
+---
+subject: physics
+unit: kinematics-dynamics
+order: 50
+title: "등속 원운동과 구심력 — 커브 길 마찰, 회전 고리 최소 속력"
+h1: "등속 원운동과 구심력"
+description: "속력이 일정해도 방향이 바뀌어 생기는 구심 가속도 v²/r와, 그 원인이 되는 구심력을 실제 힘(마찰력, 장력, 수직항력)에서 찾는 방법을 커브 길 자동차와 회전 고리 예제로 해설해요."
+summary:
+  - "등속 원운동은 속력은 일정하지만 방향이 바뀌므로, 원의 중심을 향하는 가속도 a = v²/r가 있다."
+  - "구심력은 새로운 힘이 아니라 중심 방향 알짜힘의 이름이다. 마찰력, 장력, 중력 등이 그 역할을 한다."
+  - "회전 고리 꼭대기를 통과하는 최소 속력은 v = √(gr)이다."
+keyword: "구심력 원운동 문제"
+level: core
+checks:
+  - id: ex1
+    claim: "1000 kg, r=50 m, v=15 m/s: 구심력 4500 N, 필요한 μs ≥ v²/(rg) ≈ 0.459"
+    sympy: "1000*15**2/50 == 4500 and Abs(N(15**2/(50*Rational(98,10))) - 0.4592) < 1e-4"
+  - id: p1
+    claim: "반지름 10 m 고리 꼭대기 최소 속력 √(gr) ≈ 9.90 m/s"
+    sympy: "Abs(N(sqrt(Rational(98,10)*10)) - 9.899) < 1e-3"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 방향이 바뀌는 것도 가속이다
+
+속도는 크기와 방향을 가진 벡터라서, 속력이 일정해도 방향이 계속 바뀌면 가속도가 있습니다. 원운동에서 이 가속도는 늘 **원의 중심**을 향하고 크기는 $v^2/r$입니다. 이 가속도를 만드는 중심 방향의 알짜힘을 구심력이라 부르는데, 따로 존재하는 힘이 아니라 마찰력·장력·중력·수직항력 중 무엇이 그 역할을 하는지 찾아야 합니다.
+
+## 핵심 공식
+
+$$
+a_c = \frac{v^2}{r} = r\omega^2, \qquad F_c = \frac{mv^2}{r}
+$$
+
+평평한 커브: $\mu_s mg \ge \dfrac{mv^2}{r}$ $\Rightarrow$ $v_{\max} = \sqrt{\mu_s gr}$
+회전 고리 꼭대기: $mg + N = \dfrac{mv^2}{r}$, $N \ge 0$ $\Rightarrow$ $v_{\min} = \sqrt{gr}$
+
+## 예제
+
+<Example>
+질량 $1000\ \text{kg}$인 차가 반지름 $50\ \text{m}$인 평평한 커브를 $15\ \text{m/s}$로 돕니다. 필요한 구심력과, 미끄러지지 않기 위한 최소 정지 마찰 계수를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="필요한 구심력">
+$$
+F_c = \frac{(1000)(15)^2}{50} = 4500\ \text{N}
+$$
+</Step>
+
+<Step n={2} title="구심력의 정체를 찾는다">
+평평한 길에서 차를 중심 쪽으로 미는 수평 힘은 타이어와 도로 사이의 정지 마찰력뿐입니다.
+</Step>
+
+<Step n={3} title="마찰 계수 조건">
+$$
+\mu_s mg \ge \frac{mv^2}{r} \quad\Longrightarrow\quad \mu_s \ge \frac{v^2}{rg} = \frac{225}{490} \approx 0.46
+$$
+
+질량은 약분되어 무거운 차든 가벼운 차든 같은 조건입니다.
+</Step>
+
+<Answer>
+구심력 $4500\ \text{N}$, $\mu_s \ge 0.46$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="구심력을 자유물체도에 따로 그린다">
+구심력은 별도의 힘이 아닙니다. 실제 힘들을 그린 뒤, 그 합이 $mv^2/r$이 되도록 식을 세웁니다.
+</Mistake>
+
+<Mistake title="원심력을 바깥쪽 힘으로 넣는다">
+관성계에서 풀 때 원심력은 없습니다. 바깥으로 쏠리는 느낌은 관성 때문입니다.
+</Mistake>
+
+<Mistake title="고리 꼭대기에서 수직항력 방향을 위로 둔다">
+고리 꼭대기에서 궤도가 미는 힘은 아래(중심 쪽)입니다. 중력과 같은 방향입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+반지름 $10\ \text{m}$인 수직 회전 고리 꼭대기를 떨어지지 않고 통과하기 위한 최소 속력은?
+</Fragment>
+
+꼭대기에서 수직항력이 0일 때가 한계이므로 $mg = \dfrac{mv^2}{r}$, $v = \sqrt{gr}$.
+
+**정답:** 약 $9.9\ \text{m/s}$
+</Practice>

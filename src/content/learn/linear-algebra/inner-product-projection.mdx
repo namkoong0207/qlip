@@ -1,0 +1,96 @@
+---
+subject: linear-algebra
+unit: orthogonality
+order: 150
+title: "내적과 정사영 — proj 공식, 직교 성분 분해 예제"
+h1: "내적과 정사영"
+description: "벡터 b를 a 방향으로 정사영하는 공식 proj_a b = (a·b / a·a) a와, b를 a와 나란한 성분·수직인 성분으로 나누는 방법을 예제로 해설해요. 내적의 기하학적 의미와 흔한 실수 포함."
+summary:
+  - "내적 a·b = |a||b|cosθ. 0이면 두 벡터는 직교한다."
+  - "b의 a 방향 정사영은 proj_a b = (a·b)/(a·a) · a이다."
+  - "b − proj_a b는 a와 직교하므로, b는 나란한 성분과 수직인 성분의 합으로 나뉜다."
+keyword: "정사영 공식 내적"
+level: intro
+related: [linear-algebra/gram-schmidt, linear-algebra/least-squares]
+checks:
+  - id: ex1
+    claim: "b=(1,2,3)의 a=(1,1,1) 방향 정사영 (2,2,2), 수직 성분 (−1,0,1)·a = 0"
+    sympy: "(Matrix([1,1,1]).dot(Matrix([1,2,3]))/Matrix([1,1,1]).dot(Matrix([1,1,1])))*Matrix([1,1,1]) == Matrix([2,2,2]) and (Matrix([1,2,3]) - Matrix([2,2,2])).dot(Matrix([1,1,1])) == 0"
+  - id: p1
+    claim: "b=(2,1)의 a=(3,4) 방향 정사영 = (6/5, 8/5)"
+    sympy: "(Matrix([3,4]).dot(Matrix([2,1]))/Matrix([3,4]).dot(Matrix([3,4])))*Matrix([3,4]) == Matrix([Rational(6,5), Rational(8,5)])"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 그림자를 드리운다
+
+벡터 $\mathbf b$ 위에서 수직으로 빛을 비춰 $\mathbf a$ 방향 직선에 생긴 그림자가 정사영입니다. 그림자의 길이는 내적으로 구해지고, 그림자와 원래 벡터의 차이는 $\mathbf a$에 정확히 수직입니다. 이 '가장 가까운 점 찾기'가 그람-슈미트 직교화, 최소제곱법, 신호 처리의 기본 연산입니다.
+
+## 핵심 공식
+
+$$
+\mathbf a\cdot\mathbf b = \sum a_ib_i = |\mathbf a||\mathbf b|\cos\theta
+$$
+
+$$
+\text{proj}_{\mathbf a}\mathbf b = \frac{\mathbf a\cdot\mathbf b}{\mathbf a\cdot\mathbf a}\,\mathbf a, \qquad \mathbf b = \underbrace{\text{proj}_{\mathbf a}\mathbf b}_{\mathbf a\text{와 나란}} + \underbrace{(\mathbf b - \text{proj}_{\mathbf a}\mathbf b)}_{\mathbf a\text{와 수직}}
+$$
+
+## 예제
+
+<Example>
+$\mathbf b = (1, 2, 3)$을 $\mathbf a = (1, 1, 1)$ 방향 성분과 그에 수직인 성분으로 나누세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="내적을 구한다">
+$\mathbf a\cdot\mathbf b = 1 + 2 + 3 = 6$, $\mathbf a\cdot\mathbf a = 3$.
+</Step>
+
+<Step n={2} title="정사영">
+$$
+\text{proj}_{\mathbf a}\mathbf b = \frac{6}{3}(1, 1, 1) = (2, 2, 2)
+$$
+</Step>
+
+<Step n={3} title="수직 성분과 확인">
+$\mathbf b - (2, 2, 2) = (-1, 0, 1)$. $\mathbf a$와 내적하면 $-1 + 0 + 1 = 0$ ✓.
+</Step>
+
+<Answer>
+$\mathbf b = (2, 2, 2) + (-1, 0, 1)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="|a|²가 아니라 |a|로 나눈다">
+분모는 $\mathbf a\cdot\mathbf a = |\mathbf a|^2$입니다. $|\mathbf a|$로 나누고 $\mathbf a$를 곱하면 길이가 틀립니다. (단위벡터 $\mathbf u$라면 $(\mathbf u\cdot\mathbf b)\mathbf u$)
+</Mistake>
+
+<Mistake title="정사영의 길이와 벡터를 혼동한다">
+$\frac{\mathbf a\cdot\mathbf b}{|\mathbf a|}$는 스칼라 정사영(길이)이고, 정사영 벡터는 여기에 단위벡터를 곱한 것입니다.
+</Mistake>
+
+<Mistake title="a, b 순서를 바꾼다">
+$\text{proj}_{\mathbf a}\mathbf b$와 $\text{proj}_{\mathbf b}\mathbf a$는 다른 벡터입니다. 어느 방향 위로 내리는지 확인하세요.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\mathbf b = (2, 1)$의 $\mathbf a = (3, 4)$ 방향 정사영을 구하세요.
+</Fragment>
+
+$\mathbf a\cdot\mathbf b = 10$, $\mathbf a\cdot\mathbf a = 25$이므로 $\frac{10}{25}(3, 4)$.
+
+**정답:** $\left(\dfrac65,\ \dfrac85\right)$
+</Practice>

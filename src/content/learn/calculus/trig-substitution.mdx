@@ -1,0 +1,100 @@
+---
+subject: calculus
+unit: integration
+order: 22
+title: "삼각치환 — √(a²−x²), √(a²+x²), √(x²−a²) 치환표와 예제"
+h1: "삼각치환으로 제곱근 적분하기"
+description: "√(a²−x²), √(a²+x²), √(x²−a²)가 있는 적분을 삼각함수로 치환해 제곱근을 없애는 방법을 표로 정리하고, 원의 넓이를 구하는 정적분 예제와 x로 되돌리는 삼각형 그리기까지 해설해요."
+summary:
+  - "√(a²−x²)는 x = a sinθ, √(a²+x²)는 x = a tanθ, √(x²−a²)는 x = a secθ로 치환하면 제곱근이 사라진다."
+  - "정적분은 θ의 구간으로 바꿔 계산하고, 부정적분은 직각삼각형을 그려 x로 되돌린다."
+  - "sin²θ, cos²θ 적분에는 반각 공식을 쓴다."
+keyword: "삼각치환 적분"
+level: core
+prerequisites: [calculus/u-substitution]
+checks:
+  - id: ex1
+    claim: "∫₀³ √(9−x²) dx = 9π/4"
+    sympy: "(lambda x: integrate(sqrt(9-x**2), (x,0,3)) == 9*pi/4)(Symbol('x'))"
+  - id: p1
+    claim: "∫ dx/(x²+4)^{3/2} = x/(4√(x²+4)) + C"
+    sympy: "(lambda x: simplify(diff(x/(4*sqrt(x**2+4)), x) - 1/(x**2+4)**Rational(3,2)) == 0)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 피타고라스 항등식으로 제곱근을 없앤다
+
+$\sqrt{9 - x^2}$은 치환적분으로도 부분적분으로도 잘 안 풀립니다. 그런데 $x = 3\sin\theta$로 두면 $9 - 9\sin^2\theta = 9\cos^2\theta$가 되어 **제곱근이 깔끔하게 사라집니다**. 삼각치환은 $1 - \sin^2 = \cos^2$, $1 + \tan^2 = \sec^2$ 같은 항등식을 이용해 제곱근을 없애는 방법입니다. 원·타원의 넓이, 호의 길이, 전기장 계산에서 자주 나옵니다.
+
+## 핵심 공식
+
+| 식 | 치환 | 사라지는 원리 |
+|---|---|---|
+| $\sqrt{a^2 - x^2}$ | $x = a\sin\theta$ | $a^2 - a^2\sin^2\theta = a^2\cos^2\theta$ |
+| $\sqrt{a^2 + x^2}$ | $x = a\tan\theta$ | $a^2 + a^2\tan^2\theta = a^2\sec^2\theta$ |
+| $\sqrt{x^2 - a^2}$ | $x = a\sec\theta$ | $a^2\sec^2\theta - a^2 = a^2\tan^2\theta$ |
+
+반각 공식: $\cos^2\theta = \dfrac{1 + \cos 2\theta}{2}$
+
+## 예제
+
+<Example>
+$\displaystyle\int_0^3\sqrt{9 - x^2}\,dx$를 계산하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="치환을 정한다">
+$a = 3$인 $\sqrt{a^2 - x^2}$ 꼴이므로 $x = 3\sin\theta$, $dx = 3\cos\theta\,d\theta$ 입니다.
+</Step>
+
+<Step n={2} title="구간을 θ로 바꾼다">
+$x = 0$이면 $\theta = 0$, $x = 3$이면 $\theta = \dfrac{\pi}{2}$ 입니다. 이 범위에서 $\cos\theta \ge 0$이라 $\sqrt{9\cos^2\theta} = 3\cos\theta$.
+</Step>
+
+<Step n={3} title="반각 공식으로 적분한다">
+$$
+\int_0^{\pi/2} 3\cos\theta\cdot 3\cos\theta\,d\theta = 9\int_0^{\pi/2}\frac{1 + \cos 2\theta}{2}\,d\theta = \frac92\left[\theta + \frac{\sin 2\theta}{2}\right]_0^{\pi/2} = \frac{9\pi}{4}
+$$
+</Step>
+
+<Step n={4} title="기하학적으로 확인한다">
+$y = \sqrt{9 - x^2}$은 반지름 3인 원의 위쪽 절반입니다. $0 \le x \le 3$ 부분은 사분원이므로 넓이는 $\dfrac14\pi(3)^2 = \dfrac{9\pi}{4}$ 로 일치합니다.
+</Step>
+
+<Answer>
+$\dfrac{9\pi}{4}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="dx를 바꾸지 않는다">
+$x = 3\sin\theta$이면 $dx = 3\cos\theta\,d\theta$입니다. $dx$를 $d\theta$로만 바꾸면 계수와 $\cos\theta$ 하나가 빠집니다.
+</Mistake>
+
+<Mistake title="제곱근을 벗길 때 부호를 확인하지 않는다">
+$\sqrt{\cos^2\theta} = |\cos\theta|$입니다. 치환 범위에서 부호가 양수인지 확인하세요.
+</Mistake>
+
+<Mistake title="부정적분을 θ로 남겨 둔다">
+부정적분은 직각삼각형(빗변 $a$, 대변 $x$ 등)을 그려 $\sin\theta$, $\tan\theta$를 다시 $x$로 바꿔야 끝납니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\displaystyle\int\frac{dx}{(x^2 + 4)^{3/2}}$를 계산하세요.
+</Fragment>
+
+$x = 2\tan\theta$, $dx = 2\sec^2\theta\,d\theta$, $(x^2+4)^{3/2} = 8\sec^3\theta$ 이므로 $\dfrac14\displaystyle\int\cos\theta\,d\theta = \dfrac14\sin\theta$. 삼각형에서 $\sin\theta = \dfrac{x}{\sqrt{x^2+4}}$.
+
+**정답:** $\dfrac{x}{4\sqrt{x^2 + 4}} + C$
+</Practice>

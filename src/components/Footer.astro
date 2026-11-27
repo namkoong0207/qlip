@@ -1,5 +1,5 @@
 ---
-import { SITE } from "../config/site";
+import { SITE, appStoreUrl } from "../config/site";
 import { FEATURES } from "../data/features";
 import { SUBJECTS } from "../data/subjects";
 const year = new Date().getFullYear();
@@ -28,7 +28,8 @@ const year = new Date().getFullYear();
           <li><a href="/about/">소개</a></li>
           <li><a href="/pricing/">요금제</a></li>
           <li><a href="/faq/">FAQ</a></li>
-          <li><a href={SITE.appStore.url} rel="noopener" data-track="app_store_click" data-loc="footer">App Store</a></li>
+          <li><a href="/compare/">서비스 비교</a></li>
+          <li><a href={appStoreUrl("web_footer")} rel="noopener" data-track="app_store_click" data-loc="footer">App Store</a></li>
         </ul>
       </div>
       <div>

@@ -1,0 +1,110 @@
+---
+subject: calculus
+unit: integration
+order: 23
+title: "이상적분 — 무한 구간·발산하는 함수, 수렴 판정과 p-적분"
+h1: "이상적분: 끝이 무한하거나 함수가 발산할 때"
+description: "적분 구간이 무한하거나 피적분함수가 구간 안에서 무한대로 가는 이상적분을 극한으로 계산하는 방법과, p-적분으로 수렴·발산을 빠르게 판정하는 법을 예제로 해설해요."
+summary:
+  - "이상적분은 문제가 되는 끝을 문자 t로 바꿔 정적분을 구한 뒤 t의 극한을 취한다."
+  - "극한이 유한한 값이면 수렴, 무한대이거나 존재하지 않으면 발산이다."
+  - "∫₁^∞ 1/xᵖ dx는 p > 1이면 수렴, ∫₀¹ 1/xᵖ dx는 p < 1이면 수렴한다."
+keyword: "이상적분 수렴 발산"
+level: core
+related: [calculus/series-convergence-tests]
+checks:
+  - id: ex1
+    claim: "∫₁^∞ 1/x² dx = 1, ∫₀¹ 1/√x dx = 2"
+    sympy: "(lambda x: integrate(1/x**2, (x,1,oo)) == 1 and integrate(1/sqrt(x), (x,0,1)) == 2)(Symbol('x', positive=True))"
+  - id: ex2
+    claim: "∫₁^∞ 1/x dx 는 발산"
+    sympy: "(lambda x: integrate(1/x, (x,1,oo)) == oo)(Symbol('x', positive=True))"
+  - id: p1
+    claim: "∫₀^∞ x e^{−x} dx = 1"
+    sympy: "(lambda x: integrate(x*exp(-x), (x,0,oo)) == 1)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 무한히 긴 넓이도 유한할 수 있다
+
+$y = \dfrac{1}{x^2}$ 아래의 넓이를 $x = 1$부터 끝없이 오른쪽으로 더해도, 그래프가 충분히 빨리 $0$에 가까워지면 넓이는 유한한 값에 머뭅니다. 반면 $\dfrac{1}{x}$은 천천히 줄어들어 넓이가 무한히 커집니다. 이상적분은 이런 '끝없는' 적분을 **극한**으로 정의해 수렴 여부를 판단합니다. 확률분포, 라플라스 변환, 급수의 적분 판정법이 모두 이상적분입니다.
+
+## 핵심 공식
+
+$$
+\int_a^\infty f(x)\,dx = \lim_{t\to\infty}\int_a^t f(x)\,dx, \qquad
+\int_a^b f(x)\,dx = \lim_{t\to a^+}\int_t^b f(x)\,dx\ \ (x = a\text{에서 발산할 때})
+$$
+
+p-적분:
+
+$$
+\int_1^\infty\frac{dx}{x^p}\ \text{수렴} \iff p \gt 1, \qquad \int_0^1\frac{dx}{x^p}\ \text{수렴} \iff p \lt 1
+$$
+
+## 예제
+
+<Example>
+(1) $\displaystyle\int_1^\infty\frac{dx}{x^2}$ (2) $\displaystyle\int_0^1\frac{dx}{\sqrt x}$ (3) $\displaystyle\int_1^\infty\frac{dx}{x}$ 의 수렴 여부와 값을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 무한 끝을 t로 바꾼다">
+$$
+\lim_{t\to\infty}\int_1^t x^{-2}\,dx = \lim_{t\to\infty}\left[-\frac1x\right]_1^t = \lim_{t\to\infty}\left(1 - \frac1t\right) = 1
+$$
+</Step>
+
+<Step n={2} title="(2) 발산하는 끝을 t로 바꾼다">
+$x = 0$에서 $\dfrac{1}{\sqrt x}$이 무한대로 가므로
+
+$$
+\lim_{t\to0^+}\int_t^1 x^{-1/2}\,dx = \lim_{t\to0^+}\Big[2\sqrt x\Big]_t^1 = 2 - 0 = 2
+$$
+</Step>
+
+<Step n={3} title="(3) 극한이 무한대인지 본다">
+$$
+\lim_{t\to\infty}\Big[\ln x\Big]_1^t = \lim_{t\to\infty}\ln t = \infty
+$$
+
+극한이 유한하지 않으므로 발산합니다. p-적분에서 $p = 1$인 경계 경우입니다.
+</Step>
+
+<Answer>
+(1) $1$로 수렴 (2) $2$로 수렴 (3) 발산
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="구간 안의 발산점을 놓친다">
+$\displaystyle\int_{-1}^1\frac{dx}{x^2}$를 그대로 계산하면 $-2$라는 틀린 값이 나옵니다. $x = 0$에서 함수가 발산하므로 두 이상적분으로 나눠야 하고, 실제로는 발산합니다.
+</Mistake>
+
+<Mistake title="∞를 대입하는 것처럼 쓴다">
+$\left[-\frac1x\right]_1^\infty$처럼 쓰는 것은 줄임 표기일 뿐입니다. 답안에는 극한으로 쓰는 것이 안전합니다.
+</Mistake>
+
+<Mistake title="함수가 0으로 가면 수렴한다고 생각한다">
+$\dfrac1x$은 $0$으로 가지만 적분은 발산합니다. 얼마나 **빨리** $0$으로 가는지가 중요합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\displaystyle\int_0^\infty x e^{-x}\,dx$를 계산하세요.
+</Fragment>
+
+부분적분으로 $\int_0^t xe^{-x}dx = \Big[-(x+1)e^{-x}\Big]_0^t = 1 - (t+1)e^{-t}$ 이고, $t\to\infty$에서 $(t+1)e^{-t}\to 0$ 입니다.
+
+**정답:** $1$로 수렴
+</Practice>

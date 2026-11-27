@@ -1,0 +1,109 @@
+---
+subject: chemistry
+unit: kinetics-electrochem
+order: 200
+title: "네른스트 식과 전지 전위 — 농도가 바뀔 때 E 계산, ΔG° = −nFE°"
+h1: "네른스트 식으로 전지 전위 구하기"
+description: "표준 전지 전위 E°와 농도가 표준이 아닐 때의 전위를 네른스트 식 E = E° − (0.0592/n)log Q로 구하는 방법을 다니엘 전지(Zn/Cu) 예제로 정리하고, ΔG° = −nFE°로 자발성을 판단하는 법까지 해설해요."
+summary:
+  - "표준 전지 전위 E° = E°(환원극) − E°(산화극). E° > 0이면 표준 상태에서 자발적이다."
+  - "25 °C에서 E = E° − (0.0592/n) log Q. n은 옮겨지는 전자 수, Q는 반응지수."
+  - "ΔG° = −nFE° (F = 96485 C/mol)로 전위와 자유에너지가 연결된다."
+keyword: "네른스트 식 전지 전위"
+level: advanced
+prerequisites: [chemistry/oxidation-numbers, chemistry/entropy-gibbs-free-energy]
+checks:
+  - id: ex1
+    claim: "Zn|Zn²⁺(1.0)||Cu²⁺(0.010)|Cu, E°=1.10 V, n=2: E = 1.10 − 0.0296·log100 = 1.04 V"
+    sympy: "Rational(110,100) - Rational(592,10000)/2*log(100, 10) == Rational(10408,10000)"
+  - id: ex2
+    claim: "ΔG° = −2·96485·1.10 J ≈ −212 kJ"
+    sympy: "Abs(N(-2*96485*Rational(110,100)/1000) - (-212.27)) < 0.01"
+  - id: p1
+    claim: "[Zn²⁺]=0.10, [Cu²⁺]=1.0 → Q=0.10, E = 1.10 + 0.0296 = 1.13 V"
+    sympy: "Rational(110,100) - Rational(296,10000)*log(Rational(1,10), 10) == Rational(11296,10000)"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 전지 전압도 평형에 다가가며 떨어진다
+
+전지는 산화·환원 반응의 자유에너지를 전기 에너지로 바꾸는 장치입니다. 표준 상태(1 M, 1 atm)에서의 전압이 표준 전지 전위 $E^\circ$이고, 실제 농도가 다르면 전압이 달라집니다. 반응이 진행되며 생성물이 쌓이면 $Q$가 커져 전압이 떨어지고, 평형($Q = K$)에서 전압이 0이 됩니다. 이 관계를 나타낸 것이 네른스트 식입니다. 배터리 방전 곡선, pH 미터, 신경 세포의 막전위가 모두 네른스트 식으로 계산됩니다.
+
+## 핵심 공식
+
+$$
+E^\circ_{\text{전지}} = E^\circ_{\text{환원극}} - E^\circ_{\text{산화극}}, \qquad E = E^\circ - \frac{0.0592}{n}\log Q\ \ (25\ ^\circ\text{C})
+$$
+
+$$
+\Delta G^\circ = -nFE^\circ, \qquad F = 96485\ \text{C/mol}
+$$
+
+## 예제
+
+<Example>
+다니엘 전지 $\text{Zn}(s) + \text{Cu}^{2+}(aq) \rightarrow \text{Zn}^{2+}(aq) + \text{Cu}(s)$의 $E^\circ = 1.10\ \text{V}$입니다. $[\text{Zn}^{2+}] = 1.0\ \text{M}$, $[\text{Cu}^{2+}] = 0.010\ \text{M}$일 때 전지 전위와, $\Delta G^\circ$를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="n과 Q를 구한다">
+Zn이 전자 2개를 잃고 Cu²⁺가 2개를 얻으므로 $n = 2$. 고체는 빼고
+
+$$
+Q = \frac{[\text{Zn}^{2+}]}{[\text{Cu}^{2+}]} = \frac{1.0}{0.010} = 100
+$$
+</Step>
+
+<Step n={2} title="네른스트 식에 넣는다">
+$$
+E = 1.10 - \frac{0.0592}{2}\log 100 = 1.10 - 0.0592 = 1.04\ \text{V}
+$$
+
+반응물(Cu²⁺)이 적어 표준 상태보다 전압이 낮습니다.
+</Step>
+
+<Step n={3} title="ΔG°를 구한다">
+$$
+\Delta G^\circ = -(2)(96485)(1.10) \approx -2.12\times10^5\ \text{J} = -212\ \text{kJ}
+$$
+
+음수이므로 표준 상태에서 자발적입니다.
+</Step>
+
+<Answer>
+$E \approx 1.04\ \text{V}$, $\Delta G^\circ \approx -212\ \text{kJ}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="Q를 반응물/생성물로 거꾸로 쓴다">
+$Q$는 생성물이 분자입니다. 거꾸로 쓰면 보정 부호가 반대가 되어 전압이 오르는 것처럼 나옵니다.
+</Mistake>
+
+<Mistake title="n을 1로 둔다">
+옮겨지는 전자 수를 반쪽 반응에서 확인하세요. 다니엘 전지는 $n = 2$입니다.
+</Mistake>
+
+<Mistake title="반쪽 반응에 계수를 곱하며 E°도 곱한다">
+표준 환원 전위는 세기 성질이라 반응식을 2배 해도 $E^\circ$는 그대로입니다. 대신 $n$이 바뀝니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+같은 다니엘 전지에서 $[\text{Zn}^{2+}] = 0.10\ \text{M}$, $[\text{Cu}^{2+}] = 1.0\ \text{M}$이면 전지 전위는?
+</Fragment>
+
+$Q = 0.10$, $\log Q = -1$ 이므로 $E = 1.10 + 0.0296$.
+
+**정답:** $E \approx 1.13\ \text{V}$
+</Practice>

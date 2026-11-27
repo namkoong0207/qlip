@@ -11,7 +11,7 @@ const crumbs = [{ name: "홈", path: "/" }, { name: "공부 가이드", path: "/
   <PageHead crumbs={crumbs} eyebrow="공부 가이드" h1="대학생 공부 가이드" lead="족보, 시험 계획, 공부 도구처럼 대학 시험공부에서 매번 부딪히는 문제를 정리해요." />
   <section class="section">
     <div class="container">
-      {guides.length === 0 && <p class="lead">첫 가이드를 검수하고 있어요. 그동안 <a class="link-arrow" href="/learn/">학습 라이브러리</a>를 둘러보세요.</p>}
+      {guides.length === 0 && <p class="lead">첫 가이드를 준비하고 있어요. 그동안 <a class="link-arrow" href="/learn/">학습 라이브러리</a>를 둘러보세요.</p>}
       <div class="grid grid-2">
         {guides.map((g) => (
           <a class="card" href={`/guides/${g.id}/`}><h2 style="font-size:20px;margin-bottom:8px;">{g.data.h1}</h2><p>{g.data.description}</p></a>

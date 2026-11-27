@@ -12,7 +12,7 @@ const qrSvg = qr ? await QRCode.toString(appStoreUrl(`${campaign}_qr`), { type: 
 ---
 <div class="download">
   <a class="store-badge" href={href} rel="noopener" data-track="app_store_click" data-loc={loc}>
-    <img src="/img/app-store-badge.svg" alt="App Store에서 Qlip 다운로드" width="156" height="52" />
+    <img src="/img/app-store-badge.svg" alt="App Store에서 다운로드하세요" width="169" height="52" />
   </a>
   {qr && (
     <div class="qr" data-track="qr_view" data-loc={loc}>

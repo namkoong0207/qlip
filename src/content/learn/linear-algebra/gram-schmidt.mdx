@@ -1,0 +1,102 @@
+---
+subject: linear-algebra
+unit: orthogonality
+order: 160
+title: "그람-슈미트 과정 — 직교 기저·정규직교 기저 만들기 예제"
+h1: "그람-슈미트 과정으로 직교 기저 만들기"
+description: "일차독립인 벡터들에서 앞서 만든 방향 성분을 차례로 빼 서로 직교하는 기저를 만드는 그람-슈미트 과정을 정리하고, ℝ³의 세 벡터를 직교화·정규화하는 예제를 단계별로 해설해요."
+summary:
+  - "u₁ = v₁로 두고, 다음 벡터에서 앞선 uᵢ 방향 정사영을 모두 빼면 직교 벡터 u₂, u₃…가 된다."
+  - "각 uᵢ를 길이로 나누면 정규직교 기저가 된다."
+  - "직교성은 매 단계 내적이 0인지로 검산한다."
+keyword: "그람 슈미트 과정"
+level: core
+prerequisites: [linear-algebra/inner-product-projection]
+related: [linear-algebra/qr-decomposition]
+checks:
+  - id: ex1
+    claim: "v₁=(1,1,0), v₂=(1,0,1), v₃=(0,1,1) → u₂=(½,−½,1), u₃=(−⅔,⅔,⅔), 서로 직교"
+    sympy: "(lambda v1, v2, v3: (v2 - (v2.dot(v1)/v1.dot(v1))*v1) == Matrix([Rational(1,2),Rational(-1,2),1]) and Matrix([Rational(-2,3),Rational(2,3),Rational(2,3)]) == v3 - (v3.dot(v1)/v1.dot(v1))*v1 - (v3.dot(Matrix([Rational(1,2),Rational(-1,2),1]))/Matrix([Rational(1,2),Rational(-1,2),1]).dot(Matrix([Rational(1,2),Rational(-1,2),1])))*Matrix([Rational(1,2),Rational(-1,2),1]) and Matrix([Rational(-2,3),Rational(2,3),Rational(2,3)]).dot(v1) == 0)(Matrix([1,1,0]), Matrix([1,0,1]), Matrix([0,1,1]))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 겹치는 방향을 차례로 빼낸다
+
+기저 벡터들이 서로 비스듬하면 좌표 계산이 번거롭습니다. 그람-슈미트 과정은 첫 벡터는 그대로 두고, 두 번째 벡터에서 첫 벡터 방향 성분(정사영)을 빼서 수직으로 만들고, 세 번째 벡터에서는 앞의 두 방향 성분을 모두 빼는 식으로 직교 기저를 만듭니다. 같은 공간을 생성하면서 계산하기 좋은 기저가 되고, QR 분해와 최소제곱의 바탕이 됩니다.
+
+## 핵심 공식
+
+$$
+\mathbf u_1 = \mathbf v_1, \qquad \mathbf u_k = \mathbf v_k - \sum_{i=1}^{k-1}\frac{\mathbf v_k\cdot\mathbf u_i}{\mathbf u_i\cdot\mathbf u_i}\,\mathbf u_i, \qquad \mathbf e_k = \frac{\mathbf u_k}{|\mathbf u_k|}
+$$
+
+## 예제
+
+<Example>
+$\mathbf v_1 = (1, 1, 0)$, $\mathbf v_2 = (1, 0, 1)$, $\mathbf v_3 = (0, 1, 1)$을 그람-슈미트 과정으로 직교화하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="첫 벡터">
+$\mathbf u_1 = (1, 1, 0)$, $\mathbf u_1\cdot\mathbf u_1 = 2$.
+</Step>
+
+<Step n={2} title="두 번째: u₁ 방향을 뺀다">
+$\mathbf v_2\cdot\mathbf u_1 = 1$이므로
+
+$$
+\mathbf u_2 = (1, 0, 1) - \frac12(1, 1, 0) = \left(\tfrac12, -\tfrac12, 1\right)
+$$
+
+검산 $\mathbf u_2\cdot\mathbf u_1 = \frac12 - \frac12 = 0$ ✓. ($\mathbf u_2\cdot\mathbf u_2 = \frac32$)
+</Step>
+
+<Step n={3} title="세 번째: u₁, u₂ 방향을 모두 뺀다">
+$\mathbf v_3\cdot\mathbf u_1 = 1$, $\mathbf v_3\cdot\mathbf u_2 = -\frac12 + 1 = \frac12$.
+
+$$
+\mathbf u_3 = (0, 1, 1) - \frac12(1, 1, 0) - \frac{1/2}{3/2}\left(\tfrac12, -\tfrac12, 1\right) = \left(-\tfrac23, \tfrac23, \tfrac23\right)
+$$
+</Step>
+
+<Step n={4} title="정규화(필요하면)">
+길이 $\sqrt2$, $\sqrt{3/2}$, $\frac{2}{\sqrt3}$로 각각 나누면 정규직교 기저 $\frac{1}{\sqrt2}(1,1,0)$, $\frac{1}{\sqrt6}(1,-1,2)$, $\frac{1}{\sqrt3}(-1,1,1)$이 됩니다.
+</Step>
+
+<Answer>
+직교 기저 $(1, 1, 0)$, $\left(\tfrac12, -\tfrac12, 1\right)$, $\left(-\tfrac23, \tfrac23, \tfrac23\right)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="원래 v₁, v₂ 방향으로 뺀다">
+세 번째 단계에서 빼는 방향은 이미 직교화한 $\mathbf u_1, \mathbf u_2$입니다. $\mathbf v_2$로 빼면 직교가 깨집니다.
+</Mistake>
+
+<Mistake title="분모 uᵢ·uᵢ를 1로 둔다">
+정규화하기 전에는 $\mathbf u_i\cdot\mathbf u_i$가 1이 아닙니다. 정규화를 먼저 했다면 분모가 1이 됩니다.
+</Mistake>
+
+<Mistake title="검산을 생략한다">
+각 단계에서 새 벡터와 이전 벡터들의 내적이 0인지 확인하면 산술 실수를 바로 찾습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\mathbf v_1 = (3, 4)$, $\mathbf v_2 = (1, 0)$으로 $\mathbb R^2$의 정규직교 기저를 만드세요.
+</Fragment>
+
+$\mathbf u_2 = (1, 0) - \frac{3}{25}(3, 4) = \left(\frac{16}{25}, -\frac{12}{25}\right)$. 길이로 나누면 $\left(\frac45, -\frac35\right)$.
+
+**정답:** $\left(\tfrac35, \tfrac45\right)$, $\left(\tfrac45, -\tfrac35\right)$
+</Practice>

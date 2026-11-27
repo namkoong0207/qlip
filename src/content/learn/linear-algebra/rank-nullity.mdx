@@ -1,0 +1,97 @@
+---
+subject: linear-algebra
+unit: vector-spaces
+order: 65
+title: "계수-퇴화차수 정리 — rank + nullity = 열의 수, 예제"
+h1: "계수-퇴화차수 정리"
+description: "m×n 행렬에서 계수(rank, 피벗 수)와 퇴화차수(nullity, 자유 변수 수)의 합이 열의 수 n과 같다는 계수-퇴화차수 정리를 정리하고, 3×5 행렬 예제와 해의 개수 판단 활용을 해설해요."
+summary:
+  - "rank A = 피벗의 수 = 열공간의 차원, nullity A = 자유 변수의 수 = 영공간의 차원."
+  - "m×n 행렬에서 rank A + nullity A = n (열의 수)."
+  - "rank A ≤ min(m, n)이고, 정사각 행렬은 rank = n일 때만 가역이다."
+keyword: "계수 퇴화차수 정리"
+level: core
+prerequisites: [linear-algebra/null-column-space]
+checks:
+  - id: ex1
+    claim: "3×5 행렬 [[1,2,0,1,3],[2,4,1,3,7],[3,6,1,4,10]]: rank 2, nullity 3, 합 5"
+    sympy: "Matrix([[1,2,0,1,3],[2,4,1,3,7],[3,6,1,4,10]]).rank() == 2 and len(Matrix([[1,2,0,1,3],[2,4,1,3,7],[3,6,1,4,10]]).nullspace()) == 3"
+  - id: p1
+    claim: "4×6 행렬의 rank가 4면 nullity 2, 7×5 행렬의 nullity ≥ 0이고 rank ≤ 5"
+    sympy: "6 - 4 == 2 and min(7, 5) == 5"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 입력의 차원은 살아남거나 사라진다
+
+$m\times n$ 행렬은 $n$차원 입력을 받습니다. 그 $n$개의 방향 중 일부는 출력(열공간)에 살아남고, 나머지는 $\mathbf 0$으로 눌려 사라집니다(영공간). 살아남은 차원(rank)과 사라진 차원(nullity)을 더하면 처음 입력의 차원 $n$이 됩니다. 이 단순한 등식으로 해의 개수, 가역성, 변환이 일대일·전사인지를 판단할 수 있습니다.
+
+## 핵심 공식
+
+$$
+\text{rank}\,A + \text{nullity}\,A = n \quad (A\text{가 } m\times n)
+$$
+
+- rank = 피벗 수 = $\dim C(A)$ = 독립인 행의 수
+- nullity = 자유 변수 수 = $\dim N(A)$
+
+## 예제
+
+<Example>
+$A = \begin{pmatrix} 1 & 2 & 0 & 1 & 3 \\ 2 & 4 & 1 & 3 & 7 \\ 3 & 6 & 1 & 4 & 10 \end{pmatrix}$의 계수와 퇴화차수를 구하고 정리를 확인하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="행 줄임한다">
+$R_2 - 2R_1$, $R_3 - 3R_1$ 뒤 $R_3 - R_2$를 하면
+
+$$
+\begin{pmatrix} 1 & 2 & 0 & 1 & 3 \\ 0 & 0 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 & 0 \end{pmatrix}
+$$
+</Step>
+
+<Step n={2} title="피벗과 자유 변수를 센다">
+피벗은 1열, 3열에 2개 → rank 2. 자유 변수는 $x_2, x_4, x_5$ 3개 → nullity 3.
+</Step>
+
+<Step n={3} title="정리를 확인한다">
+$2 + 3 = 5$ = 열의 수 ✓. 셋째 행이 첫째·둘째 행의 합이라 독립인 행이 2개뿐인 것도 rank 2와 맞습니다.
+</Step>
+
+<Answer>
+rank $= 2$, nullity $= 3$, $2 + 3 = 5$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="행의 수와 더한다">
+정리의 우변은 열의 수 $n$입니다. 행의 수 $m$과 맞추면 틀립니다.
+</Mistake>
+
+<Mistake title="0이 아닌 성분 수로 rank를 센다">
+rank는 행 줄임 뒤 피벗(영이 아닌 행)의 수입니다.
+</Mistake>
+
+<Mistake title="rank가 행보다 클 수 있다고 생각한다">
+rank는 $\min(m, n)$을 넘을 수 없습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$4\times6$ 행렬 $B$의 계수가 4입니다. $B\mathbf x = \mathbf 0$의 해 공간 차원은? $B\mathbf x = \mathbf b$는 모든 $\mathbf b \in \mathbb R^4$에 대해 해가 있을까요?
+</Fragment>
+
+nullity $= 6 - 4 = 2$. rank가 행의 수 4와 같으므로 열공간이 $\mathbb R^4$ 전체입니다.
+
+**정답:** 해 공간 차원 2, 모든 $\mathbf b$에 대해 해가 있다(해는 무수히 많음)
+</Practice>

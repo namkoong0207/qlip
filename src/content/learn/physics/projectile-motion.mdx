@@ -1,0 +1,102 @@
+---
+subject: physics
+unit: kinematics-dynamics
+order: 20
+title: "포물선 운동 — 수평·연직 분리, 사거리·최고 높이 공식과 예제"
+h1: "포물선 운동: 수평과 연직을 따로 푼다"
+description: "비스듬히 던진 물체의 포물선 운동을 수평(등속)과 연직(등가속도)으로 나눠 푸는 방법과 사거리·최고 높이·비행 시간 공식을 정리하고, 지면 발사와 절벽 수평 발사 예제를 해설해요."
+summary:
+  - "수평 방향은 가속도가 0인 등속 운동, 연직 방향은 가속도 −g인 등가속도 운동으로 따로 푼다."
+  - "두 방향을 잇는 것은 시간 t 하나뿐이다. 연직 운동에서 t를 구해 수평 거리에 쓴다."
+  - "같은 높이로 떨어질 때 사거리 R = v₀² sin 2θ / g, 45°에서 최대다."
+keyword: "포물선 운동 공식"
+level: core
+prerequisites: [physics/uniform-acceleration]
+checks:
+  - id: ex1
+    claim: "20 m/s, 30°: 비행 시간 ≈2.04 s, 최고 높이 ≈5.10 m, 사거리 ≈35.3 m"
+    sympy: "Abs(N(2*20*sin(pi/6)/Rational(98,10)) - 2.041) < 1e-3 and Abs(N((20*sin(pi/6))**2/(2*Rational(98,10))) - 5.102) < 1e-3 and Abs(N(400*sin(pi/3)/Rational(98,10)) - 35.35) < 0.01"
+  - id: p1
+    claim: "45 m 절벽에서 10 m/s 수평 발사: 낙하 시간 ≈3.03 s, 수평 거리 ≈30.3 m"
+    sympy: "Abs(N(sqrt(90/Rational(98,10))) - 3.030) < 1e-3 and Abs(N(10*sqrt(90/Rational(98,10))) - 30.30) < 0.01"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 두 개의 1차원 운동이 겹친 것
+
+비스듬히 던진 공은 곡선을 그리지만, 공기 저항을 무시하면 **수평으로는 속도가 변하지 않고, 연직으로는 자유낙하**를 합니다. 두 운동은 서로 영향을 주지 않으므로 따로 풀고, 같은 시각 $t$로 묶으면 됩니다. 같은 높이에서 수평으로 쏜 총알과 그냥 떨어뜨린 총알이 동시에 바닥에 닿는 것도 이 때문입니다.
+
+## 핵심 공식
+
+처음 속도 $v_0$, 발사각 $\theta$:
+
+$$
+v_{0x} = v_0\cos\theta,\quad v_{0y} = v_0\sin\theta, \qquad x = v_{0x}t,\quad y = v_{0y}t - \frac12 gt^2
+$$
+
+같은 높이로 떨어질 때:
+
+$$
+T = \frac{2v_0\sin\theta}{g}, \qquad H = \frac{(v_0\sin\theta)^2}{2g}, \qquad R = \frac{v_0^2\sin 2\theta}{g}
+$$
+
+## 예제
+
+<Example>
+지면에서 공을 $20\ \text{m/s}$, $30^\circ$로 던졌습니다. 비행 시간, 최고 높이, 사거리를 구하세요. ($g = 9.8\ \text{m/s}^2$)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="속도를 성분으로 나눈다">
+$v_{0x} = 20\cos 30^\circ \approx 17.3\ \text{m/s}$, $v_{0y} = 20\sin 30^\circ = 10\ \text{m/s}$.
+</Step>
+
+<Step n={2} title="연직 운동으로 시간과 높이를 구한다">
+$y = 0$으로 돌아오는 시간 $T = \dfrac{2(10)}{9.8} \approx 2.04\ \text{s}$, 최고 높이 $H = \dfrac{10^2}{2(9.8)} \approx 5.10\ \text{m}$.
+</Step>
+
+<Step n={3} title="수평 운동으로 사거리를 구한다">
+$$
+R = v_{0x}T = 17.3 \times 2.04 \approx 35.3\ \text{m}
+$$
+
+공식 $R = \dfrac{400\sin 60^\circ}{9.8}$로도 같습니다.
+</Step>
+
+<Answer>
+비행 시간 약 $2.04\ \text{s}$, 최고 높이 약 $5.1\ \text{m}$, 사거리 약 $35.3\ \text{m}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="수평 방향에도 g를 넣는다">
+중력은 연직 방향으로만 작용합니다. 수평 속도는 끝까지 $v_0\cos\theta$입니다.
+</Mistake>
+
+<Mistake title="높이가 다른데 사거리 공식을 쓴다">
+$R = \frac{v_0^2\sin2\theta}{g}$는 출발점과 도착점의 높이가 같을 때만 성립합니다. 절벽 문제는 연직 식에서 $t$를 직접 구하세요.
+</Mistake>
+
+<Mistake title="최고점에서 속도가 0이라고 생각한다">
+최고점에서 0이 되는 것은 연직 속도뿐이고, 수평 속도는 그대로 남아 있습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+높이 $45\ \text{m}$ 절벽 끝에서 공을 $10\ \text{m/s}$로 수평으로 던졌습니다. 바닥에 닿기까지 시간과 수평 거리는?
+</Fragment>
+
+연직 처음 속도가 0이므로 $45 = \frac12(9.8)t^2$, $t = \sqrt{90/9.8}$. 수평 거리는 $10t$.
+
+**정답:** 약 $3.03\ \text{s}$, 약 $30.3\ \text{m}$
+</Practice>

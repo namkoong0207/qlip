@@ -1,0 +1,109 @@
+---
+subject: calculus
+unit: integration
+order: 21
+title: "부분분수 적분 — 분해 꼴 정하기(일차·중복·이차 인수), 예제"
+h1: "부분분수로 유리함수 적분하기"
+description: "유리함수를 부분분수로 나눠 적분하는 방법을 서로 다른 일차인수, 중복 인수 경우로 나눠 정리하고, 계수 구하는 법과 로그 적분까지 예제로 해설해요. 차수 확인 실수와 연습 문제 포함."
+summary:
+  - "분자의 차수가 분모 이상이면 먼저 나눗셈을 하고, 남은 진분수만 부분분수로 나눈다."
+  - "서로 다른 일차인수는 A/(x−a), 중복 인수 (x−a)²는 A/(x−a) + B/(x−a)² 두 항으로 둔다."
+  - "각 항은 ∫ 1/(x−a) dx = ln|x−a|, ∫ 1/(x−a)² dx = −1/(x−a)로 적분한다."
+keyword: "부분분수 적분"
+level: core
+related: [engineering-math/laplace-ivp, calculus/u-substitution]
+checks:
+  - id: ex1
+    claim: "(3x+5)/((x+1)(x+2)) = 2/(x+1) + 1/(x+2)"
+    sympy: "(lambda x: apart((3*x+5)/((x+1)*(x+2))) == 2/(x+1) + 1/(x+2))(Symbol('x'))"
+  - id: ex1b
+    claim: "적분 결과 2ln|x+1| + ln|x+2| 를 미분하면 원래 식"
+    sympy: "(lambda x: simplify(diff(2*log(x+1)+log(x+2), x) - (3*x+5)/((x+1)*(x+2))) == 0)(Symbol('x', positive=True))"
+  - id: p1
+    claim: "(x²+1)/(x(x−1)²) = 1/x + 2/(x−1)²"
+    sympy: "(lambda x: apart((x**2+1)/(x*(x-1)**2)) == 1/x + 2/(x-1)**2)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 분수를 쪼개면 로그로 적분된다
+
+$\dfrac{1}{x+1}$이나 $\dfrac{1}{x+2}$는 바로 로그로 적분되지만, 둘을 통분한 $\dfrac{2x+3}{(x+1)(x+2)}$는 한눈에 적분이 안 됩니다. 부분분수는 통분을 거꾸로 해서, 복잡한 유리함수를 이런 간단한 분수들의 합으로 되돌리는 방법입니다. 공업수학의 라플라스 역변환에서도 똑같이 쓰입니다.
+
+## 핵심 공식
+
+$$
+\frac{P(x)}{(x-a)(x-b)} = \frac{A}{x-a} + \frac{B}{x-b}, \qquad
+\frac{P(x)}{(x-a)^2} = \frac{A}{x-a} + \frac{B}{(x-a)^2}
+$$
+
+$$
+\int\frac{dx}{x-a} = \ln|x-a| + C, \qquad \int\frac{dx}{(x-a)^2} = -\frac{1}{x-a} + C
+$$
+
+(분자 차수 ≥ 분모 차수이면 먼저 다항식 나눗셈)
+
+## 예제
+
+<Example>
+$\displaystyle\int\frac{3x + 5}{(x+1)(x+2)}\,dx$를 계산하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="차수를 확인하고 분해 꼴을 정한다">
+분자 1차, 분모 2차이므로 바로 분해합니다. 서로 다른 일차인수 두 개입니다.
+
+$$
+\frac{3x + 5}{(x+1)(x+2)} = \frac{A}{x+1} + \frac{B}{x+2}
+$$
+</Step>
+
+<Step n={2} title="근을 대입해 계수를 구한다">
+양변에 분모를 곱하면 $3x + 5 = A(x+2) + B(x+1)$ 입니다.
+
+- $x = -1$: $2 = A(1)$, $A = 2$
+- $x = -2$: $-1 = B(-1)$, $B = 1$
+</Step>
+
+<Step n={3} title="항별로 적분한다">
+$$
+\int\left(\frac{2}{x+1} + \frac{1}{x+2}\right)dx = 2\ln|x+1| + \ln|x+2| + C
+$$
+</Step>
+
+<Answer>
+$2\ln|x+1| + \ln|x+2| + C$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="가분수인데 바로 분해한다">
+$\dfrac{x^3}{x^2 - 1}$처럼 분자 차수가 높으면 먼저 나눗셈으로 $x + \dfrac{x}{x^2-1}$을 만든 뒤 남은 부분을 분해합니다.
+</Mistake>
+
+<Mistake title="중복 인수의 두 번째 항을 빠뜨린다">
+$(x-1)^2$이 있으면 $\dfrac{A}{x-1} + \dfrac{B}{(x-1)^2}$ 두 항이 모두 필요합니다. 하나만 두면 계수를 맞출 수 없습니다.
+</Mistake>
+
+<Mistake title="로그에 절댓값을 빼먹는다">
+$\int\frac{dx}{x+1} = \ln|x+1|$입니다. 절댓값이 없으면 $x \lt -1$에서 정의되지 않는 답이 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\displaystyle\int\frac{x^2 + 1}{x(x-1)^2}\,dx$를 계산하세요.
+</Fragment>
+
+$\dfrac{A}{x} + \dfrac{B}{x-1} + \dfrac{C}{(x-1)^2}$로 두면 $x = 0$에서 $A = 1$, $x = 1$에서 $C = 2$, $x^2$ 계수 비교로 $A + B = 1$, $B = 0$ 입니다.
+
+**정답:** $\ln|x| - \dfrac{2}{x-1} + C$
+</Practice>

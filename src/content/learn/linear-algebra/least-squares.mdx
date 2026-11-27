@@ -1,0 +1,104 @@
+---
+subject: linear-algebra
+unit: orthogonality
+order: 170
+title: "최소제곱법 — 정규방정식 AᵀAx = Aᵀb로 직선 맞추기 예제"
+h1: "최소제곱법으로 데이터에 직선 맞추기"
+description: "해가 없는 연립방정식 Ax = b에서 오차 제곱합을 최소로 하는 근사해를 정규방정식 AᵀAx̂ = Aᵀb로 구하는 최소제곱법을 정리하고, 세 점과 네 점에 직선 y = a + bx를 맞추는 예제를 해설해요."
+summary:
+  - "Ax = b의 해가 없을 때, |Ax − b|²를 최소로 하는 x̂는 정규방정식 AᵀAx̂ = Aᵀb의 해다."
+  - "기하학적으로 Ax̂는 b를 A의 열공간에 정사영한 것이고, 오차 b − Ax̂는 열공간과 직교한다."
+  - "직선 맞추기에서 A의 각 행은 (1, xᵢ), b는 yᵢ들이다."
+keyword: "최소제곱법 정규방정식"
+level: core
+prerequisites: [linear-algebra/inner-product-projection]
+related: [linear-algebra/qr-decomposition]
+checks:
+  - id: ex1
+    claim: "(0,1),(1,3),(2,4): a = 7/6, b = 3/2"
+    sympy: "(Matrix([[1,0],[1,1],[1,2]]).T*Matrix([[1,0],[1,1],[1,2]])).inv()*Matrix([[1,0],[1,1],[1,2]]).T*Matrix([1,3,4]) == Matrix([Rational(7,6), Rational(3,2)])"
+  - id: ex2
+    claim: "오차 벡터는 A의 열과 직교 (Aᵀ(b − Ax̂) = 0)"
+    sympy: "Matrix([[1,0],[1,1],[1,2]]).T*(Matrix([1,3,4]) - Matrix([[1,0],[1,1],[1,2]])*Matrix([Rational(7,6), Rational(3,2)])) == zeros(2,1)"
+  - id: p1
+    claim: "(1,2),(2,3),(3,5),(4,6): y = 1/2 + (7/5)x"
+    sympy: "(Matrix([[1,1],[1,2],[1,3],[1,4]]).T*Matrix([[1,1],[1,2],[1,3],[1,4]])).inv()*Matrix([[1,1],[1,2],[1,3],[1,4]]).T*Matrix([2,3,5,6]) == Matrix([Rational(1,2), Rational(7,5)])"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 정확한 해가 없으면 가장 가까운 해를
+
+실험 데이터 세 점이 한 직선 위에 정확히 있는 일은 드뭅니다. 직선의 식을 세우면 미지수 2개에 방정식 3개라 해가 없습니다. 최소제곱법은 "오차의 제곱합이 가장 작은" 직선을 고릅니다. 선형대수로 보면 $\mathbf b$를 $A$의 열공간에 정사영하는 것이고, 그 조건이 정규방정식입니다. 회귀분석, 센서 보정, 머신러닝의 선형 모델이 모두 이 방법입니다.
+
+## 핵심 공식
+
+$$
+A^TA\,\hat{\mathbf x} = A^T\mathbf b, \qquad \hat{\mathbf x} = (A^TA)^{-1}A^T\mathbf b\ \ (\text{열이 독립일 때})
+$$
+
+직선 $y = a + bx$: $A = \begin{pmatrix} 1 & x_1 \\ \vdots & \vdots \\ 1 & x_n \end{pmatrix}$, $\mathbf b = \begin{pmatrix} y_1 \\ \vdots \\ y_n \end{pmatrix}$
+
+## 예제
+
+<Example>
+세 점 $(0, 1)$, $(1, 3)$, $(2, 4)$에 가장 잘 맞는 직선 $y = a + bx$를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="A와 b를 쓴다">
+$$
+A = \begin{pmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{pmatrix}, \qquad \mathbf b = \begin{pmatrix} 1 \\ 3 \\ 4 \end{pmatrix}
+$$
+</Step>
+
+<Step n={2} title="AᵀA와 Aᵀb">
+$$
+A^TA = \begin{pmatrix} 3 & 3 \\ 3 & 5 \end{pmatrix}, \qquad A^T\mathbf b = \begin{pmatrix} 8 \\ 11 \end{pmatrix}
+$$
+</Step>
+
+<Step n={3} title="정규방정식을 푼다">
+$3a + 3b = 8$, $3a + 5b = 11$ → $2b = 3$, $b = \frac32$, $a = \frac76$.
+</Step>
+
+<Step n={4} title="오차가 직교하는지 확인한다">
+예측값 $\left(\frac76, \frac83, \frac{25}{6}\right)$, 오차 $\left(-\frac16, \frac13, -\frac16\right)$. $A$의 두 열과 내적하면 모두 0입니다.
+</Step>
+
+<Answer>
+$y = \dfrac76 + \dfrac32 x$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="Ax = b를 그대로 풀려고 한다">
+방정식이 미지수보다 많으면 보통 해가 없습니다. 양변에 $A^T$를 곱한 정규방정식을 풉니다.
+</Mistake>
+
+<Mistake title="A의 1 열을 빠뜨린다">
+절편 $a$가 있으려면 $A$의 첫 열이 모두 1이어야 합니다. 빠뜨리면 원점을 지나는 직선만 맞추게 됩니다.
+</Mistake>
+
+<Mistake title="AᵀA 대신 AAᵀ를 쓴다">
+$AA^T$는 $3\times3$이라 미지수와 크기가 맞지 않습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+네 점 $(1, 2)$, $(2, 3)$, $(3, 5)$, $(4, 6)$에 최소제곱 직선을 맞추세요.
+</Fragment>
+
+$A^TA = \begin{pmatrix} 4 & 10 \\ 10 & 30 \end{pmatrix}$, $A^T\mathbf b = \begin{pmatrix} 16 \\ 47 \end{pmatrix}$. 풀면 $b = \frac75$, $a = \frac12$.
+
+**정답:** $y = \dfrac12 + \dfrac75 x$
+</Practice>
