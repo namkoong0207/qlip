@@ -1,0 +1,96 @@
+---
+subject: linear-algebra
+unit: vector-spaces
+order: 50
+title: "일차독립과 일차종속 — 판정법(행렬식·행 줄임)과 예제"
+h1: "일차독립과 일차종속 판정하기"
+description: "벡터들이 일차독립인지 c₁v₁ + … + cₙvₙ = 0의 해가 자명해뿐인지로 판정하는 정의와, 행렬식·행 줄임으로 빠르게 판정하는 방법을 예제로 해설해요. 종속 관계식 찾기와 흔한 실수 포함."
+summary:
+  - "c₁v₁ + … + cₙvₙ = 0의 해가 c₁ = … = cₙ = 0뿐이면 일차독립, 아니면 일차종속이다."
+  - "n개의 n차원 벡터는 열로 쌓은 행렬의 행렬식이 0이 아니면 독립, 0이면 종속."
+  - "종속이면 영공간 벡터가 '어떤 벡터가 나머지의 결합인지' 관계식을 알려 준다."
+keyword: "일차독립 판정"
+level: intro
+related: [linear-algebra/basis-dimension, linear-algebra/determinant]
+checks:
+  - id: ex1
+    claim: "(1,2,3),(4,5,6),(7,8,9): det 0, v₁ − 2v₂ + v₃ = 0"
+    sympy: "Matrix([[1,4,7],[2,5,8],[3,6,9]]).det() == 0 and Matrix([1,2,3]) - 2*Matrix([4,5,6]) + Matrix([7,8,9]) == zeros(3,1)"
+  - id: p1
+    claim: "(1,0,1),(0,1,1),(1,1,0): det −2 ≠ 0 → 독립"
+    sympy: "Matrix([[1,0,1],[0,1,1],[1,1,0]]).det() == -2"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 쓸데없는 벡터가 끼어 있는가
+
+벡터들 중 하나가 나머지들의 조합으로 만들어진다면, 그 벡터는 새로운 방향을 하나도 보태지 못합니다. 이런 벡터가 있으면 일차종속, 모든 벡터가 각자 새 방향을 보태면 일차독립입니다. 정의는 "영벡터를 만드는 결합이 모든 계수 0밖에 없는가"로 씁니다. 기저, 차원, 계수(rank), 해의 유일성이 모두 이 개념 위에 있습니다.
+
+## 핵심 공식
+
+$$
+c_1\mathbf v_1 + \cdots + c_n\mathbf v_n = \mathbf 0 \;\Longrightarrow\; c_1 = \cdots = c_n = 0 \quad(\text{독립})
+$$
+
+$n$개의 $\mathbb R^n$ 벡터: $\det[\mathbf v_1 \cdots \mathbf v_n] \neq 0 \iff$ 독립. 벡터가 차원보다 많으면 항상 종속.
+
+## 예제
+
+<Example>
+$\mathbf v_1 = (1, 2, 3)$, $\mathbf v_2 = (4, 5, 6)$, $\mathbf v_3 = (7, 8, 9)$가 일차독립인지 판정하고, 종속이면 관계식을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="열로 쌓아 행렬식을 본다">
+$$
+\det\begin{pmatrix} 1 & 4 & 7 \\ 2 & 5 & 8 \\ 3 & 6 & 9 \end{pmatrix} = 0
+$$
+
+0이므로 일차종속입니다.
+</Step>
+
+<Step n={2} title="영공간으로 관계식을 찾는다">
+$c_1\mathbf v_1 + c_2\mathbf v_2 + c_3\mathbf v_3 = \mathbf 0$을 행 줄임하면 해는 $(c_1, c_2, c_3) = t(1, -2, 1)$ 입니다.
+</Step>
+
+<Step n={3} title="관계식을 쓰고 확인한다">
+$\mathbf v_1 - 2\mathbf v_2 + \mathbf v_3 = \mathbf 0$, 즉 $\mathbf v_3 = 2\mathbf v_2 - \mathbf v_1$. 확인: $2(4,5,6) - (1,2,3) = (7, 8, 9)$ ✓.
+</Step>
+
+<Answer>
+일차종속, $\mathbf v_1 - 2\mathbf v_2 + \mathbf v_3 = \mathbf 0$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="두 벡터가 평행하지 않으면 독립이라고 생각한다">
+세 벡터 이상에서는 어느 두 개도 평행하지 않아도 종속일 수 있습니다. 예제가 그런 경우입니다.
+</Mistake>
+
+<Mistake title="정사각 행렬이 아닌데 행렬식을 쓴다">
+$\mathbb R^3$의 벡터 2개는 행렬식으로 판정할 수 없습니다. 행 줄임으로 피벗 수를 세세요.
+</Mistake>
+
+<Mistake title="영벡터가 포함된 집합을 독립이라고 쓴다">
+영벡터가 하나라도 있으면 그 계수만 1로 두어 항상 종속입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$(1, 0, 1)$, $(0, 1, 1)$, $(1, 1, 0)$은 일차독립인가요?
+</Fragment>
+
+열로 쌓은 행렬식은 $1(0 - 1) - 0 + 1(0 - 1) = -2 \neq 0$.
+
+**정답:** 일차독립
+</Practice>

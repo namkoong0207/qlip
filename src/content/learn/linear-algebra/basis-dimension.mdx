@@ -1,0 +1,95 @@
+---
+subject: linear-algebra
+unit: vector-spaces
+order: 55
+title: "기저와 차원 — 생성 집합에서 기저 고르기, 부분공간 차원 예제"
+h1: "기저와 차원"
+description: "벡터공간을 빠짐없이 그리고 군더더기 없이 표현하는 기저의 두 조건(생성, 일차독립)과 차원의 정의를 정리하고, 생성 집합에서 기저를 고르는 법과 평면 x + y + z = 0의 기저·차원을 예제로 해설해요."
+summary:
+  - "기저는 공간을 생성하면서 일차독립인 벡터 집합이다. 생성은 '빠짐없이', 독립은 '군더더기 없이'."
+  - "차원은 기저 벡터의 개수이며, 어떤 기저를 골라도 같다."
+  - "생성 집합을 열로 쌓아 행 줄임하면 피벗 열에 해당하는 원래 벡터들이 기저가 된다."
+keyword: "기저와 차원"
+level: core
+prerequisites: [linear-algebra/linear-independence]
+related: [linear-algebra/null-column-space, linear-algebra/change-of-basis]
+checks:
+  - id: ex1
+    claim: "span{(1,1,0),(0,1,1),(1,2,1)}의 차원 2 ((1,2,1) = 앞 둘의 합)"
+    sympy: "Matrix([[1,0,1],[1,1,2],[0,1,1]]).rank() == 2 and Matrix([1,1,0]) + Matrix([0,1,1]) == Matrix([1,2,1])"
+  - id: p1
+    claim: "x+y+z=0의 기저 (−1,1,0),(−1,0,1), 차원 2"
+    sympy: "len(Matrix([[1,1,1]]).nullspace()) == 2 and Matrix([[1,1,1]])*Matrix([-1,1,0]) == Matrix([0]) and Matrix([[1,1,1]])*Matrix([-1,0,1]) == Matrix([0])"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 공간의 좌표축 세트
+
+기저는 그 공간의 모든 벡터를 단 한 가지 방법으로 표현할 수 있게 해 주는 '좌표축 세트'입니다. 축이 모자라면 표현할 수 없는 벡터가 생기고(생성 실패), 남으면 표현 방법이 여러 개가 됩니다(종속). 기저 벡터의 수, 즉 공간이 실제로 몇 방향으로 펼쳐져 있는지가 차원입니다.
+
+## 핵심 공식
+
+$\{\mathbf v_1, \ldots, \mathbf v_k\}$가 $V$의 기저 $\iff$ (1) $\text{span} = V$ (2) 일차독립
+
+$$
+\dim V = (\text{기저 벡터의 개수}), \qquad \dim\text{span}\{\mathbf v_i\} = \text{rank}[\mathbf v_1 \cdots \mathbf v_k]
+$$
+
+## 예제
+
+<Example>
+$W = \text{span}\{(1, 1, 0),\ (0, 1, 1),\ (1, 2, 1)\}$의 기저와 차원을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="열로 쌓아 행 줄임한다">
+$$
+\begin{pmatrix} 1 & 0 & 1 \\ 1 & 1 & 2 \\ 0 & 1 & 1 \end{pmatrix} \to \begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 1 \\ 0 & 0 & 0 \end{pmatrix}
+$$
+</Step>
+
+<Step n={2} title="피벗 열을 찾는다">
+피벗은 1열과 2열에 있습니다. 3열은 피벗이 없으므로 앞의 열들로 만들어집니다: $(1, 2, 1) = (1, 1, 0) + (0, 1, 1)$.
+</Step>
+
+<Step n={3} title="원래 벡터에서 기저를 고른다">
+피벗 열에 해당하는 **원래** 벡터 $(1, 1, 0)$, $(0, 1, 1)$이 기저이고, 차원은 2입니다. $W$는 $\mathbb R^3$ 안의 평면입니다.
+</Step>
+
+<Answer>
+기저 $\{(1, 1, 0),\ (0, 1, 1)\}$, $\dim W = 2$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="행 줄임한 결과의 열을 기저로 쓴다">
+열공간의 기저는 행 줄임 **전** 원래 행렬의 피벗 열입니다. 행 연산은 열공간을 바꿉니다.
+</Mistake>
+
+<Mistake title="생성하는 벡터 수를 차원으로 쓴다">
+벡터 3개로 생성했다고 차원이 3인 것은 아닙니다. 독립인 개수가 차원입니다.
+</Mistake>
+
+<Mistake title="기저가 하나뿐이라고 생각한다">
+기저는 무수히 많지만 개수(차원)는 항상 같습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+평면 $x + y + z = 0$ (부분공간)의 기저와 차원을 구하세요.
+</Fragment>
+
+$x = -y - z$로 두고 $y = s$, $z = t$를 자유 변수로 하면 $(x, y, z) = s(-1, 1, 0) + t(-1, 0, 1)$.
+
+**정답:** 기저 $\{(-1, 1, 0),\ (-1, 0, 1)\}$, 차원 2
+</Practice>
