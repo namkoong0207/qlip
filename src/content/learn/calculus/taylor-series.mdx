@@ -1,0 +1,146 @@
+---
+subject: calculus
+unit: series
+order: 30
+title: "테일러 급수·매클로린 급수 — 공식, 기본 전개 5개, 예제"
+h1: "테일러 급수와 매클로린 급수"
+description: "함수를 다항식으로 근사하는 테일러 급수의 공식과 꼭 외워야 할 매클로린 전개 5개를 정리하고, 기본 전개를 곱하고 대입해 새 급수를 만드는 법과 근사 오차를 예제로 해설해요."
+summary:
+  - "테일러 급수는 한 점에서의 모든 도함수 값으로 함수를 다항식처럼 펼친 것이다: f(x) = Σ f⁽ⁿ⁾(a)(x−a)ⁿ/n!."
+  - "a = 0일 때를 매클로린 급수라 하며 eˣ, sin x, cos x, ln(1+x), 1/(1−x)의 전개는 외워 둔다."
+  - "새 함수의 급수는 도함수를 다시 구하기보다 기본 전개를 대입·곱셈·미분·적분해서 만드는 편이 빠르다."
+keyword: "테일러 급수 매클로린 급수"
+level: core
+checks:
+  - id: ex1
+    claim: "eˣcos x의 매클로린 전개 = 1 + x − x³/3 − x⁴/6 + …"
+    sympy: "(lambda x: series(exp(x)*cos(x), x, 0, 5).removeO() == 1 + x - x**3/3 - x**4/6)(Symbol('x'))"
+  - id: ex2
+    claim: "cos 0.1 ≈ 1 − 0.005 + 0.1⁴/24, 오차 1.5×10⁻⁹ 미만"
+    sympy: "Abs(N(1 - Rational(1,200) + Rational(1,240000)) - N(cos(Rational(1,10)), 15)) < 1.5e-9"
+  - id: p1
+    claim: "1/(1−x²) = 1 + x² + x⁴ + x⁶ + …"
+    sympy: "(lambda x: series(1/(1-x**2), x, 0, 8).removeO() == 1 + x**2 + x**4 + x**6)(Symbol('x'))"
+  - id: p2
+    claim: "arctan x = x − x³/3 + x⁵/5 − x⁷/7 + …"
+    sympy: "(lambda x: series(atan(x), x, 0, 9).removeO() == x - x**3/3 + x**5/5 - x**7/7)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 한 점의 정보로 함수 전체를 다항식으로
+
+$e^x$, $\sin x$ 같은 함수는 계산기 없이 값을 구하기 어렵지만, 다항식은 덧셈과 곱셈만으로 계산됩니다. 테일러 급수는 한 점 $a$에서 함수값, 기울기, 오목한 정도(2계 도함수), 그 이상의 도함수까지 **모두 맞추는 다항식**을 만들어 함수를 대신하게 합니다. 항을 많이 쓸수록 $a$ 근처에서 원래 함수에 더 가까워집니다.
+
+공학에서 $\sin\theta \approx \theta$ (작은 각 근사), 극한 계산, 미분방정식의 급수해, 수치 계산이 모두 테일러 급수에서 나옵니다.
+
+## 핵심 공식
+
+$x = a$에서의 테일러 급수:
+
+$$
+f(x) = \sum_{n=0}^{\infty}\frac{f^{(n)}(a)}{n!}(x-a)^n = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \cdots
+$$
+
+$a = 0$인 매클로린 급수 중 꼭 외울 다섯 개:
+
+$$
+e^x = \sum_{n=0}^\infty \frac{x^n}{n!}, \qquad
+\sin x = \sum_{n=0}^\infty \frac{(-1)^n x^{2n+1}}{(2n+1)!}, \qquad
+\cos x = \sum_{n=0}^\infty \frac{(-1)^n x^{2n}}{(2n)!}
+$$
+
+$$
+\frac{1}{1-x} = \sum_{n=0}^\infty x^n \ (|x| \lt 1), \qquad
+\ln(1+x) = \sum_{n=1}^\infty \frac{(-1)^{n+1}x^n}{n} \ (-1 \lt x \le 1)
+$$
+
+교대급수로 근사하면 오차는 **처음으로 버린 항의 절댓값보다 작습니다**.
+
+## 예제
+
+<Example>
+(1) $f(x) = e^x\cos x$의 매클로린 급수를 $x^4$항까지 구하세요.
+
+(2) $\cos 0.1$을 매클로린 급수의 처음 세 항으로 근사하고, 오차의 상한을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 도함수를 구하지 않고 기본 전개를 곱한다">
+$f^{(4)}(0)$까지 직접 미분하면 계산이 길어집니다. 대신 두 기본 전개를 곱합니다.
+
+$$
+e^x = 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} + \cdots,\qquad
+\cos x = 1 - \frac{x^2}{2} + \frac{x^4}{24} - \cdots
+$$
+</Step>
+
+<Step n={2} title="(1) 차수별로 모은다">
+$x^4$까지 나오는 곱만 모읍니다.
+
+- $x^0$: $1$
+- $x^1$: $x$
+- $x^2$: $\frac{x^2}{2} - \frac{x^2}{2} = 0$
+- $x^3$: $\frac{x^3}{6} - \frac{x^3}{2} = -\frac{x^3}{3}$
+- $x^4$: $\frac{x^4}{24} - \frac{x^4}{4} + \frac{x^4}{24} = -\frac{x^4}{6}$
+</Step>
+
+<Step n={3} title="(2) cos 0.1에 처음 세 항을 쓴다">
+$$
+\cos 0.1 \approx 1 - \frac{(0.1)^2}{2} + \frac{(0.1)^4}{24} = 1 - 0.005 + 0.00000417 \approx 0.99500417
+$$
+</Step>
+
+<Step n={4} title="(2) 교대급수 오차로 상한을 구한다">
+처음으로 버린 항은 $-\dfrac{(0.1)^6}{720}$이므로
+
+$$
+|\text{오차}| \lt \frac{10^{-6}}{720} \approx 1.4\times10^{-9}
+$$
+
+실제 $\cos 0.1 = 0.9950041653\ldots$과 근삿값의 차는 약 $1.4\times10^{-9}$로 상한 안에 있습니다.
+</Step>
+
+<Answer>
+(1) $e^x\cos x = 1 + x - \dfrac{x^3}{3} - \dfrac{x^4}{6} + \cdots$ (2) $\cos 0.1 \approx 0.99500417$, 오차 $\lt 1.4\times10^{-9}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="n!을 빠뜨린다">
+$f^{(n)}(a)(x-a)^n$만 쓰고 $n!$로 나누지 않으면 계수가 전부 커집니다. $e^x$의 전개가 $1 + x + x^2 + \cdots$가 아니라는 것으로 확인하세요.
+</Mistake>
+
+<Mistake title="곱할 때 필요한 차수의 항을 빠뜨린다">
+$x^4$ 계수를 구하려면 $x^0\cdot x^4$, $x^2\cdot x^2$, $x^4\cdot x^0$을 모두 더해야 합니다. 표로 차수 조합을 적어 두면 빠뜨리지 않습니다.
+</Mistake>
+
+<Mistake title="수렴 구간을 무시한다">
+$\frac{1}{1-x}$와 $\ln(1+x)$의 전개는 $|x|$가 $1$보다 클 때 성립하지 않습니다. $\ln 3$을 $\ln(1+x)$ 전개에 $x = 2$를 넣어 구하면 발산합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\dfrac{1}{1-x^2}$의 매클로린 급수를 $x^6$항까지 구하세요.
+</Fragment>
+
+$\dfrac{1}{1-u} = 1 + u + u^2 + \cdots$에 $u = x^2$를 대입합니다.
+
+**정답:** $1 + x^2 + x^4 + x^6 + \cdots$ ($|x| \lt 1$)
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$\dfrac{d}{dx}\arctan x = \dfrac{1}{1+x^2}$임을 이용해 $\arctan x$의 매클로린 급수를 구하세요.
+</Fragment>
+
+$\dfrac{1}{1+x^2} = 1 - x^2 + x^4 - x^6 + \cdots$를 $0$부터 $x$까지 항별로 적분합니다. $\arctan 0 = 0$이므로 적분상수는 $0$입니다.
+
+**정답:** $\arctan x = x - \dfrac{x^3}{3} + \dfrac{x^5}{5} - \dfrac{x^7}{7} + \cdots$
+</Practice>
