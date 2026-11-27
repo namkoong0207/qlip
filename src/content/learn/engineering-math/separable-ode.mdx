@@ -1,0 +1,102 @@
+---
+subject: engineering-math
+unit: first-order-ode
+order: 1
+title: "변수분리형 미분방정식 — 분리해서 양변 적분하기, 예제"
+h1: "변수분리형 미분방정식 풀기"
+description: "dy/dx = g(x)h(y) 꼴의 변수분리형 미분방정식을 y는 한쪽, x는 다른 쪽으로 모아 양변을 적분해 푸는 방법을 예제로 해설해요. 초기값으로 상수 정하기, 나눌 때 잃는 해까지."
+summary:
+  - "dy/dx = g(x)h(y)이면 dy/h(y) = g(x)dx로 나눠 양변을 각각 적분한다."
+  - "적분상수는 한쪽에만 하나 두고, 초기값으로 정한다."
+  - "h(y)로 나눌 때 h(y) = 0인 상수해를 잃을 수 있으니 따로 확인한다."
+keyword: "변수분리형 미분방정식"
+level: intro
+related: [engineering-math/first-order-linear-ode, engineering-math/exact-ode]
+checks:
+  - id: ex1
+    claim: "y′ = xy², y(0)=1의 해 y = 2/(2−x²)"
+    sympy: "(lambda x: simplify(diff(2/(2-x**2), x) - x*(2/(2-x**2))**2) == 0 and (2/(2-x**2)).subs(x,0) == 1)(Symbol('x'))"
+  - id: p1
+    claim: "y′ = 1 + y², y(0)=0의 해 y = tan x"
+    sympy: "(lambda x: simplify(diff(tan(x), x) - (1 + tan(x)**2)) == 0 and tan(0) == 0)(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: x와 y를 양쪽으로 갈라놓는다
+
+$\dfrac{dy}{dx}$가 "$x$만의 식 × $y$만의 식"으로 쪼개지면, $y$가 들어간 것은 모두 $dy$ 쪽으로, $x$가 들어간 것은 모두 $dx$ 쪽으로 보낼 수 있습니다. 그러면 양변을 각자의 변수로 그냥 적분하면 됩니다. 인구 증가, 방사성 붕괴, 뉴턴 냉각, 로지스틱 모델이 모두 이 꼴입니다.
+
+## 핵심 공식
+
+$$
+\frac{dy}{dx} = g(x)\,h(y) \quad\Longrightarrow\quad \int\frac{dy}{h(y)} = \int g(x)\,dx + C
+$$
+
+## 예제
+
+<Example>
+$\dfrac{dy}{dx} = xy^2$, $y(0) = 1$을 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="변수를 분리한다">
+$$
+\frac{dy}{y^2} = x\,dx \qquad (y \neq 0)
+$$
+</Step>
+
+<Step n={2} title="양변을 적분한다">
+$$
+-\frac1y = \frac{x^2}{2} + C
+$$
+</Step>
+
+<Step n={3} title="초기값으로 C를 정한다">
+$x = 0$, $y = 1$에서 $-1 = C$ 입니다. 따라서 $-\dfrac1y = \dfrac{x^2}{2} - 1 = \dfrac{x^2 - 2}{2}$.
+</Step>
+
+<Step n={4} title="y로 정리하고 확인한다">
+$$
+y = \frac{2}{2 - x^2}
+$$
+
+$y(0) = 1$이고, 미분하면 $y' = \dfrac{4x}{(2-x^2)^2} = x y^2$ 로 맞습니다. 해는 $|x| \lt \sqrt2$에서 정의됩니다.
+</Step>
+
+<Answer>
+$y = \dfrac{2}{2 - x^2}$ ($|x| \lt \sqrt2$)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="상수 C를 양변에 하나씩 둔다">
+$C_1$, $C_2$를 따로 두어도 결국 하나로 합쳐집니다. 처음부터 한쪽에만 두면 계산이 깔끔합니다.
+</Mistake>
+
+<Mistake title="나눌 때 잃는 해를 놓친다">
+$y^2$으로 나눌 때 $y = 0$인 경우를 버렸습니다. $y = 0$도 $y' = xy^2$을 만족하는 해입니다. 초기값이 $y(0) = 0$이었다면 답은 $y = 0$이었을 것입니다.
+</Mistake>
+
+<Mistake title="로그의 상수를 잘못 다룬다">
+$\ln|y| = x + C$에서 $y = e^{x} + C$로 쓰면 틀립니다. $y = Ae^{x}$ ($A = \pm e^C$)입니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\dfrac{dy}{dx} = 1 + y^2$, $y(0) = 0$을 푸세요.
+</Fragment>
+
+$\displaystyle\int\frac{dy}{1+y^2} = \int dx$에서 $\arctan y = x + C$, $y(0) = 0$이므로 $C = 0$.
+
+**정답:** $y = \tan x$ ($|x| \lt \frac{\pi}{2}$)
+</Practice>

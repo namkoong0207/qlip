@@ -1,0 +1,114 @@
+---
+subject: engineering-math
+unit: second-order-ode
+order: 6
+title: "매개변수 변환법 — 론스키안 공식과 y″+y=sec x 예제"
+h1: "매개변수 변환법으로 특수해 구하기"
+description: "미정계수법으로 추측할 수 없는 sec x, ln x 같은 비동차항에 쓰는 매개변수 변환법(론스키안 공식)을 정리하고, y″ + y = sec x 예제를 단계별로 해설해요. 표준형으로 바꾸는 실수까지."
+summary:
+  - "동차해 y₁, y₂를 구한 뒤 특수해를 y_p = u₁y₁ + u₂y₂로 두고 u₁, u₂를 함수로 찾는다."
+  - "표준형 y″ + p y′ + q y = f(x)에서 u₁ = −∫y₂f/W dx, u₂ = ∫y₁f/W dx (W는 론스키안)."
+  - "sec x, tan x, ln x, 1/x처럼 미정계수법 표에 없는 항일 때 쓴다."
+keyword: "매개변수 변환법"
+level: advanced
+prerequisites: [engineering-math/second-order-homogeneous]
+related: [engineering-math/undetermined-coefficients]
+checks:
+  - id: ex1
+    claim: "y″+y=sec x의 특수해 y_p = x sin x + cos x ln(cos x)"
+    sympy: "(lambda x: simplify(diff(x*sin(x)+cos(x)*log(cos(x)), x, 2) + x*sin(x)+cos(x)*log(cos(x)) - 1/cos(x)) == 0)(Symbol('x'))"
+  - id: p1
+    claim: "y″−2y′+y = eˣ/x의 특수해 y_p = x eˣ ln x"
+    sympy: "(lambda x: simplify(diff(x*exp(x)*log(x), x, 2) - 2*diff(x*exp(x)*log(x), x) + x*exp(x)*log(x) - exp(x)/x) == 0)(Symbol('x', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 상수를 함수로 바꿔 본다
+
+동차해 $C_1y_1 + C_2y_2$의 상수 $C_1, C_2$를 $x$의 함수 $u_1(x), u_2(x)$로 바꾸면, 비동차 방정식도 만족하게 만들 수 있습니다. 미정계수법은 비동차항이 다항식·지수·삼각함수일 때만 쓸 수 있지만, 매개변수 변환법은 **어떤 비동차항이든** 적분만 되면 특수해를 줍니다. 대신 계산이 길어서, 미정계수법이 되는 문제에는 그쪽이 빠릅니다.
+
+## 핵심 공식
+
+표준형 $y'' + p(x)y' + q(x)y = f(x)$, 동차해 $y_1, y_2$에 대해
+
+$$
+W = \begin{vmatrix} y_1 & y_2 \\ y_1' & y_2' \end{vmatrix}, \qquad
+u_1 = -\int\frac{y_2 f}{W}\,dx, \qquad u_2 = \int\frac{y_1 f}{W}\,dx
+$$
+
+$$
+y_p = u_1y_1 + u_2y_2
+$$
+
+## 예제
+
+<Example>
+$y'' + y = \sec x$의 특수해를 구하세요. ($-\frac{\pi}{2} \lt x \lt \frac{\pi}{2}$)
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="동차해와 론스키안">
+$r^2 + 1 = 0$이므로 $y_1 = \cos x$, $y_2 = \sin x$.
+
+$$
+W = \cos x\cdot\cos x - \sin x\cdot(-\sin x) = 1
+$$
+</Step>
+
+<Step n={2} title="u₁을 구한다">
+$$
+u_1 = -\int\sin x\sec x\,dx = -\int\tan x\,dx = \ln(\cos x)
+$$
+</Step>
+
+<Step n={3} title="u₂를 구한다">
+$$
+u_2 = \int\cos x\sec x\,dx = \int 1\,dx = x
+$$
+</Step>
+
+<Step n={4} title="특수해를 조립한다">
+$$
+y_p = \cos x\,\ln(\cos x) + x\sin x
+$$
+
+$\sec x$는 미정계수법 표에 없는 함수라 이 방법이 필요했습니다.
+</Step>
+
+<Answer>
+$y_p = x\sin x + \cos x\,\ln(\cos x)$ (일반해는 여기에 $C_1\cos x + C_2\sin x$를 더함)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="표준형으로 만들지 않고 f를 읽는다">
+$x^2y'' + \cdots = g(x)$이면 $f = g/x^2$입니다. $y''$ 계수를 1로 만든 뒤의 우변이 공식의 $f$입니다.
+</Mistake>
+
+<Mistake title="u₁ 앞의 마이너스를 빠뜨린다">
+$u_1 = -\int y_2 f/W$입니다. 부호 하나로 특수해 전체가 틀립니다. 결과를 방정식에 넣어 검산하세요.
+</Mistake>
+
+<Mistake title="u₁, u₂에 적분상수를 붙인다">
+상수를 붙이면 동차해가 다시 섞일 뿐입니다. 특수해를 구할 때는 생략합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y'' - 2y' + y = \dfrac{e^x}{x}$ ($x \gt 0$)의 특수해를 구하세요.
+</Fragment>
+
+$y_1 = e^x$, $y_2 = xe^x$, $W = e^{2x}$. $u_1 = -\int 1\,dx = -x$, $u_2 = \int\frac1x dx = \ln x$. $y_p = -xe^x + xe^x\ln x$이고, $-xe^x$은 동차해이므로 빼도 됩니다.
+
+**정답:** $y_p = x e^x\ln x$
+</Practice>

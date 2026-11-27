@@ -1,0 +1,103 @@
+---
+subject: engineering-math
+unit: second-order-ode
+order: 14
+title: "연립 미분방정식 x′ = Ax — 고유값 방법과 초기값 문제"
+h1: "연립 미분방정식을 고유값으로 풀기"
+description: "선형 연립 미분방정식 x′ = Ax를 행렬 A의 고유값·고유벡터로 푸는 방법을 정리하고, 일반해 c₁e^{λ₁t}v₁ + c₂e^{λ₂t}v₂에 초기값을 맞추는 예제와 2계 방정식을 연립으로 바꾸는 연습 문제를 해설해요."
+summary:
+  - "x′ = Ax에서 A의 고유값 λ와 고유벡터 v를 구하면 e^{λt}v가 하나의 해가 된다."
+  - "서로 다른 고유값이면 일반해는 x(t) = c₁e^{λ₁t}v₁ + c₂e^{λ₂t}v₂이다."
+  - "고유값이 모두 음수면 해가 0으로 수렴(안정), 양수가 하나라도 있으면 발산한다."
+keyword: "연립 미분방정식 고유값"
+level: advanced
+prerequisites: [linear-algebra/eigenvalues-eigenvectors]
+related: [linear-algebra/diagonalization]
+checks:
+  - id: ex1
+    claim: "A=[[1,2],[2,1]], x(0)=(1,0): x=((e^{3t}+e^{−t})/2, (e^{3t}−e^{−t})/2)"
+    sympy: "(lambda t: simplify((Matrix([[1,2],[2,1]])*t).exp()*Matrix([1,0]) - Matrix([(exp(3*t)+exp(-t))/2, (exp(3*t)-exp(-t))/2])) == zeros(2,1))(Symbol('t'))"
+  - id: p1
+    claim: "y″+3y′+2y=0을 연립으로: 고유값 −1, −2, y(0)=1,y′(0)=0이면 y=2e^{−t}−e^{−2t}"
+    sympy: "(lambda t: Matrix([[0,1],[-2,-3]]).eigenvals() == {-1:1, -2:1} and simplify(((Matrix([[0,1],[-2,-3]])*t).exp()*Matrix([1,0]))[0] - (2*exp(-t)-exp(-2*t))) == 0)(Symbol('t'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 고유벡터 방향으로는 각자 따로 움직인다
+
+두 탱크 사이를 오가는 물질, 결합된 진동자, 회로의 두 전류처럼 서로 영향을 주는 양은 연립 미분방정식이 됩니다. 행렬 $A$로 쓰면 $\mathbf x' = A\mathbf x$인데, $A$의 **고유벡터 방향**으로는 결합이 풀려 각 성분이 $e^{\lambda t}$로 독립적으로 커지거나 줄어듭니다. 그래서 고유값과 고유벡터만 구하면 해 전체가 정해집니다.
+
+## 핵심 공식
+
+$$
+\mathbf x' = A\mathbf x, \qquad A\mathbf v_i = \lambda_i\mathbf v_i \;\Longrightarrow\; \mathbf x(t) = c_1e^{\lambda_1 t}\mathbf v_1 + c_2e^{\lambda_2 t}\mathbf v_2
+$$
+
+$c_1, c_2$는 $\mathbf x(0) = c_1\mathbf v_1 + c_2\mathbf v_2$에서 정합니다.
+
+## 예제
+
+<Example>
+$\mathbf x' = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}\mathbf x$, $\mathbf x(0) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$을 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="고유값과 고유벡터">
+특성방정식 $\lambda^2 - 2\lambda - 3 = 0$에서 $\lambda_1 = 3$, $\lambda_2 = -1$. 고유벡터는 $\mathbf v_1 = (1, 1)^T$, $\mathbf v_2 = (1, -1)^T$.
+</Step>
+
+<Step n={2} title="일반해를 쓴다">
+$$
+\mathbf x(t) = c_1e^{3t}\begin{pmatrix}1\\1\end{pmatrix} + c_2e^{-t}\begin{pmatrix}1\\-1\end{pmatrix}
+$$
+</Step>
+
+<Step n={3} title="초기값으로 상수를 정한다">
+$t = 0$에서 $c_1 + c_2 = 1$, $c_1 - c_2 = 0$ 이므로 $c_1 = c_2 = \frac12$.
+</Step>
+
+<Step n={4} title="성분별로 정리한다">
+$$
+x_1(t) = \frac{e^{3t} + e^{-t}}{2}, \qquad x_2(t) = \frac{e^{3t} - e^{-t}}{2}
+$$
+
+$t = 0$에서 $(1, 0)$이고, 고유값 $3 \gt 0$ 때문에 해는 시간이 지나면 커집니다(불안정).
+</Step>
+
+<Answer>
+$\mathbf x(t) = \dfrac12\begin{pmatrix} e^{3t} + e^{-t} \\ e^{3t} - e^{-t} \end{pmatrix}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="고유값과 고유벡터 짝을 바꾼다">
+$e^{3t}$에는 $\lambda = 3$의 고유벡터가 붙어야 합니다. 짝이 어긋나면 방정식을 만족하지 않습니다.
+</Mistake>
+
+<Mistake title="초기값을 성분별로 따로 맞추려 한다">
+$c_1, c_2$는 벡터 방정식 $\mathbf x(0) = c_1\mathbf v_1 + c_2\mathbf v_2$ 하나에서 동시에 정해집니다.
+</Mistake>
+
+<Mistake title="복소 고유값에서 실수 해로 바꾸지 않는다">
+고유값이 $\alpha \pm \beta i$이면 $e^{\alpha t}(\cos\beta t, \sin\beta t)$ 꼴의 실수 해 두 개로 바꿔 써야 답이 실수가 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y'' + 3y' + 2y = 0$, $y(0) = 1$, $y'(0) = 0$을 $x_1 = y$, $x_2 = y'$로 두어 연립 방정식으로 바꿔 푸세요.
+</Fragment>
+
+$\mathbf x' = \begin{pmatrix} 0 & 1 \\ -2 & -3 \end{pmatrix}\mathbf x$, 고유값 $-1, -2$, 고유벡터 $(1, -1)$, $(1, -2)$. $c_1 + c_2 = 1$, $-c_1 - 2c_2 = 0$에서 $c_1 = 2$, $c_2 = -1$.
+
+**정답:** $y = 2e^{-t} - e^{-2t}$ (두 고유값이 음수라 안정)
+</Practice>

@@ -1,0 +1,109 @@
+---
+subject: engineering-math
+unit: fourier-pde
+order: 22
+title: "열방정식 변수분리 풀이 — 경계조건, 고유함수, 푸리에 사인급수"
+h1: "열방정식을 변수분리로 풀기"
+description: "막대의 온도를 나타내는 열방정식 u_t = k u_xx를 양 끝 온도가 0인 경계조건에서 변수분리법으로 풀고, 초기 온도를 푸리에 사인급수로 맞추는 과정을 예제로 해설해요. 고유값과 감쇠 속도 해석 포함."
+summary:
+  - "u(x,t) = X(x)T(t)로 두면 열방정식이 X″ + λX = 0과 T′ + kλT = 0 두 상미분방정식으로 갈라진다."
+  - "양 끝이 0인 경계조건에서 고유함수는 sin(nπx/L), 시간 부분은 e^{−k(nπ/L)²t}이다."
+  - "초기 온도 분포를 사인급수로 나타내면 각 항이 서로 다른 속도로 감쇠한다. 높은 진동수일수록 빨리 사라진다."
+keyword: "열방정식 변수분리"
+level: advanced
+prerequisites: [engineering-math/fourier-series, engineering-math/second-order-homogeneous]
+related: [engineering-math/wave-equation]
+checks:
+  - id: ex1
+    claim: "u=3e^{−π²t}sin πx − e^{−9π²t}sin 3πx 가 u_t=u_xx, 경계 u(0)=u(1)=0, 초기 3sinπx − sin3πx 만족"
+    sympy: "(lambda x, t: simplify(diff(3*exp(-pi**2*t)*sin(pi*x)-exp(-9*pi**2*t)*sin(3*pi*x), t) - diff(3*exp(-pi**2*t)*sin(pi*x)-exp(-9*pi**2*t)*sin(3*pi*x), x, 2)) == 0 and (3*exp(-pi**2*t)*sin(pi*x)-exp(-9*pi**2*t)*sin(3*pi*x)).subs(x,1) == 0 and (3*exp(-pi**2*t)*sin(pi*x)-exp(-9*pi**2*t)*sin(3*pi*x)).subs(t,0) == 3*sin(pi*x)-sin(3*pi*x))(*symbols('x t'))"
+  - id: p1
+    claim: "k=2, L=2, u(x,0)=5 sin(πx/2) → u=5e^{−π²t/2} sin(πx/2)"
+    sympy: "(lambda x, t: simplify(diff(5*exp(-pi**2*t/2)*sin(pi*x/2), t) - 2*diff(5*exp(-pi**2*t/2)*sin(pi*x/2), x, 2)) == 0)(*symbols('x t'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 온도 분포를 '모드'로 나눠 각자 식게 한다
+
+막대 안의 온도 $u(x, t)$는 뜨거운 곳에서 차가운 곳으로 열이 흐르며 고르게 퍼집니다. 이 과정을 나타내는 열방정식은 편미분방정식이지만, 해를 "위치만의 모양 × 시간에 따른 크기"로 가정하면 두 개의 상미분방정식으로 갈라집니다(변수분리). 위치 부분에서 나오는 사인 모양들이 푸리에 급수의 기본 파형이 되고, 각 모양은 자기만의 속도로 식어 갑니다.
+
+## 핵심 공식
+
+$$
+u_t = k\,u_{xx}, \quad 0 \lt x \lt L, \qquad u(0, t) = u(L, t) = 0, \qquad u(x, 0) = f(x)
+$$
+
+$$
+u(x, t) = \sum_{n=1}^\infty b_n\,e^{-k(n\pi/L)^2 t}\sin\frac{n\pi x}{L}, \qquad b_n = \frac2L\int_0^L f(x)\sin\frac{n\pi x}{L}\,dx
+$$
+
+## 예제
+
+<Example>
+$u_t = u_{xx}$ ($0 \lt x \lt 1$), $u(0, t) = u(1, t) = 0$, $u(x, 0) = 3\sin\pi x - \sin 3\pi x$를 푸세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="변수를 분리한다">
+$u = X(x)T(t)$를 넣으면 $XT' = X''T$, 양변을 $XT$로 나누면
+
+$$
+\frac{T'}{T} = \frac{X''}{X} = -\lambda
+$$
+</Step>
+
+<Step n={2} title="경계조건으로 고유값을 정한다">
+$X'' + \lambda X = 0$, $X(0) = X(1) = 0$의 0이 아닌 해는 $X_n = \sin n\pi x$, $\lambda_n = (n\pi)^2$ 일 때만 있습니다.
+</Step>
+
+<Step n={3} title="시간 부분을 푼다">
+$T' = -(n\pi)^2T$ 이므로 $T_n = e^{-(n\pi)^2 t}$.
+</Step>
+
+<Step n={4} title="초기 조건을 맞춘다">
+초기 온도가 이미 사인 항 두 개라 계수를 바로 읽습니다: $b_1 = 3$, $b_3 = -1$, 나머지 $0$.
+
+$$
+u(x, t) = 3e^{-\pi^2 t}\sin\pi x - e^{-9\pi^2 t}\sin 3\pi x
+$$
+
+$n = 3$ 항은 $e^{-9\pi^2 t}$로 9배 빨리 사라져, 잠시 뒤에는 첫 항 모양만 남습니다.
+</Step>
+
+<Answer>
+$u(x, t) = 3e^{-\pi^2 t}\sin\pi x - e^{-9\pi^2 t}\sin 3\pi x$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="분리 상수의 부호를 양수로 둔다">
+$\frac{X''}{X} = +\lambda$로 두면 경계조건을 만족하는 해가 $0$밖에 없습니다. 진동하는 해를 얻으려면 $-\lambda$로 둡니다.
+</Mistake>
+
+<Mistake title="시간 지수에 k와 (nπ/L)²를 빠뜨린다">
+감쇠율은 $k(n\pi/L)^2$입니다. $L$이나 $k$가 1이 아닐 때 하나를 빠뜨리기 쉽습니다.
+</Mistake>
+
+<Mistake title="초기 조건이 사인 항인데도 적분으로 계수를 구한다">
+틀리진 않지만, 초기 함수가 이미 $\sin\frac{n\pi x}{L}$들의 합이면 계수를 그대로 읽는 것이 빠릅니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$u_t = 2u_{xx}$ ($0 \lt x \lt 2$), 양 끝 $0$, $u(x, 0) = 5\sin\dfrac{\pi x}{2}$를 푸세요.
+</Fragment>
+
+$n = 1$, $L = 2$, $k = 2$이므로 감쇠율은 $2\left(\frac{\pi}{2}\right)^2 = \frac{\pi^2}{2}$.
+
+**정답:** $u(x, t) = 5e^{-\pi^2 t/2}\sin\dfrac{\pi x}{2}$
+</Practice>

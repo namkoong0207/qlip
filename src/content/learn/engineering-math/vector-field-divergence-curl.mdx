@@ -1,0 +1,100 @@
+---
+subject: engineering-math
+unit: vector-calculus
+order: 30
+title: "발산과 회전 — div F, curl F 계산과 보존장 판정"
+h1: "벡터장의 발산과 회전"
+description: "벡터장 F의 발산 ∇·F(퍼져 나가는 정도)와 회전 ∇×F(소용돌이 정도)를 계산하는 공식과 물리적 의미를 정리하고, 회전이 0인 보존장의 퍼텐셜 함수를 찾는 예제를 단계별로 해설해요."
+summary:
+  - "발산 ∇·F = ∂P/∂x + ∂Q/∂y + ∂R/∂z는 한 점에서 벡터장이 퍼져 나가는(+) 또는 모여드는(−) 정도인 스칼라다."
+  - "회전 ∇×F는 행렬식 꼴로 계산하는 벡터로, 그 점에서 소용돌이의 축과 세기를 나타낸다."
+  - "단순연결 영역에서 ∇×F = 0이면 F = ∇φ인 퍼텐셜 φ가 있는 보존장이다."
+keyword: "발산 회전 벡터장"
+level: core
+related: [engineering-math/green-divergence-theorems, engineering-math/exact-ode]
+checks:
+  - id: ex1
+    claim: "F=(x²y, yz, xz²): div = 2xy + z + 2xz, curl = (−y, −z², −x²)"
+    sympy: "(lambda x, y, z: diff(x**2*y,x)+diff(y*z,y)+diff(x*z**2,z) == 2*x*y+z+2*x*z and Matrix([diff(x*z**2,y)-diff(y*z,z), diff(x**2*y,z)-diff(x*z**2,x), diff(y*z,x)-diff(x**2*y,y)]) == Matrix([-y,-z**2,-x**2]))(*symbols('x y z'))"
+  - id: p1
+    claim: "G=(2xy, x²+z, y)는 curl 0, φ = x²y + yz"
+    sympy: "(lambda x, y, z: Matrix([diff(y,y)-diff(x**2+z,z), diff(2*x*y,z)-diff(y,x), diff(x**2+z,x)-diff(2*x*y,y)]) == zeros(3,1) and Matrix([diff(x**2*y+y*z,v) for v in (x,y,z)]) == Matrix([2*x*y, x**2+z, y]))(*symbols('x y z'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 샘이 있는가, 소용돌이가 있는가
+
+물의 흐름을 벡터장으로 생각해 보세요. 어떤 점에서 물이 솟아 나와 사방으로 퍼지면 그 점의 **발산**이 양수이고, 빨려 들어가면 음수입니다. 작은 바람개비를 꽂았을 때 돌아가면 그 점에 **회전**이 있습니다. 전자기학의 맥스웰 방정식, 유체역학의 연속 방정식이 모두 발산과 회전으로 쓰여 있습니다.
+
+## 핵심 공식
+
+$\mathbf F = (P, Q, R)$에 대해
+
+$$
+\nabla\cdot\mathbf F = \frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z}
+$$
+
+$$
+\nabla\times\mathbf F = \left(\frac{\partial R}{\partial y} - \frac{\partial Q}{\partial z},\ \ \frac{\partial P}{\partial z} - \frac{\partial R}{\partial x},\ \ \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)
+$$
+
+$\nabla\times\mathbf F = \mathbf 0$ (단순연결 영역) $\iff$ $\mathbf F = \nabla\phi$
+
+## 예제
+
+<Example>
+$\mathbf F = (x^2y,\ yz,\ xz^2)$의 발산과 회전을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="발산: 각 성분을 자기 변수로 미분해 더한다">
+$$
+\nabla\cdot\mathbf F = 2xy + z + 2xz
+$$
+</Step>
+
+<Step n={2} title="회전의 x 성분">
+$\dfrac{\partial R}{\partial y} - \dfrac{\partial Q}{\partial z} = 0 - y = -y$
+</Step>
+
+<Step n={3} title="회전의 y, z 성분">
+$\dfrac{\partial P}{\partial z} - \dfrac{\partial R}{\partial x} = 0 - z^2 = -z^2$, $\quad\dfrac{\partial Q}{\partial x} - \dfrac{\partial P}{\partial y} = 0 - x^2 = -x^2$
+</Step>
+
+<Answer>
+$\nabla\cdot\mathbf F = 2xy + z + 2xz$, $\quad\nabla\times\mathbf F = (-y,\ -z^2,\ -x^2)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="발산을 벡터로, 회전을 스칼라로 쓴다">
+발산은 숫자 하나(스칼라), 회전은 벡터입니다. 답의 형태부터 확인하세요.
+</Mistake>
+
+<Mistake title="회전의 y 성분 부호를 뒤집는다">
+행렬식으로 전개할 때 가운데 성분에 마이너스가 붙습니다. $\left(\frac{\partial P}{\partial z} - \frac{\partial R}{\partial x}\right)$ 순서를 외워 두면 안전합니다.
+</Mistake>
+
+<Mistake title="회전이 0이면 항상 보존장이라고 단정한다">
+원점에 구멍이 있는 영역처럼 단순연결이 아니면 회전이 0이어도 보존장이 아닐 수 있습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\mathbf G = (2xy,\ x^2 + z,\ y)$가 보존장인지 판정하고, 그렇다면 퍼텐셜 $\phi$를 구하세요.
+</Fragment>
+
+회전은 $(1 - 1,\ 0 - 0,\ 2x - 2x) = \mathbf 0$ 입니다. $\phi_x = 2xy$에서 $\phi = x^2y + g(y, z)$, $\phi_y = x^2 + g_y = x^2 + z$에서 $g = yz + h(z)$, $\phi_z = y$에서 $h$는 상수.
+
+**정답:** 보존장, $\phi = x^2y + yz$
+</Practice>

@@ -1,0 +1,112 @@
+---
+subject: engineering-math
+unit: laplace
+order: 9
+title: "라플라스 역변환 — 부분분수와 완전제곱으로 변환표 맞추기"
+h1: "라플라스 역변환: 부분분수와 완전제곱"
+description: "F(s)를 변환표의 꼴로 바꿔 f(t)를 구하는 라플라스 역변환을 부분분수 분해와, 이차식 분모를 완전제곱으로 만드는 방법으로 정리하고 예제를 단계별로 해설해요. 이동정리 거꾸로 쓰기까지."
+summary:
+  - "분모가 서로 다른 일차식으로 인수분해되면 부분분수로 나눠 각각 e^{at}로 되돌린다."
+  - "인수분해되지 않는 이차식은 완전제곱 (s−a)² + ω²로 만들어 e^{at}cos ωt, e^{at}sin ωt로 되돌린다."
+  - "분자도 (s−a)와 상수로 나눠 써야 cos, sin 항으로 정확히 맞춰진다."
+keyword: "라플라스 역변환"
+level: core
+prerequisites: [engineering-math/laplace-transform-table, calculus/partial-fractions]
+related: [engineering-math/laplace-ivp]
+checks:
+  - id: ex1
+    claim: "L⁻¹{(s+5)/(s²+4s+3)} = 2e^{−t} − e^{−3t}"
+    sympy: "(lambda t, s: simplify(inverse_laplace_transform((s+5)/(s**2+4*s+3), s, t) - (2*exp(-t)-exp(-3*t))*Heaviside(t)) == 0)(Symbol('t', positive=True), Symbol('s'))"
+  - id: ex2
+    claim: "L⁻¹{(2s+1)/((s+1)²+4)} = 2e^{−t}cos2t − ½e^{−t}sin2t"
+    sympy: "(lambda t, s: simplify(inverse_laplace_transform((2*s+1)/((s+1)**2+4), s, t) - (2*exp(-t)*cos(2*t) - exp(-t)*sin(2*t)/2)) == 0)(Symbol('t', positive=True), Symbol('s'))"
+  - id: p1
+    claim: "L⁻¹{1/(s²(s+1))} = t − 1 + e^{−t}"
+    sympy: "(lambda t, s: simplify(inverse_laplace_transform(1/(s**2*(s+1)), s, t) - (t - 1 + exp(-t))) == 0)(Symbol('t', positive=True), Symbol('s'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 변환표의 모양으로 맞추는 퍼즐
+
+역변환은 적분으로 직접 하지 않고, $F(s)$를 변환표에 있는 모양들의 합으로 고쳐 쓴 뒤 한 항씩 되돌립니다. 분모가 일차식들로 쪼개지면 부분분수를, 쪼개지지 않는 이차식이면 완전제곱을 씁니다. 초기값 문제를 라플라스로 풀 때 시간의 대부분이 이 단계에 들어갑니다.
+
+## 핵심 공식
+
+$$
+\mathcal L^{-1}\left\{\frac{1}{s-a}\right\} = e^{at}, \qquad
+\mathcal L^{-1}\left\{\frac{s-a}{(s-a)^2+\omega^2}\right\} = e^{at}\cos\omega t, \qquad
+\mathcal L^{-1}\left\{\frac{\omega}{(s-a)^2+\omega^2}\right\} = e^{at}\sin\omega t
+$$
+
+## 예제
+
+<Example>
+(1) $\mathcal L^{-1}\left\{\dfrac{s+5}{s^2+4s+3}\right\}$ (2) $\mathcal L^{-1}\left\{\dfrac{2s+1}{s^2+2s+5}\right\}$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 분모를 인수분해하고 부분분수로">
+$s^2 + 4s + 3 = (s+1)(s+3)$.
+
+$$
+\frac{s+5}{(s+1)(s+3)} = \frac{A}{s+1} + \frac{B}{s+3}, \quad A = \frac{4}{2} = 2,\ \ B = \frac{2}{-2} = -1
+$$
+</Step>
+
+<Step n={2} title="(1) 항별로 되돌린다">
+$$
+f(t) = 2e^{-t} - e^{-3t}
+$$
+</Step>
+
+<Step n={3} title="(2) 판별식이 음수라 완전제곱으로">
+$s^2 + 2s + 5 = (s+1)^2 + 4$ 입니다. 분자를 $(s+1)$과 상수로 나눕니다.
+
+$$
+2s + 1 = 2(s+1) - 1 \quad\Longrightarrow\quad \frac{2(s+1)}{(s+1)^2+4} - \frac12\cdot\frac{2}{(s+1)^2+4}
+$$
+</Step>
+
+<Step n={4} title="(2) cos, sin 항으로 되돌린다">
+$$
+f(t) = 2e^{-t}\cos 2t - \frac12 e^{-t}\sin 2t
+$$
+</Step>
+
+<Answer>
+(1) $2e^{-t} - e^{-3t}$ (2) $e^{-t}\left(2\cos 2t - \tfrac12\sin 2t\right)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="분자를 s 그대로 두고 cos으로 되돌린다">
+분모가 $(s+1)^2 + 4$이면 cos 항의 분자는 $s$가 아니라 $s + 1$이어야 합니다. 분자를 먼저 $(s+1)$로 맞추세요.
+</Mistake>
+
+<Mistake title="sin 항에 ω를 맞추지 않는다">
+$\dfrac{1}{(s+1)^2+4}$는 $\dfrac12\cdot\dfrac{2}{(s+1)^2+4}$로 써야 $e^{-t}\sin 2t$가 됩니다. $\frac12$을 빠뜨리기 쉽습니다.
+</Mistake>
+
+<Mistake title="복소수로 인수분해한다">
+판별식이 음수인 이차식을 복소 일차식으로 쪼개도 답은 나오지만 계산이 훨씬 깁니다. 완전제곱이 빠릅니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\mathcal L^{-1}\left\{\dfrac{1}{s^2(s+1)}\right\}$를 구하세요.
+</Fragment>
+
+$\dfrac{A}{s} + \dfrac{B}{s^2} + \dfrac{C}{s+1}$로 두면 $B = 1$, $C = 1$, $A = -1$ 입니다.
+
+**정답:** $t - 1 + e^{-t}$
+</Practice>
