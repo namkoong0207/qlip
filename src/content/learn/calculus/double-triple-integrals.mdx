@@ -1,0 +1,116 @@
+---
+subject: calculus
+unit: multivariable
+order: 52
+title: "중적분 좌표 변환 — 극좌표·원통좌표·구면좌표와 야코비안"
+h1: "중적분 좌표 변환: 극·원통·구면좌표"
+description: "원이나 구 모양 영역의 이중·삼중적분을 극좌표(r dr dθ), 원통좌표, 구면좌표(ρ² sinφ)로 바꿔 계산하는 방법과 야코비안을 정리하고, 가우스 적분형 예제와 구의 부피를 단계별로 해설해요."
+summary:
+  - "원·원판 영역은 극좌표로 바꾸면 경계가 상수가 된다. 이때 dA = r dr dθ."
+  - "원통 모양은 원통좌표 dV = r dz dr dθ, 구 모양은 구면좌표 dV = ρ² sinφ dρ dφ dθ."
+  - "좌표를 바꿀 때 붙는 r, ρ² sinφ가 야코비안이며, 이것을 빠뜨리면 답이 틀린다."
+keyword: "극좌표 이중적분 구면좌표"
+level: advanced
+prerequisites: [calculus/polar-area]
+related: [calculus/volumes-of-revolution]
+checks:
+  - id: ex1
+    claim: "∬_{x²+y²≤4} e^{−(x²+y²)} dA = π(1 − e⁻⁴)"
+    sympy: "(lambda r, th: simplify(integrate(integrate(exp(-r**2)*r, (r,0,2)), (th,0,2*pi)) - pi*(1-exp(-4))) == 0)(*symbols('r theta', positive=True))"
+  - id: ex2
+    claim: "반지름 3인 구의 부피 = 36π (구면좌표)"
+    sympy: "(lambda rho, ph, th: integrate(rho**2*sin(ph), (rho,0,3), (ph,0,pi), (th,0,2*pi)) == 36*pi)(*symbols('rho phi theta', positive=True))"
+  - id: p1
+    claim: "∬_{r≤1} (x²+y²) dA = π/2"
+    sympy: "(lambda r, th: integrate(r**3, (r,0,1), (th,0,2*pi)) == pi/2)(*symbols('r theta', positive=True))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 영역 모양에 맞는 좌표를 고른다
+
+원판 위에서 직교좌표로 적분하면 경계가 $y = \pm\sqrt{4 - x^2}$처럼 복잡해집니다. 극좌표로 바꾸면 같은 영역이 $0 \le r \le 2$, $0 \le \theta \le 2\pi$라는 **직사각형 범위**가 됩니다. 다만 좌표를 바꾸면 작은 넓이 조각의 크기가 달라지므로, 그 비율인 야코비안($r$, $\rho^2\sin\phi$)을 반드시 곱해야 합니다. 질량, 관성 모멘트, 전하량, 확률 계산이 모두 이 방법을 씁니다.
+
+## 핵심 공식
+
+| 좌표 | 변환 | 넓이·부피 요소 |
+|---|---|---|
+| 극좌표 | $x = r\cos\theta,\ y = r\sin\theta$ | $dA = r\,dr\,d\theta$ |
+| 원통좌표 | 극좌표 + $z$ | $dV = r\,dz\,dr\,d\theta$ |
+| 구면좌표 | $x = \rho\sin\phi\cos\theta,\ y = \rho\sin\phi\sin\theta,\ z = \rho\cos\phi$ | $dV = \rho^2\sin\phi\,d\rho\,d\phi\,d\theta$ |
+
+$x^2 + y^2 = r^2$, $x^2 + y^2 + z^2 = \rho^2$
+
+## 예제
+
+<Example>
+(1) $\displaystyle\iint_D e^{-(x^2+y^2)}\,dA$, $D: x^2 + y^2 \le 4$를 계산하세요.
+
+(2) 구면좌표로 반지름 $3$인 구의 부피를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 극좌표로 바꾼다">
+$x^2 + y^2 = r^2$, 영역은 $0 \le r \le 2$, $0 \le \theta \le 2\pi$, $dA = r\,dr\,d\theta$.
+
+$$
+\int_0^{2\pi}\int_0^2 e^{-r^2}\,r\,dr\,d\theta
+$$
+</Step>
+
+<Step n={2} title="(1) 안쪽 적분은 치환으로">
+야코비안 $r$ 덕분에 $u = r^2$ 치환이 됩니다.
+
+$$
+\int_0^2 e^{-r^2}r\,dr = \left[-\frac12 e^{-r^2}\right]_0^2 = \frac12\left(1 - e^{-4}\right)
+$$
+
+바깥 적분은 $2\pi$를 곱하면 $\pi(1 - e^{-4})$ 입니다. 직교좌표로는 이 적분을 기본 함수로 풀 수 없습니다.
+</Step>
+
+<Step n={3} title="(2) 구면좌표 범위를 정한다">
+$0 \le \rho \le 3$, $0 \le \phi \le \pi$, $0 \le \theta \le 2\pi$.
+
+$$
+V = \int_0^{2\pi}\int_0^{\pi}\int_0^3\rho^2\sin\phi\,d\rho\,d\phi\,d\theta = 2\pi\cdot2\cdot9 = 36\pi
+$$
+
+$\frac43\pi(3)^3 = 36\pi$와 일치합니다.
+</Step>
+
+<Answer>
+(1) $\pi(1 - e^{-4})$ (2) $36\pi$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="야코비안 r을 빠뜨린다">
+$dA = dr\,d\theta$로 쓰는 실수가 가장 흔합니다. 예제 (1)에서는 $r$이 빠지면 적분 자체를 할 수 없게 됩니다.
+</Mistake>
+
+<Mistake title="φ의 범위를 0~2π로 잡는다">
+구면좌표에서 $\phi$는 $z$축에서 잰 각이라 $0$~$\pi$입니다. $\theta$와 헷갈리면 부피가 0이 되거나 두 배가 됩니다.
+</Mistake>
+
+<Mistake title="sin φ와 cos φ 위치를 바꾼다">
+교재마다 각 이름이 다를 수 있습니다. $z = \rho\cos\phi$인지 확인하고, 그에 맞는 야코비안 $\rho^2\sin\phi$를 쓰세요.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+단위 원판 $x^2 + y^2 \le 1$에서 $\displaystyle\iint(x^2 + y^2)\,dA$를 구하세요.
+</Fragment>
+
+극좌표로 $\displaystyle\int_0^{2\pi}\int_0^1 r^2\cdot r\,dr\,d\theta = 2\pi\cdot\frac14$.
+
+**정답:** $\dfrac{\pi}{2}$
+</Practice>

@@ -1,0 +1,108 @@
+---
+subject: calculus
+unit: integration
+order: 18
+title: "치환적분 — u 고르는 법, 정적분 구간 바꾸기, 예제"
+h1: "치환적분: 속함수를 u로 바꾸기"
+description: "피적분함수 안에 '속함수와 그 도함수'가 함께 있을 때 쓰는 치환적분을 정리하고, 정적분에서 적분 구간을 u 값으로 바꾸는 방법까지 예제로 해설해요. 흔한 실수와 연습 문제 포함."
+summary:
+  - "피적분함수에 g(x)와 g′(x)가 함께 있으면 u = g(x), du = g′(x)dx로 바꿔 적분을 단순하게 만든다."
+  - "정적분은 적분 구간도 u의 값으로 바꾸면 x로 되돌릴 필요가 없다."
+  - "치환은 연쇄법칙을 거꾸로 쓴 것이므로, 결과를 미분하면 원래 피적분함수가 나와야 한다."
+keyword: "치환적분 예제"
+level: intro
+prerequisites: [calculus/chain-rule]
+related: [calculus/integration-by-parts, calculus/trig-substitution]
+checks:
+  - id: ex1
+    claim: "∫₀¹ 2x e^{x²} dx = e − 1"
+    sympy: "(lambda x: integrate(2*x*exp(x**2), (x,0,1)) == E - 1)(Symbol('x'))"
+  - id: ex2
+    claim: "∫ sin³x cos x dx = sin⁴x/4 + C"
+    sympy: "(lambda x: simplify(diff(sin(x)**4/4, x) - sin(x)**3*cos(x)) == 0)(Symbol('x'))"
+  - id: p1
+    claim: "∫₀⁴ x√(x²+9) dx = 98/3"
+    sympy: "(lambda x: integrate(x*sqrt(x**2+9), (x,0,4)) == Rational(98,3))(Symbol('x'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 연쇄법칙을 거꾸로
+
+$\dfrac{d}{dx}e^{x^2} = 2x\,e^{x^2}$ 입니다. 그러니 $\int 2x\,e^{x^2}dx$는 $e^{x^2}$이 되어야 합니다. 피적분함수 안에 **속함수 $x^2$과 그 도함수 $2x$가 함께** 들어 있기 때문입니다. 치환적분은 이 패턴을 찾아 속함수를 $u$ 하나로 바꿔, 복잡한 적분을 기본 적분으로 만드는 방법입니다.
+
+## 핵심 공식
+
+$$
+\int f\big(g(x)\big)g'(x)\,dx = \int f(u)\,du \qquad (u = g(x))
+$$
+
+정적분은 구간도 함께 바꿉니다.
+
+$$
+\int_a^b f\big(g(x)\big)g'(x)\,dx = \int_{g(a)}^{g(b)} f(u)\,du
+$$
+
+## 예제
+
+<Example>
+(1) $\displaystyle\int_0^1 2x\,e^{x^2}\,dx$ (2) $\displaystyle\int \sin^3 x\cos x\,dx$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) u와 du를 정한다">
+속함수 $u = x^2$, $du = 2x\,dx$ 입니다. 피적분함수의 $2x\,dx$가 정확히 $du$가 됩니다.
+</Step>
+
+<Step n={2} title="(1) 구간을 u 값으로 바꾼다">
+$x = 0$이면 $u = 0$, $x = 1$이면 $u = 1$ 입니다.
+
+$$
+\int_0^1 e^{u}\,du = \Big[e^u\Big]_0^1 = e - 1
+$$
+</Step>
+
+<Step n={3} title="(2) 도함수가 곁에 있는 쪽을 u로">
+$\cos x$가 $\sin x$의 도함수이므로 $u = \sin x$, $du = \cos x\,dx$ 입니다.
+
+$$
+\int u^3\,du = \frac{u^4}{4} + C = \frac{\sin^4 x}{4} + C
+$$
+</Step>
+
+<Answer>
+(1) $e - 1$ (2) $\dfrac{\sin^4 x}{4} + C$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="정적분에서 구간을 바꾸지 않는다">
+$u$로 바꾼 적분에 원래 $x$ 구간 $0$~$1$을 그대로 쓰면, 이번 예제는 우연히 같지만 대부분 틀립니다. 구간을 바꾸거나, 부정적분을 $x$로 되돌린 뒤 원래 구간을 넣으세요. 둘을 섞으면 안 됩니다.
+</Mistake>
+
+<Mistake title="du에 필요한 상수를 맞추지 않는다">
+$\int x\,e^{x^2}dx$에서 $du = 2x\,dx$이므로 $x\,dx = \tfrac12 du$입니다. $\tfrac12$을 빠뜨리면 답이 두 배가 됩니다.
+</Mistake>
+
+<Mistake title="x가 남은 채로 적분한다">
+치환 후 식에 $x$가 남아 있으면 치환이 끝나지 않은 것입니다. 다른 $u$를 고르거나 부분적분을 생각하세요.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\displaystyle\int_0^4 x\sqrt{x^2 + 9}\,dx$를 계산하세요.
+</Fragment>
+
+$u = x^2 + 9$, $x\,dx = \tfrac12 du$, 구간은 $9$~$25$ 입니다. $\dfrac12\displaystyle\int_9^{25}\sqrt u\,du = \dfrac13\Big[u^{3/2}\Big]_9^{25} = \dfrac13(125 - 27)$.
+
+**정답:** $\dfrac{98}{3}$
+</Practice>

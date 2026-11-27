@@ -1,0 +1,109 @@
+---
+subject: calculus
+unit: limits-derivatives
+order: 13
+title: "음함수 미분 — y를 x의 함수로 보고 미분하는 법, 예제"
+h1: "음함수 미분으로 접선의 기울기 구하기"
+description: "x² + xy + y² = 7처럼 y를 x에 대해 풀기 어려운 식을 그대로 미분해 dy/dx를 구하는 음함수 미분을 예제로 해설해요. y항에 연쇄법칙 붙이기, 곱의 미분, 흔한 실수와 연습 문제 포함."
+summary:
+  - "y를 x의 함수로 보고 양변을 x로 미분한다. y가 들어간 항에는 연쇄법칙으로 dy/dx가 붙는다."
+  - "미분한 식에서 dy/dx가 있는 항을 한쪽으로 모아 dy/dx에 대해 푼다."
+  - "특정 점의 기울기는 그 점의 x, y 값을 모두 대입해 구한다."
+keyword: "음함수 미분 예제"
+level: core
+prerequisites: [calculus/chain-rule]
+related: [calculus/related-rates]
+checks:
+  - id: ex1
+    claim: "x²+xy+y²=7의 (1,2)에서 dy/dx = −4/5"
+    sympy: "(lambda x, y: (-(2*x+y)/(x+2*y)).subs({x:1, y:2}) == Rational(-4,5) and (x**2+x*y+y**2).subs({x:1,y:2}) == 7 and idiff(x**2+x*y+y**2-7, y, x).subs({x:1,y:2}) == Rational(-4,5))(*symbols('x y'))"
+  - id: p1
+    claim: "x³+y³=6xy의 (3,3)에서 dy/dx = −1"
+    sympy: "(lambda x, y: idiff(x**3+y**3-6*x*y, y, x).subs({x:3,y:3}) == -1)(*symbols('x y'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: y = f(x)로 풀지 않고 바로 미분하기
+
+$x^2 + y^2 = 25$ 같은 원의 식은 $y$에 대해 풀면 $\pm$ 두 갈래로 나뉘고, $x^3 + y^3 = 6xy$ 같은 식은 아예 풀기 어렵습니다. 음함수 미분은 식을 풀지 않고, **$y$가 $x$에 따라 변하는 함수라고 생각한 채** 양변을 미분합니다. $y$가 들어간 항을 미분할 때마다 연쇄법칙으로 $\dfrac{dy}{dx}$가 붙는다는 점만 기억하면 됩니다.
+
+## 핵심 공식
+
+$$
+\frac{d}{dx}\big[y^n\big] = n y^{n-1}\frac{dy}{dx}, \qquad \frac{d}{dx}\big[xy\big] = y + x\frac{dy}{dx}
+$$
+
+다변수 미분으로 쓰면 $F(x, y) = 0$에서
+
+$$
+\frac{dy}{dx} = -\frac{F_x}{F_y} \qquad (F_y \neq 0)
+$$
+
+## 예제
+
+<Example>
+곡선 $x^2 + xy + y^2 = 7$ 위의 점 $(1, 2)$에서 접선의 기울기를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="점이 곡선 위에 있는지 확인한다">
+$1 + 2 + 4 = 7$이므로 $(1, 2)$는 곡선 위의 점입니다.
+</Step>
+
+<Step n={2} title="양변을 x로 미분한다">
+$xy$는 곱의 미분, $y^2$는 연쇄법칙을 씁니다.
+
+$$
+2x + \left(y + x\frac{dy}{dx}\right) + 2y\frac{dy}{dx} = 0
+$$
+</Step>
+
+<Step n={3} title="dy/dx로 정리한다">
+$$
+(x + 2y)\frac{dy}{dx} = -(2x + y) \quad\Longrightarrow\quad \frac{dy}{dx} = -\frac{2x + y}{x + 2y}
+$$
+</Step>
+
+<Step n={4} title="점을 대입한다">
+$$
+\frac{dy}{dx}\bigg|_{(1,2)} = -\frac{2 + 2}{1 + 4} = -\frac{4}{5}
+$$
+</Step>
+
+<Answer>
+접선의 기울기 $-\dfrac{4}{5}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="y² 를 2y로만 미분한다">
+$\dfrac{d}{dx}y^2 = 2y\dfrac{dy}{dx}$입니다. $y$를 상수처럼 미분하면 $\dfrac{dy}{dx}$가 빠져 식이 성립하지 않습니다.
+</Mistake>
+
+<Mistake title="xy를 x·dy/dx로만 미분한다">
+$xy$는 두 함수의 곱이라 $y + x\dfrac{dy}{dx}$ 두 항이 나옵니다. 앞의 $y$를 빠뜨리기 쉽습니다.
+</Mistake>
+
+<Mistake title="x만 대입하고 y는 대입하지 않는다">
+음함수 미분의 결과에는 $x$와 $y$가 함께 있습니다. 기울기를 구할 때는 점의 좌표 둘 다 넣어야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+데카르트 엽선 $x^3 + y^3 = 6xy$ 위의 점 $(3, 3)$에서 접선의 기울기를 구하세요.
+</Fragment>
+
+미분하면 $3x^2 + 3y^2 y' = 6y + 6xy'$, 정리하면 $y' = \dfrac{6y - 3x^2}{3y^2 - 6x}$ 입니다. $(3, 3)$을 넣으면 $\dfrac{18 - 27}{27 - 18}$.
+
+**정답:** $-1$
+</Practice>

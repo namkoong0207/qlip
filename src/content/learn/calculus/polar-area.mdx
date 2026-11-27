@@ -1,0 +1,108 @@
+---
+subject: calculus
+unit: integration
+order: 25
+title: "극좌표 넓이 — ½∫r²dθ 공식, 심장형·장미 곡선 예제"
+h1: "극좌표 곡선으로 둘러싸인 넓이"
+description: "극좌표 곡선 r = f(θ)로 둘러싸인 영역의 넓이를 부채꼴을 모은 공식 ½∫r²dθ로 구하는 방법과 θ 범위 정하는 법을 심장형, 장미 곡선 예제로 해설해요. 흔한 실수와 연습 문제 포함."
+summary:
+  - "극좌표 넓이는 얇은 부채꼴(½r²dθ)을 모아 A = ½∫r²dθ로 구한다."
+  - "θ 범위는 곡선이 영역을 정확히 한 번 그리는 구간으로 잡는다."
+  - "장미 곡선처럼 같은 꽃잎이 반복되면 한 꽃잎을 구해 개수를 곱한다."
+keyword: "극좌표 넓이 공식"
+level: core
+checks:
+  - id: ex1
+    claim: "심장형 r=1+cosθ의 넓이 = 3π/2"
+    sympy: "(lambda th: Rational(1,2)*integrate((1+cos(th))**2, (th,0,2*pi)) == 3*pi/2)(Symbol('theta'))"
+  - id: ex2
+    claim: "r=cos2θ 한 꽃잎(−π/4~π/4) 넓이 = π/8, 꽃잎 4개 = π/2"
+    sympy: "(lambda th: Rational(1,2)*integrate(cos(2*th)**2, (th,-pi/4,pi/4)) == pi/8)(Symbol('theta'))"
+  - id: p1
+    claim: "원 r=2sinθ (0~π) 넓이 = π"
+    sympy: "(lambda th: Rational(1,2)*integrate((2*sin(th))**2, (th,0,pi)) == pi)(Symbol('theta'))"
+provenance: original
+author: Qlip
+status: published
+review:
+  by: Qlip
+  date: 2026-11-27
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 피자 조각을 모아 넓이를 구한다
+
+직교좌표에서는 얇은 직사각형을 모아 넓이를 구했다면, 극좌표에서는 원점에서 뻗어 나가는 **얇은 부채꼴**을 모읍니다. 반지름 $r$, 중심각 $d\theta$인 부채꼴의 넓이는 $\frac12 r^2 d\theta$이므로, 이것을 $\theta$ 범위에 걸쳐 적분하면 됩니다. 심장형, 장미 곡선처럼 직교좌표로는 다루기 어려운 곡선에서 특히 유용합니다.
+
+## 핵심 공식
+
+$$
+A = \frac12\int_\alpha^\beta r(\theta)^2\,d\theta
+$$
+
+두 곡선 사이: $A = \frac12\displaystyle\int_\alpha^\beta\big(r_{\text{바깥}}^2 - r_{\text{안}}^2\big)\,d\theta$
+
+자주 쓰는 적분: $\displaystyle\int_0^{2\pi}\cos^2\theta\,d\theta = \pi$
+
+## 예제
+
+<Example>
+(1) 심장형 $r = 1 + \cos\theta$로 둘러싸인 넓이 (2) 네 잎 장미 $r = \cos 2\theta$의 전체 넓이를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) θ 범위를 정한다">
+$\theta$가 $0$에서 $2\pi$까지 돌면 심장형을 한 번 그립니다.
+</Step>
+
+<Step n={2} title="(1) 공식에 넣고 전개한다">
+$$
+A = \frac12\int_0^{2\pi}(1 + 2\cos\theta + \cos^2\theta)\,d\theta = \frac12\left(2\pi + 0 + \pi\right) = \frac{3\pi}{2}
+$$
+
+$\cos\theta$의 한 주기 적분은 $0$, $\cos^2\theta$의 한 주기 적분은 $\pi$ 입니다.
+</Step>
+
+<Step n={3} title="(2) 한 꽃잎의 범위를 찾는다">
+$r = 0$이 되는 $\cos 2\theta = 0$에서 $\theta = \pm\dfrac{\pi}{4}$ 입니다. 이 사이에서 꽃잎 하나를 그립니다.
+
+$$
+\frac12\int_{-\pi/4}^{\pi/4}\cos^2 2\theta\,d\theta = \frac12\cdot\frac{\pi}{4} = \frac{\pi}{8}
+$$
+</Step>
+
+<Step n={4} title="(2) 꽃잎 개수를 곱한다">
+$r = \cos 2\theta$는 꽃잎이 4개이므로 전체 넓이는 $4\cdot\dfrac{\pi}{8} = \dfrac{\pi}{2}$ 입니다.
+</Step>
+
+<Answer>
+(1) $\dfrac{3\pi}{2}$ (2) $\dfrac{\pi}{2}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="½을 빠뜨린다">
+부채꼴 넓이는 $\frac12 r^2\theta$입니다. $\int r^2 d\theta$로만 쓰면 답이 두 배가 됩니다.
+</Mistake>
+
+<Mistake title="θ 범위를 너무 넓게 잡는다">
+$r = \cos 2\theta$를 $0$~$2\pi$로 한 번에 적분하면 결과는 맞지만, $r = 2\sin\theta$를 $0$~$2\pi$로 적분하면 원을 두 번 돌아 넓이가 두 배가 됩니다. 곡선을 한 번만 그리는 범위를 확인하세요.
+</Mistake>
+
+<Mistake title="r을 그대로 적분한다">
+넓이는 $r^2$을 적분합니다. $\int r\,d\theta$는 넓이가 아닙니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$r = 2\sin\theta$로 둘러싸인 넓이를 구하세요.
+</Fragment>
+
+$0 \le \theta \le \pi$에서 원을 한 번 그립니다. $\dfrac12\displaystyle\int_0^\pi 4\sin^2\theta\,d\theta = 2\cdot\dfrac{\pi}{2}$. 이 곡선은 반지름 1인 원이라 넓이 $\pi$와 일치합니다.
+
+**정답:** $\pi$
+</Practice>
