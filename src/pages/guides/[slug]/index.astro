@@ -1,0 +1,37 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHead from "../../../components/PageHead.astro";
+import Download from "../../../components/Download.astro";
+import { guidesFilter } from "../../../lib/learn";
+import { articleLd, breadcrumbLd } from "../../../lib/jsonld";
+
+export async function getStaticPaths() {
+  const guides = (await getCollection("guides")).filter(guidesFilter);
+  return guides.map((g) => ({ params: { slug: g.id }, props: { guide: g } }));
+}
+const { guide } = Astro.props as { guide: CollectionEntry<"guides"> };
+const d = guide.data;
+const path = `/guides/${guide.id}/`;
+const { Content } = await render(guide);
+const crumbs = [{ name: "공부 가이드", path: "/guides/" }, { name: d.h1, path }];
+const published = d.status === "published";
+const fmt = (x: Date) => x.toISOString().slice(0, 10).replace(/-/g, ".");
+---
+<BaseLayout title={d.title} description={d.description} path={path} ogType="article" section="guides" campaign="web_guide" noindex={!published}
+  jsonLd={[breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs]), articleLd({ title: d.title, description: d.description, path, published: d.created, modified: d.updated, author: d.author })]}>
+  {!published && <div class="draft-banner" role="note">검수 전 미리보기 — 운영 사이트에는 공개되지 않아요</div>}
+  <PageHead crumbs={crumbs} eyebrow="공부 가이드" h1={d.h1}>
+    <p class="learn-meta"><span>작성 {d.author}</span><span>최종 수정 <time datetime={d.updated.toISOString().slice(0, 10)}>{fmt(d.updated)}</time></span></p>
+  </PageHead>
+  <div class="container" style="padding-top:40px;padding-bottom:96px;">
+    <article class="prose">
+      <Content />
+      <aside class="learn-cta">
+        <h2>시험 문제는 Qlip으로</h2>
+        <p>족보와 과제 문제를 사진으로 찍으면 단계별 해설을 받고, 틀린 문제는 시험 전까지 다시 풀 수 있어요.</p>
+        <Download campaign="web_guide" loc="guide_cta" />
+      </aside>
+    </article>
+  </div>
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+import { PLANS, won } from "../data/pricing";
+---
+<div class="plans">
+  {PLANS.map((p) => (
+    <div class:list={["card plan", { featured: p.id === "pro" }]}>
+      <h3>{p.name}</h3>
+      <div class="price">
+        {p.monthlyKRW ? <>{won(p.monthlyKRW)}<small> / 월</small></> : <>0원</>}
+      </div>
+      <div class="credits">매주 {p.weeklyCredits}크레딧</div>
+      <p>{p.summary}</p>
+      <ul>
+        {p.passKRW && <li>시험 기간 7일권 {won(p.passKRW)} (자동 갱신 없음)</li>}
+        <li>문제 해설 약 {Math.floor(p.weeklyCredits / 3)}개 분량 / 주</li>
+        {p.id === "free" ? <li>족보 1개까지 저장</li> : <li>족보 저장 무제한</li>}
+      </ul>
+    </div>
+  ))}
+</div>

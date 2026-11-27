@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import { SUBJECTS } from "../../data/subjects";
+import { learnEntries, pathOf } from "../../lib/learn";
+import { breadcrumbLd } from "../../lib/jsonld";
+const entries = await learnEntries();
+const crumbs = [{ name: "학습 라이브러리", path: "/learn/" }];
+const recent = [...entries].sort((a, b) => +b.data.updated - +a.data.updated).slice(0, 6);
+---
+<BaseLayout
+  title="대학 전공 학습 라이브러리 — 미적분학·공업수학·일반물리·일반화학·선형대수"
+  description="대학 이공계 전공 개념을 공식, 직접 만든 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 정리한 무료 학습 라이브러리. 모든 글은 정답을 다시 계산하고 사람이 검수한 뒤 공개해요."
+  path="/learn/"
+  section="learn"
+  campaign="web_learn_index"
+  jsonLd={[breadcrumbLd([{ name: "홈", path: "/" }, ...crumbs])]}
+>
+  <PageHead crumbs={[{ name: "홈", path: "/" }, ...crumbs]} eyebrow="무료 · 검수 완료 콘텐츠" h1="대학 전공 학습 라이브러리" lead="시험에 자주 나오는 전공 개념을 공식, 예제, 단계별 해설, 자주 하는 실수, 연습 문제로 한 페이지에 정리했어요. 예제는 모두 직접 만든 문제이고, 정답을 다시 계산해 확인한 뒤 사람이 검수해 공개해요." />
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3">
+        {SUBJECTS.map((s) => {
+          const n = entries.filter((e) => e.data.subject === s.slug).length;
+          return (
+            <a class="card" href={`/learn/${s.slug}/`}>
+              <h2 style="font-size:21px;margin-bottom:6px;">{s.name}</h2>
+              <p>{s.short}</p>
+              <p class="muted" style="margin-top:10px;">{n > 0 ? `${n}개 주제` : "준비 중"}</p>
+            </a>
+          );
+        })}
+        <a class="card" href="/guides/" style="background:var(--accent-soft);border-color:transparent;">
+          <h2 style="font-size:21px;margin-bottom:6px;">공부 가이드</h2>
+          <p>족보 공부법, 시험 계획, 공부 앱 고르는 법</p>
+        </a>
+      </div>
+      {recent.length > 0 && (
+        <>
+          <h2 style="margin:64px 0 20px;font-size:24px;">최근 업데이트</h2>
+          <div class="grid grid-2">
+            {recent.map((e) => (
+              <a class="card" href={pathOf(e)}>
+                <span class="num">{SUBJECTS.find((s) => s.slug === e.data.subject)!.name}</span>
+                <h3>{e.data.h1}</h3>
+                <p>{e.data.summary[0]}</p>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>

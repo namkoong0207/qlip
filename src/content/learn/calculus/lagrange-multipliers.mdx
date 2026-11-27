@@ -1,0 +1,129 @@
+---
+subject: calculus
+unit: multivariable
+order: 50
+title: "라그랑주 승수법 — 제약 조건 최적화 공식과 예제 풀이"
+h1: "라그랑주 승수법으로 제약 조건 아래 최댓값·최솟값 구하기"
+description: "∇f = λ∇g로 제약 조건이 있는 최댓값·최솟값을 구하는 라그랑주 승수법을 기하학적 의미와 함께 정리하고, 직선·원 위의 극값 예제를 단계별로 해설해요. 후보점 비교와 흔한 실수 포함."
+summary:
+  - "g(x, y) = c 위에서 f의 극값은 두 함수의 기울기 벡터가 평행한 점, 즉 ∇f = λ∇g인 점에서 생긴다."
+  - "∇f = λ∇g의 성분 방정식과 제약식 g = c를 연립해 후보점을 모두 구한다."
+  - "후보점에서 f 값을 모두 비교해 최댓값과 최솟값을 고른다. λ 값 자체는 답이 아니다."
+keyword: "라그랑주 승수법 예제"
+level: core
+checks:
+  - id: ex1
+    claim: "x+2y=8에서 xy의 최댓값 8, (4, 2)"
+    sympy: "(lambda x, y, l: solve([y - l, x - 2*l, x + 2*y - 8], [x, y, l], dict=True) == [{x: 4, y: 2, l: 2}] and 4*2 == 8)(*symbols('x y l'))"
+  - id: ex2
+    claim: "x²+y²=1 위에서 x²+2y²의 최댓값 2, 최솟값 1"
+    sympy: "(lambda th: maximum(cos(th)**2 + 2*sin(th)**2, th, Interval(0, 2*pi)) == 2 and minimum(cos(th)**2 + 2*sin(th)**2, th, Interval(0, 2*pi)) == 1)(Symbol('th', real=True))"
+  - id: p1
+    claim: "x+y=4에서 x²+y²의 최솟값 8, (2, 2)"
+    sympy: "(lambda x, y, l: solve([2*x - l, 2*y - l, x + y - 4], [x, y, l], dict=True) == [{x: 2, y: 2, l: 4}] and 2**2 + 2**2 == 8)(*symbols('x y l'))"
+prerequisites: [calculus/chain-rule]
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 등고선이 제약 곡선에 '닿는' 점
+
+제약 조건 $g(x, y) = c$는 평면 위의 곡선입니다. 이 곡선을 따라 걸으면서 $f$의 값이 어떻게 변하는지 생각해 보세요. $f$의 등고선을 가로지르는 동안에는 $f$가 계속 커지거나 작아집니다. $f$가 극값이 되는 순간은 걷는 곡선이 등고선에 **접하는** 순간입니다.
+
+두 곡선이 접하면 두 곡선의 법선 방향이 같고, 법선 방향은 기울기 벡터 $\nabla f$, $\nabla g$입니다. 그래서 극값 후보에서는 $\nabla f$가 $\nabla g$의 상수배가 됩니다. 그 상수가 라그랑주 승수 $\lambda$입니다.
+
+경제학의 예산 제약, 공학의 재료량이 정해진 설계 최적화, 물리의 구속 조건 문제가 이 방법으로 풀립니다.
+
+## 핵심 공식
+
+$g(x, y) = c$ 위에서 $f(x, y)$의 극값 후보는 다음 연립방정식의 해입니다.
+
+$$
+\nabla f = \lambda\,\nabla g, \qquad g(x, y) = c
+$$
+
+성분으로 쓰면
+
+$$
+f_x = \lambda g_x, \qquad f_y = \lambda g_y, \qquad g(x, y) = c
+$$
+
+미지수 $x, y, \lambda$ 세 개에 방정식 세 개입니다. 제약 곡선이 닫혀 있고 유계이면(예: 원) 최댓값과 최솟값이 반드시 존재하므로 후보점의 $f$ 값을 비교하면 됩니다.
+
+## 예제
+
+<Example>
+(1) $x + 2y = 8$ ($x, y \gt 0$)일 때 $f(x, y) = xy$의 최댓값을 구하세요.
+
+(2) 원 $x^2 + y^2 = 1$ 위에서 $f(x, y) = x^2 + 2y^2$의 최댓값과 최솟값을 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 기울기 벡터를 구해 연립방정식을 세운다">
+$g(x, y) = x + 2y$이므로 $\nabla f = (y,\ x)$, $\nabla g = (1,\ 2)$ 입니다.
+
+$$
+y = \lambda, \qquad x = 2\lambda, \qquad x + 2y = 8
+$$
+</Step>
+
+<Step n={2} title="(1) 풀고 f 값을 구한다">
+처음 두 식을 셋째 식에 넣으면 $2\lambda + 2\lambda = 8$, $\lambda = 2$ 입니다. 따라서 $x = 4$, $y = 2$이고 $f(4, 2) = 8$ 입니다.
+
+경계($x \to 0$ 또는 $y \to 0$)에서는 $f \to 0$이므로 이 값이 최댓값입니다.
+</Step>
+
+<Step n={3} title="(2) 연립방정식을 세운다">
+$\nabla f = (2x,\ 4y)$, $\nabla g = (2x,\ 2y)$ 이므로
+
+$$
+2x = 2\lambda x, \qquad 4y = 2\lambda y, \qquad x^2 + y^2 = 1
+$$
+</Step>
+
+<Step n={4} title="(2) 경우를 나눠 후보점을 모두 찾는다">
+첫 식은 $x(1 - \lambda) = 0$, 둘째 식은 $y(2 - \lambda) = 0$ 입니다.
+
+- $x = 0$이면 제약식에서 $y = \pm1$: 후보 $(0, \pm1)$
+- $\lambda = 1$이면 둘째 식에서 $y = 0$, 따라서 $x = \pm1$: 후보 $(\pm1, 0)$
+
+양변을 $x$로 나누어 $\lambda = 1$만 남기면 $x = 0$인 경우를 잃습니다. **인수분해해서 경우를 나누는 것**이 핵심입니다.
+</Step>
+
+<Step n={5} title="(2) f 값을 비교한다">
+$f(0, \pm1) = 2$, $f(\pm1, 0) = 1$ 입니다. 원은 닫혀 있고 유계이므로 이 중 큰 값이 최댓값, 작은 값이 최솟값입니다.
+</Step>
+
+<Answer>
+(1) 최댓값 $8$ (점 $(4, 2)$) (2) 최댓값 $2$ (점 $(0, \pm1)$), 최솟값 $1$ (점 $(\pm1, 0)$)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="변수로 나눠서 해를 잃는다">
+$2x = 2\lambda x$를 $x$로 나누면 $\lambda = 1$만 남고 $x = 0$인 후보가 사라집니다. 항상 $x(1 - \lambda) = 0$처럼 인수분해해서 두 경우를 모두 보세요.
+</Mistake>
+
+<Mistake title="제약식을 연립에 넣지 않는다">
+$\nabla f = \lambda\nabla g$만 풀면 해가 무수히 많거나 $\lambda$만 남습니다. 제약식 $g = c$가 세 번째 방정식입니다.
+</Mistake>
+
+<Mistake title="후보점을 비교하지 않고 첫 해를 답으로 쓴다">
+라그랑주 조건은 극값의 **후보**를 줄 뿐, 그것이 최대인지 최소인지는 알려 주지 않습니다. 모든 후보에서 $f$ 값을 계산해 비교해야 합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+직선 $x + y = 4$ 위에서 $f(x, y) = x^2 + y^2$의 최솟값을 구하세요. (원점에서 직선까지 거리의 제곱입니다.)
+</Fragment>
+
+$2x = \lambda$, $2y = \lambda$에서 $x = y$이고 $x + y = 4$이므로 $x = y = 2$ 입니다. 직선 위에서 $f$는 얼마든지 커질 수 있으므로 이 점은 최솟값입니다. 원점과 직선 사이 거리 $\frac{4}{\sqrt2} = 2\sqrt2$의 제곱과도 같습니다.
+
+**정답:** 최솟값 $8$ (점 $(2, 2)$)
+</Practice>

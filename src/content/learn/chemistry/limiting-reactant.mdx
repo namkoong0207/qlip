@@ -1,0 +1,126 @@
+---
+subject: chemistry
+unit: stoichiometry-gases
+order: 20
+title: "한계 반응물과 수득률 — 몰 계산 순서와 예제 풀이"
+h1: "한계 반응물 찾기와 수득률 계산"
+description: "질량을 몰로 바꾸고 계수비로 비교해 한계 반응물을 찾는 방법, 이론적 수득량과 퍼센트 수득률을 구하는 순서를 예제로 해설해요. 질량으로 비교하는 실수와 남는 반응물 계산까지."
+summary:
+  - "반응물이 모두 정확히 반응하지 않으면 먼저 다 떨어지는 반응물(한계 반응물)이 생성물의 양을 정한다."
+  - "질량이 아니라 몰수를 계수로 나눈 값으로 비교한다. 이 값이 가장 작은 반응물이 한계 반응물이다."
+  - "퍼센트 수득률 = 실제 수득량 / 이론적 수득량 × 100%."
+keyword: "한계 반응물 수득률 계산"
+level: intro
+checks:
+  - id: ex1
+    claim: "H₂ 4.0 g(1.98 mol), O₂ 16.0 g(0.500 mol): O₂가 한계, H₂O 이론량 ≈ 18.0 g, H₂ ≈ 2.0 g 남음"
+    sympy: "Rational(16,32) < (Rational(40,10)/Rational(2016,1000))/2 and Abs(2*Rational(16,32)*Rational(1802,100) - 18.02) < 1e-9 and Abs(N((Rational(4)/Rational(2016,1000) - 2*Rational(1,2))*Rational(2016,1000)) - 1.984) < 1e-3"
+  - id: ex2
+    claim: "실제 15.3 g이면 수득률 ≈ 84.9%"
+    sympy: "Abs(N(Rational(153,10)/Rational(1802,100)*100) - 84.9) < 0.05"
+  - id: p1
+    claim: "N₂ 28.0 g + H₂ 9.0 g: N₂가 한계, NH₃ ≈ 34.0 g"
+    sympy: "Rational(280,10)/Rational(2802,100) < (Rational(9)/Rational(2016,1000))/3 and Abs(N(2*Rational(280,10)/Rational(2802,100)*Rational(1703,100)) - 34.04) < 0.01"
+related: [chemistry/ideal-gas-law]
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 재료가 먼저 떨어지는 쪽이 결과를 정한다
+
+샌드위치를 빵 2장과 치즈 1장으로 만든다면, 빵 10장과 치즈 3장으로는 5개가 아니라 3개만 만들 수 있습니다. 치즈가 먼저 떨어지기 때문입니다. 화학 반응도 같습니다. 반응물을 계수비대로 정확히 넣지 않으면 한쪽이 먼저 소진되고, 그 반응물(**한계 반응물**)의 양이 생성물의 최대량을 정합니다. 남는 쪽은 **과량 반응물**입니다.
+
+비교의 기준은 질량이 아니라 **입자 수, 곧 몰**이고, 반응식의 계수가 그 비율을 알려 줍니다.
+
+## 핵심 공식
+
+$$
+n = \frac{m}{M} \qquad (\text{몰수} = \text{질량} / \text{몰질량})
+$$
+
+반응 $aA + bB \rightarrow cC$에서
+
+$$
+\frac{n_A}{a}\ \text{와}\ \frac{n_B}{b}\ \text{중 작은 쪽이 한계 반응물}, \qquad n_C = \frac{c}{a}\,n_A\ (A\text{가 한계일 때})
+$$
+
+$$
+\text{퍼센트 수득률} = \frac{\text{실제 수득량}}{\text{이론적 수득량}}\times100\%
+$$
+
+## 예제
+
+<Example>
+수소 $4.0\ \text{g}$과 산소 $16.0\ \text{g}$을 반응시켜 물을 만듭니다: $2\text{H}_2 + \text{O}_2 \rightarrow 2\text{H}_2\text{O}$ (몰질량: $\text{H}_2$ $2.016$, $\text{O}_2$ $32.00$, $\text{H}_2\text{O}$ $18.02\ \text{g/mol}$)
+
+(a) 한계 반응물과 물의 이론적 수득량은? (b) 반응 후 남는 반응물은 몇 g? (c) 실제로 물 $15.3\ \text{g}$을 얻었다면 퍼센트 수득률은?
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="질량을 몰로 바꾼다">
+$$
+n_{\text{H}_2} = \frac{4.0}{2.016} \approx 1.98\ \text{mol}, \qquad n_{\text{O}_2} = \frac{16.0}{32.00} = 0.500\ \text{mol}
+$$
+</Step>
+
+<Step n={2} title="(a) 계수로 나눠 비교한다">
+$$
+\frac{n_{\text{H}_2}}{2} \approx 0.99, \qquad \frac{n_{\text{O}_2}}{1} = 0.500
+$$
+
+산소 쪽 값이 작으므로 **산소가 한계 반응물**입니다. 질량은 산소가 4배 많았지만 몰수로는 부족합니다.
+</Step>
+
+<Step n={3} title="(a) 한계 반응물로 생성물을 계산한다">
+산소 1 mol당 물 2 mol이 생기므로
+
+$$
+n_{\text{H}_2\text{O}} = 2(0.500) = 1.00\ \text{mol} \quad\Longrightarrow\quad m = 1.00\times18.02 \approx 18.0\ \text{g}
+$$
+</Step>
+
+<Step n={4} title="(b) 남는 수소를 계산한다">
+산소 $0.500\ \text{mol}$과 반응하는 수소는 $1.00\ \text{mol}$입니다. 남는 수소는 $1.98 - 1.00 = 0.98\ \text{mol}$, 질량으로 $0.98\times2.016 \approx 2.0\ \text{g}$ 입니다.
+
+검산(질량 보존): 반응한 질량 $2.0 + 16.0 = 18.0\ \text{g}$ = 생긴 물 $18.0\ \text{g}$.
+</Step>
+
+<Step n={5} title="(c) 퍼센트 수득률">
+$$
+\frac{15.3}{18.0}\times100\% \approx 85\%
+$$
+</Step>
+
+<Answer>
+(a) 한계 반응물 $\text{O}_2$, 이론적 수득량 약 $18.0\ \text{g}$ (b) $\text{H}_2$ 약 $2.0\ \text{g}$ 남음 (c) 약 $85\%$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="질량이 작은 쪽을 한계 반응물로 고른다">
+예제에서 수소 질량(4.0 g)이 산소(16.0 g)보다 작지만 한계 반응물은 산소입니다. 반드시 몰로 바꾸고 계수로 나눠 비교하세요.
+</Mistake>
+
+<Mistake title="계수로 나누지 않고 몰수만 비교한다">
+몰수만 보면 산소 $0.500$이 수소 $1.98$보다 작아 이번에는 우연히 맞지만, 계수가 다른 반응에서는 틀립니다. 계수로 나눈 값을 비교하는 습관을 들이세요.
+</Mistake>
+
+<Mistake title="과량 반응물로 이론적 수득량을 계산한다">
+수소 $1.98\ \text{mol}$으로 물을 계산하면 $35.7\ \text{g}$이 되어, 수득률이 50% 아래로 잘못 나옵니다. 생성물은 항상 한계 반응물로 계산합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$\text{N}_2 + 3\text{H}_2 \rightarrow 2\text{NH}_3$에서 질소 $28.0\ \text{g}$과 수소 $9.0\ \text{g}$을 반응시킬 때 한계 반응물과 암모니아의 이론적 수득량을 구하세요. (몰질량: $\text{N}_2$ $28.02$, $\text{H}_2$ $2.016$, $\text{NH}_3$ $17.03\ \text{g/mol}$)
+</Fragment>
+
+$n_{\text{N}_2} \approx 0.999$, $n_{\text{H}_2} \approx 4.46\ \text{mol}$. 계수로 나누면 $0.999$와 $1.49$이므로 질소가 한계입니다. $n_{\text{NH}_3} = 2\times0.999 \approx 2.00\ \text{mol}$.
+
+**정답:** 한계 반응물 $\text{N}_2$, 암모니아 약 $34.0\ \text{g}$
+</Practice>

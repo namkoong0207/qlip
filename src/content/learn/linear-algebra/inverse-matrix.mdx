@@ -1,0 +1,142 @@
+---
+subject: linear-algebra
+unit: systems-matrices
+order: 30
+title: "역행렬 구하는 법 — 2×2 공식과 가우스-조르당 소거법 예제"
+h1: "역행렬 구하기: 2×2 공식과 가우스-조르당 소거법"
+description: "역행렬이 존재하는 조건(행렬식 ≠ 0), 2×2 역행렬 공식, [A | I]를 [I | A⁻¹]로 만드는 가우스-조르당 소거법을 3×3 예제로 단계별 해설해요. 곱해서 검산하는 법과 흔한 실수 포함."
+summary:
+  - "AA⁻¹ = A⁻¹A = I인 행렬 A⁻¹가 역행렬이며, det A ≠ 0일 때만 존재한다."
+  - "2×2는 공식으로: 대각 성분을 바꾸고 비대각 성분의 부호를 바꾼 뒤 det A로 나눈다."
+  - "3×3 이상은 [A | I]에 행 연산을 해서 왼쪽을 I로 만들면 오른쪽이 A⁻¹이 된다."
+keyword: "역행렬 구하는 법"
+level: intro
+checks:
+  - id: ex1
+    claim: "[[2,1],[5,3]]⁻¹ = [[3,−1],[−5,2]]"
+    sympy: "Matrix([[2,1],[5,3]]).inv() == Matrix([[3,-1],[-5,2]])"
+  - id: ex2
+    claim: "[[1,0,2],[2,1,0],[0,1,1]]⁻¹ = (1/5)[[1,2,−2],[−2,1,4],[2,−1,1]]"
+    sympy: "Matrix([[1,0,2],[2,1,0],[0,1,1]]).inv() == Matrix([[1,2,-2],[-2,1,4],[2,-1,1]])/5"
+  - id: p1
+    claim: "[[1,2,3],[0,1,4],[5,6,0]]⁻¹ = [[−24,18,5],[20,−15,−4],[−5,4,1]]"
+    sympy: "Matrix([[1,2,3],[0,1,4],[5,6,0]]).inv() == Matrix([[-24,18,5],[20,-15,-4],[-5,4,1]])"
+  - id: p2
+    claim: "[[1,2],[2,4]]는 행렬식이 0이라 역행렬이 없다"
+    sympy: "Matrix([[1,2],[2,4]]).det() == 0"
+prerequisites: [linear-algebra/gaussian-elimination]
+related: [linear-algebra/determinant]
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 곱셈을 되돌리는 행렬
+
+수 $a$에 $\frac1a$을 곱하면 $1$이 되듯, 정사각행렬 $A$에 곱해서 단위행렬 $I$가 되는 행렬이 역행렬 $A^{-1}$입니다. 역행렬이 있으면 $A\mathbf{x} = \mathbf{b}$의 해를 $\mathbf{x} = A^{-1}\mathbf{b}$로 바로 쓸 수 있습니다.
+
+$0$에 역수가 없듯, 모든 행렬에 역행렬이 있지는 않습니다. $A$가 어떤 방향을 $\mathbf{0}$으로 납작하게 눌러 버리면(행렬식이 $0$이면) 원래대로 되돌릴 수 없기 때문입니다.
+
+## 핵심 공식
+
+2×2 역행렬:
+
+$$
+A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}, \qquad A^{-1} = \frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix} \quad (ad - bc \neq 0)
+$$
+
+가우스-조르당 소거법:
+
+$$
+\big[\,A \mid I\,\big] \xrightarrow{\ \text{기본 행 연산}\ } \big[\,I \mid A^{-1}\,\big]
+$$
+
+왼쪽에 영행이 생기면 $A$는 역행렬이 없습니다.
+
+## 예제
+
+<Example>
+(1) $A = \begin{pmatrix} 2 & 1 \\ 5 & 3 \end{pmatrix}$의 역행렬을 구하세요.
+
+(2) $B = \begin{pmatrix} 1 & 0 & 2 \\ 2 & 1 & 0 \\ 0 & 1 & 1 \end{pmatrix}$의 역행렬을 가우스-조르당 소거법으로 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 2×2 공식을 쓴다">
+$\det A = 2\cdot3 - 1\cdot5 = 1$이므로
+
+$$
+A^{-1} = \frac11\begin{pmatrix} 3 & -1 \\ -5 & 2 \end{pmatrix}
+$$
+</Step>
+
+<Step n={2} title="(2) [B | I]를 쓰고 첫째 열을 정리한다">
+$R_2 \rightarrow R_2 - 2R_1$:
+
+$$
+\left[\begin{array}{ccc|ccc} 1 & 0 & 2 & 1 & 0 & 0 \\ 0 & 1 & -4 & -2 & 1 & 0 \\ 0 & 1 & 1 & 0 & 0 & 1 \end{array}\right]
+$$
+</Step>
+
+<Step n={3} title="(2) 아래쪽을 마저 0으로 만들고 피벗을 1로">
+$R_3 \rightarrow R_3 - R_2$로 $[\,0\ 0\ 5 \mid 2\ {-1}\ 1\,]$, 이어서 $R_3 \rightarrow \tfrac15R_3$:
+
+$$
+\left[\begin{array}{ccc|ccc} 1 & 0 & 2 & 1 & 0 & 0 \\ 0 & 1 & -4 & -2 & 1 & 0 \\ 0 & 0 & 1 & \tfrac25 & -\tfrac15 & \tfrac15 \end{array}\right]
+$$
+</Step>
+
+<Step n={4} title="(2) 위쪽을 0으로 만든다">
+$R_2 \rightarrow R_2 + 4R_3$, $R_1 \rightarrow R_1 - 2R_3$:
+
+$$
+\left[\begin{array}{ccc|ccc} 1 & 0 & 0 & \tfrac15 & \tfrac25 & -\tfrac25 \\ 0 & 1 & 0 & -\tfrac25 & \tfrac15 & \tfrac45 \\ 0 & 0 & 1 & \tfrac25 & -\tfrac15 & \tfrac15 \end{array}\right]
+$$
+</Step>
+
+<Step n={5} title="곱해서 검산한다">
+$B$의 첫 행 $(1, 0, 2)$와 $B^{-1}$의 첫 열 $(\tfrac15, -\tfrac25, \tfrac25)$를 곱하면 $\tfrac15 + 0 + \tfrac45 = 1$, 둘째 열 $(\tfrac25, \tfrac15, -\tfrac15)$와는 $\tfrac25 - \tfrac25 = 0$입니다. 이런 식으로 $BB^{-1} = I$를 확인합니다.
+</Step>
+
+<Answer>
+(1) $A^{-1} = \begin{pmatrix} 3 & -1 \\ -5 & 2 \end{pmatrix}$ (2) $B^{-1} = \dfrac15\begin{pmatrix} 1 & 2 & -2 \\ -2 & 1 & 4 \\ 2 & -1 & 1 \end{pmatrix}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="2×2 공식에서 부호를 바꿀 자리를 헷갈린다">
+대각 성분 $a$, $d$는 **자리만** 바꾸고, 비대각 성분 $b$, $c$는 자리는 그대로 두고 **부호만** 바꿉니다.
+</Mistake>
+
+<Mistake title="행렬식으로 나누는 것을 잊는다">
+예제 (1)은 $\det A = 1$이라 티가 나지 않지만, 보통은 $\frac{1}{ad-bc}$를 곱해야 합니다. 검산($AA^{-1} = I$)을 하면 바로 드러납니다.
+</Mistake>
+
+<Mistake title="오른쪽 블록에 행 연산을 빠뜨린다">
+가우스-조르당에서는 $[A \mid I]$의 **여섯 열 전체**에 같은 연산을 합니다. 왼쪽만 바꾸면 오른쪽은 역행렬이 아닙니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$C = \begin{pmatrix} 1 & 2 & 3 \\ 0 & 1 & 4 \\ 5 & 6 & 0 \end{pmatrix}$의 역행렬을 구하세요.
+</Fragment>
+
+$[C \mid I]$에서 $R_3 - 5R_1$, $R_3 + 4R_2$로 $[\,0\ 0\ 1 \mid {-5}\ 4\ 1\,]$을 얻고, 위로 올라가며 정리합니다. $\det C = 1$이라 성분이 모두 정수로 나옵니다.
+
+**정답:** $C^{-1} = \begin{pmatrix} -24 & 18 & 5 \\ 20 & -15 & -4 \\ -5 & 4 & 1 \end{pmatrix}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$D = \begin{pmatrix} 1 & 2 \\ 2 & 4 \end{pmatrix}$의 역행렬을 구하세요.
+</Fragment>
+
+$\det D = 4 - 4 = 0$입니다. 둘째 행이 첫째 행의 2배라 행 연산을 하면 영행이 생깁니다.
+
+**정답:** 역행렬이 존재하지 않는다
+</Practice>

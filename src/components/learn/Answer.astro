@@ -1,0 +1,7 @@
+---
+const { label = "정답" } = Astro.props as { label?: string };
+---
+<div class="answer-box">
+  <div class="ex-label">{label}</div>
+  <slot />
+</div>

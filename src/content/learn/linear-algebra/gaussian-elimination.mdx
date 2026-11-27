@@ -1,0 +1,136 @@
+---
+subject: linear-algebra
+unit: systems-matrices
+order: 10
+title: "가우스 소거법 — 첨가행렬, 행 연산, 후진 대입 예제"
+h1: "가우스 소거법으로 연립일차방정식 풀기"
+description: "연립일차방정식을 첨가행렬로 쓰고 기본 행 연산으로 행 사다리꼴을 만든 뒤 후진 대입으로 푸는 가우스 소거법을 3×3 예제로 단계별 해설해요. 해가 없거나 무수히 많은 경우 판별까지."
+summary:
+  - "연립일차방정식의 계수와 상수를 첨가행렬 [A | b]로 쓰고, 기본 행 연산으로 아래쪽을 0으로 만든다."
+  - "행 사다리꼴이 되면 맨 아래 식부터 위로 후진 대입해 해를 구한다."
+  - "[0 0 … 0 | c] (c ≠ 0) 행이 나오면 해가 없고, 선도 변수가 아닌 자유 변수가 남으면 해가 무수히 많다."
+keyword: "가우스 소거법 예제"
+level: intro
+checks:
+  - id: ex1
+    claim: "x+y+z=6, x+2y+3z=14, 2x+y+2z=10의 해 (1, 2, 3)"
+    sympy: "(lambda x, y, z: solve([x+y+z-6, x+2*y+3*z-14, 2*x+y+2*z-10], [x, y, z]) == {x: 1, y: 2, z: 3})(*symbols('x y z'))"
+  - id: p1
+    claim: "x+2y+z=4, 2x+y−z=1, 3x−y+2z=11의 해 (17/9, −2/9, 23/9)"
+    sympy: "(lambda x, y, z: solve([x+2*y+z-4, 2*x+y-z-1, 3*x-y+2*z-11], [x, y, z]) == {x: Rational(17,9), y: Rational(-2,9), z: Rational(23,9)})(*symbols('x y z'))"
+  - id: p2
+    claim: "x+y+z=2, 2x+2y+2z=5는 해가 없다"
+    sympy: "(lambda x, y, z: solve([x+y+z-2, 2*x+2*y+2*z-5], [x, y, z]) == [])(*symbols('x y z'))"
+related: [linear-algebra/inverse-matrix]
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 식을 바꿔도 해는 바뀌지 않는 연산
+
+연립방정식에서 두 식의 순서를 바꾸거나, 한 식에 0이 아닌 수를 곱하거나, 한 식의 배수를 다른 식에 더해도 해는 그대로입니다. 가우스 소거법은 이 세 가지 연산만으로 변수를 하나씩 지워, 맨 아래 식에 변수가 하나만 남는 계단 모양(행 사다리꼴)을 만듭니다. 그다음 아래에서 위로 대입하면 모든 변수가 정해집니다.
+
+변수 이름을 매번 쓰는 대신 계수만 모은 **첨가행렬**로 계산하면 실수가 줄고, 같은 과정이 역행렬·계수(rank)·영공간 계산에도 그대로 쓰입니다.
+
+## 핵심 공식
+
+기본 행 연산 세 가지:
+
+$$
+R_i \leftrightarrow R_j, \qquad R_i \rightarrow cR_i\ (c \neq 0), \qquad R_i \rightarrow R_i + kR_j
+$$
+
+해의 개수 판별(행 사다리꼴에서):
+
+| 모양 | 해 |
+|---|---|
+| $[\,0\ 0\ \cdots\ 0 \mid c\,]$, $c \neq 0$인 행이 있음 | 없음 |
+| 모든 변수가 선도 변수 | 유일 |
+| 자유 변수가 있음 | 무수히 많음 |
+
+## 예제
+
+<Example>
+다음 연립방정식을 가우스 소거법으로 푸세요.
+
+$$
+\begin{cases} x + y + z = 6 \\ x + 2y + 3z = 14 \\ 2x + y + 2z = 10 \end{cases}
+$$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="첨가행렬로 쓴다">
+$$
+\left[\begin{array}{ccc|c} 1 & 1 & 1 & 6 \\ 1 & 2 & 3 & 14 \\ 2 & 1 & 2 & 10 \end{array}\right]
+$$
+</Step>
+
+<Step n={2} title="첫째 열의 아래를 0으로 만든다">
+$R_2 \rightarrow R_2 - R_1$, $R_3 \rightarrow R_3 - 2R_1$:
+
+$$
+\left[\begin{array}{ccc|c} 1 & 1 & 1 & 6 \\ 0 & 1 & 2 & 8 \\ 0 & -1 & 0 & -2 \end{array}\right]
+$$
+</Step>
+
+<Step n={3} title="둘째 열의 아래를 0으로 만든다">
+$R_3 \rightarrow R_3 + R_2$:
+
+$$
+\left[\begin{array}{ccc|c} 1 & 1 & 1 & 6 \\ 0 & 1 & 2 & 8 \\ 0 & 0 & 2 & 6 \end{array}\right]
+$$
+
+행 사다리꼴이 되었고, 세 변수 모두 선도 변수라 해가 유일합니다.
+</Step>
+
+<Step n={4} title="후진 대입한다">
+맨 아래부터: $2z = 6 \Rightarrow z = 3$. 둘째 식 $y + 2(3) = 8 \Rightarrow y = 2$. 첫째 식 $x + 2 + 3 = 6 \Rightarrow x = 1$.
+</Step>
+
+<Step n={5} title="원래 식에 넣어 검산한다">
+$1 + 2 + 3 = 6$, $1 + 4 + 9 = 14$, $2 + 2 + 6 = 10$으로 세 식이 모두 성립합니다.
+</Step>
+
+<Answer>
+$(x, y, z) = (1,\ 2,\ 3)$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="한 번에 여러 연산을 겹쳐 쓴다">
+$R_2 \rightarrow R_2 - R_1$과 $R_3 \rightarrow R_3 - R_2$를 같은 단계에서 하면, 바뀌기 전의 $R_2$를 썼는지 헷갈려 산술 실수가 납니다. 한 단계에 쓰는 기준 행은 바꾸지 마세요.
+</Mistake>
+
+<Mistake title="상수 열에 연산을 하지 않는다">
+행 연산은 세로선 오른쪽 상수에도 똑같이 적용해야 합니다. 계수만 바꾸고 상수를 그대로 두면 다른 연립방정식이 됩니다.
+</Mistake>
+
+<Mistake title="0 = c 행을 보고도 계속 푼다">
+$[\,0\ 0\ 0 \mid 1\,]$은 $0 = 1$이라는 뜻이라 해가 없습니다. 이때 다른 행으로 값을 구해 답으로 쓰면 안 됩니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$x + 2y + z = 4$, $2x + y - z = 1$, $3x - y + 2z = 11$을 푸세요.
+</Fragment>
+
+$R_2 - 2R_1$, $R_3 - 3R_1$로 $[0\ {-3}\ {-3} \mid {-7}]$, $[0\ {-7}\ {-1} \mid {-1}]$을 만들고, $R_3 - \frac73R_2$로 $[0\ 0\ 6 \mid \frac{46}{3}]$을 얻습니다. $z = \frac{23}{9}$, 후진 대입으로 $y$, $x$를 구합니다. 답이 분수여도 검산하면 세 식이 모두 맞습니다.
+
+**정답:** $(x, y, z) = \left(\dfrac{17}{9},\ -\dfrac{2}{9},\ \dfrac{23}{9}\right)$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$x + y + z = 2$, $2x + 2y + 2z = 5$의 해를 판별하세요.
+</Fragment>
+
+$R_2 - 2R_1$이면 $[\,0\ 0\ 0 \mid 1\,]$, 즉 $0 = 1$입니다.
+
+**정답:** 해가 없다 (두 평면이 평행)
+</Practice>

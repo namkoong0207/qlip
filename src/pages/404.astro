@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SUBJECTS } from "../data/subjects";
+---
+<BaseLayout title="페이지를 찾을 수 없어요" description="요청한 페이지가 없거나 주소가 바뀌었어요." noindex campaign="web_404" stickyCta={false}>
+  <section class="section">
+    <div class="container" style="max-width:720px;">
+      <span class="eyebrow">404</span>
+      <h1 style="margin:14px 0 16px;font-size:clamp(28px,4vw,40px);">페이지를 찾을 수 없어요</h1>
+      <p class="lead">주소가 바뀌었거나 없는 페이지예요. 아래에서 찾던 내용을 골라 보세요.</p>
+      <ul class="chips" style="margin-top:28px;">
+        <li><a class="chip" href="/">홈</a></li>
+        <li><a class="chip" href="/learn/">학습 라이브러리</a></li>
+        {SUBJECTS.map((s) => <li><a class="chip" href={`/learn/${s.slug}/`}>{s.name}</a></li>)}
+        <li><a class="chip" href="/support.html">고객센터</a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import FaqList from "../../components/FaqList.astro";
+import Download from "../../components/Download.astro";
+import { FAQ } from "../../data/faq";
+import { breadcrumbLd, faqLd } from "../../lib/jsonld";
+const crumbs = [{ name: "홈", path: "/" }, { name: "FAQ", path: "/faq/" }];
+const groups = [
+  { key: "start", name: "시작하기" },
+  { key: "use", name: "해설과 정확도" },
+  { key: "credits", name: "요금과 크레딧" },
+  { key: "data", name: "족보와 개인정보" },
+] as const;
+---
+<BaseLayout title="자주 묻는 질문 — 과목, 무료 범위, 족보, 개인정보" description="Qlip FAQ: 어떤 과목을 지원하는지, 무료로 얼마나 쓸 수 있는지, 해설이 틀리면 어떻게 되는지, 족보를 올리면 누가 보는지, 내 기록은 어디에 저장되는지 답해요." path="/faq/" section="faq" campaign="web_faq" jsonLd={[breadcrumbLd(crumbs), faqLd(FAQ.map((f) => ({ q: f.q, a: f.a })))]}>
+  <PageHead crumbs={crumbs} eyebrow="FAQ" h1="자주 묻는 질문" lead="찾는 답이 없으면 support@qlip.kr로 물어봐 주세요. 앱의 내정보 > 문의하기에서 스크린샷을 붙여 보낼 수도 있어요." />
+  <section class="section">
+    <div class="container">
+      {groups.map((g) => (
+        <div style="margin-bottom:48px;">
+          <h2 style="font-size:24px;margin-bottom:16px;">{g.name}</h2>
+          <FaqList items={FAQ.filter((f) => f.group === g.key)} />
+        </div>
+      ))}
+      <Download campaign="web_faq" loc="faq" />
+    </div>
+  </section>
+</BaseLayout>

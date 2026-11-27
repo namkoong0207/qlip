@@ -1,0 +1,25 @@
+# qlip.kr robots.txt
+# Search and AI answers that cite and link this site: allowed.
+# Training AI models on this site's content: not allowed (operator policy, 2026-12).
+# Content-Signal: https://contentsignals.org/
+
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+
+# Training-only crawlers. Blocking these does not affect search or AI answers
+# (Google AI Overviews / AI Mode use Googlebot; ChatGPT search uses OAI-SearchBot;
+# Claude search uses Claude-SearchBot; Perplexity uses PerplexityBot).
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: meta-externalagent
+User-agent: Bytespider
+User-agent: cohere-ai
+User-agent: MistralAI-Training
+Disallow: /
+
+Sitemap: https://qlip.kr/sitemap-index.xml

@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHead from "../../components/PageHead.astro";
+import Download from "../../components/Download.astro";
+import { FEATURES } from "../../data/features";
+import { breadcrumbLd } from "../../lib/jsonld";
+const crumbs = [{ name: "홈", path: "/" }, { name: "기능", path: "/features/" }];
+---
+<BaseLayout title="기능 — 대학생 AI 문제풀이 앱 Qlip" description="Qlip의 기능: 사진으로 찍는 AI 문제풀이와 독립 검증, 족보 문항별 해설, 다시 풀기와 복습, 개념 질문, iPad와 Apple Pencil." path="/features/" section="features" campaign="web_features" jsonLd={[breadcrumbLd(crumbs)]}>
+  <PageHead crumbs={crumbs} eyebrow="기능" h1="찍고, 이해하고, 다시 풀기까지" lead="Qlip은 문제 하나를 해설받는 데서 끝나지 않고, 족보로 시험을 준비하고 틀린 문제를 시험 직전까지 다시 푸는 흐름 전체를 위해 만들었어요." />
+  <section class="section">
+    <div class="container grid grid-3">
+      {FEATURES.map((f) => (
+        <a class="card" href={`/features/${f.slug}/`}>
+          <h2 style="font-size:20px;margin-bottom:8px;">{f.name}</h2>
+          <p>{f.short}</p>
+          <p style="margin-top:12px;"><span class="link-arrow">자세히</span></p>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container"><Download campaign="web_features" loc="features_index" /></div>
+  </section>
+</BaseLayout>

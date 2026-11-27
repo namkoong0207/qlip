@@ -1,0 +1,129 @@
+---
+subject: calculus
+unit: limits-derivatives
+order: 12
+title: "연쇄법칙(합성함수 미분) — 공식, 겉과 속 나누기, 예제"
+h1: "연쇄법칙: 합성함수를 미분하는 법"
+description: "합성함수 미분인 연쇄법칙을 '겉함수 미분 × 속함수 미분'으로 정리하고, sin(x²+3x), √(1+e^{2x}) 같은 예제를 단계별로 해설해요. 여러 겹 합성, 흔한 실수, 연습 문제 포함."
+summary:
+  - "y = f(g(x))이면 y′ = f′(g(x))·g′(x). 겉함수를 속은 그대로 둔 채 미분하고, 속함수의 도함수를 곱한다."
+  - "합성이 여러 겹이면 바깥부터 한 겹씩 벗기며 도함수를 모두 곱한다."
+  - "라이프니츠 표기로는 dy/dx = (dy/du)(du/dx)이다."
+keyword: "연쇄법칙 합성함수 미분"
+level: intro
+checks:
+  - id: ex1
+    claim: "d/dx sin(x²+3x) = (2x+3)cos(x²+3x)"
+    sympy: "(lambda x: simplify(diff(sin(x**2+3*x), x) - (2*x+3)*cos(x**2+3*x)) == 0)(Symbol('x'))"
+  - id: ex2
+    claim: "d/dx √(1+e^{2x}) = e^{2x}/√(1+e^{2x})"
+    sympy: "(lambda x: simplify(diff(sqrt(1+exp(2*x)), x) - exp(2*x)/sqrt(1+exp(2*x))) == 0)(Symbol('x'))"
+  - id: p1
+    claim: "d/dx ln(cos x) = −tan x"
+    sympy: "(lambda x: simplify(diff(log(cos(x)), x) + tan(x)) == 0)(Symbol('x'))"
+  - id: p2
+    claim: "f(x)=e^{sin 2x}일 때 f′(0) = 2"
+    sympy: "(lambda x: diff(exp(sin(2*x)), x).subs(x, 0) == 2)(Symbol('x'))"
+related: [calculus/lagrange-multipliers]
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 변화율은 곱해진다
+
+$x$가 조금 변하면 속함수 $u = g(x)$가 변하고, 그 변화가 다시 겉함수 $y = f(u)$를 변하게 합니다. $u$가 $x$보다 3배 빠르게 변하고, $y$가 $u$보다 2배 빠르게 변한다면 $y$는 $x$보다 $2\times3 = 6$배 빠르게 변합니다. 변화율이 곱해진다는 이 직관이 연쇄법칙입니다.
+
+대학 미적분학에서는 거의 모든 미분 문제에 연쇄법칙이 들어갑니다. 음함수 미분, 관련 변화율, 다변수 함수의 편미분, 치환적분이 모두 이 규칙을 바탕으로 합니다.
+
+## 핵심 공식
+
+$$
+\frac{d}{dx}f\big(g(x)\big) = f'\big(g(x)\big)\cdot g'(x)
+\qquad\text{또는}\qquad
+\frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}
+$$
+
+자주 쓰는 꼴:
+
+$$
+\frac{d}{dx}\big[u^n\big] = n u^{n-1}u', \quad \frac{d}{dx}e^{u} = e^{u}u', \quad \frac{d}{dx}\ln u = \frac{u'}{u}, \quad \frac{d}{dx}\sin u = \cos u \cdot u'
+$$
+
+## 예제
+
+<Example>
+다음 함수를 미분하세요.
+
+(1) $y = \sin(x^2 + 3x)$ (2) $y = \sqrt{1 + e^{2x}}$
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(1) 겉함수와 속함수를 나눈다">
+속함수 $u = x^2 + 3x$, 겉함수 $y = \sin u$ 입니다.
+</Step>
+
+<Step n={2} title="(1) 겉을 미분하고 속의 도함수를 곱한다">
+$$
+\frac{dy}{dx} = \cos u\cdot\frac{du}{dx} = \cos(x^2 + 3x)\cdot(2x + 3)
+$$
+
+겉함수를 미분할 때 속은 $x^2 + 3x$ 그대로 둡니다.
+</Step>
+
+<Step n={3} title="(2) 합성이 세 겹임을 확인한다">
+$y = \sqrt{v}$, $v = 1 + e^{w}$, $w = 2x$로 세 겹입니다. 바깥부터 차례로 미분해 곱합니다.
+
+$$
+\frac{dy}{dx} = \frac{1}{2\sqrt{v}}\cdot e^{w}\cdot 2
+$$
+</Step>
+
+<Step n={4} title="(2) 원래 변수로 되돌리고 정리한다">
+$$
+\frac{dy}{dx} = \frac{1}{2\sqrt{1+e^{2x}}}\cdot e^{2x}\cdot 2 = \frac{e^{2x}}{\sqrt{1+e^{2x}}}
+$$
+</Step>
+
+<Answer>
+(1) $y' = (2x+3)\cos(x^2+3x)$ (2) $y' = \dfrac{e^{2x}}{\sqrt{1+e^{2x}}}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="속함수의 도함수를 곱하지 않는다">
+$\frac{d}{dx}\sin(x^2+3x)$를 $\cos(x^2+3x)$로 끝내는 실수가 가장 흔합니다. 속함수가 $x$ 하나가 아니면 반드시 그 도함수를 곱해야 합니다.
+</Mistake>
+
+<Mistake title="겉함수를 미분할 때 속까지 바꿔 버린다">
+$\frac{d}{dx}\sin(x^2)$를 $\cos(2x)$로 쓰는 실수입니다. 겉함수의 도함수에는 속함수가 **그대로** 들어가야 하므로 $\cos(x^2)\cdot 2x$가 맞습니다.
+</Mistake>
+
+<Mistake title="여러 겹에서 중간 단계를 하나 빠뜨린다">
+$e^{2x}$의 도함수에서 $2$를 빠뜨리는 식으로, 가장 안쪽 계수를 놓치기 쉽습니다. 겹마다 이름($v$, $w$)을 붙여 적으면 빠뜨리지 않습니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$y = \ln(\cos x)$를 미분하세요.
+</Fragment>
+
+$\dfrac{d}{dx}\ln u = \dfrac{u'}{u}$에서 $u = \cos x$, $u' = -\sin x$ 입니다.
+
+**정답:** $y' = -\dfrac{\sin x}{\cos x} = -\tan x$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+$f(x) = e^{\sin 2x}$일 때 $f'(0)$을 구하세요.
+</Fragment>
+
+$f'(x) = e^{\sin 2x}\cdot\cos 2x\cdot 2$ 이고, $x = 0$이면 $e^0\cdot 1\cdot 2$ 입니다.
+
+**정답:** $2$
+</Practice>

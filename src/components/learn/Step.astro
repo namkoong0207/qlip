@@ -1,0 +1,7 @@
+---
+const { n, title } = Astro.props as { n: number; title: string };
+---
+<section class="step">
+  <h3><span class="step-n">{n}</span>{title}</h3>
+  <div class="step-body"><slot /></div>
+</section>

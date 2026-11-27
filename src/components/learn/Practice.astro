@@ -1,0 +1,15 @@
+---
+/**
+ * A practice problem. The answer sits in <details>: closed for the reader, but
+ * in the HTML, so search engines and assistants read the full solution.
+ */
+const { n } = Astro.props as { n: number };
+---
+<div class="practice">
+  <div class="ex-label">연습 {n}</div>
+  <slot name="problem" />
+  <details data-track-open="learn_practice_reveal" data-item={`practice-${n}`}>
+    <summary>정답과 풀이 보기</summary>
+    <div class="practice-solution"><slot /></div>
+  </details>
+</div>
