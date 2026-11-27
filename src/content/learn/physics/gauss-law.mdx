@@ -1,0 +1,133 @@
+---
+subject: physics
+unit: electromagnetism
+order: 170
+title: "가우스 법칙 — 가우스면 고르는 법과 대전된 구·직선·평면 예제"
+h1: "가우스 법칙으로 전기장 구하기"
+description: "가우스 법칙 ∮E·dA = Q_in/ε₀를 대칭성이 있는 전하 분포에 적용하는 방법을 정리하고, 균일하게 대전된 구의 안팎 전기장을 단계별로 해설해요. 무한 직선·평면 연습 문제와 흔한 실수 포함."
+summary:
+  - "닫힌 곡면을 지나는 전기 선속은 그 안에 있는 알짜 전하를 ε₀로 나눈 값이다."
+  - "전기장이 곡면 위에서 크기가 일정하고 면에 수직이 되도록 대칭에 맞는 가우스면(구, 원통, 상자)을 고른다."
+  - "균일하게 대전된 구의 바깥 전기장은 점전하와 같고(kQ/r²), 안쪽은 반지름에 비례한다(kQr/R³)."
+keyword: "가우스 법칙 예제"
+level: core
+checks:
+  - id: ex-formula
+    claim: "구 내부: E·4πr² = (Q r³/R³)/ε₀ → E = kQr/R³"
+    sympy: "(lambda Q, r, R, e0: simplify((Q*r**3/R**3/e0)/(4*pi*r**2) - (1/(4*pi*e0))*Q*r/R**3) == 0)(*symbols('Q r R e0', positive=True))"
+  - id: ex-num
+    claim: "Q=4.0 nC, R=0.10 m: r=0.05 m에서 ≈1.80×10³ N/C, r=0.20 m에서 ≈899 N/C"
+    sympy: "Abs(8.99e9*4.0e-9*0.05/0.10**3 - 1798) < 1 and Abs(8.99e9*4.0e-9/0.20**2 - 899) < 1"
+  - id: p1
+    claim: "무한 직선 λ=2.0 nC/m, r=0.10 m: E = 2kλ/r ≈ 360 N/C"
+    sympy: "Abs(2*8.99e9*2.0e-9/0.10 - 359.6) < 0.1 and (lambda l, r, L, e0: simplify((l*L/e0)/(2*pi*r*L) - 2*(1/(4*pi*e0))*l/r) == 0)(*symbols('l r L e0', positive=True))"
+  - id: p2
+    claim: "무한 평면 σ=8.85 nC/m²: E = σ/(2ε₀) = 500 N/C"
+    sympy: "Abs(8.85e-9/(2*8.85e-12) - 500) < 1e-6"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 전기장 선이 몇 개 빠져나가는가
+
+전기장 선은 양전하에서 나와 음전하로 들어갑니다. 어떤 닫힌 곡면을 그리면, 그 곡면을 뚫고 나가는 전기장 선의 양(전기 선속)은 **곡면 안에 든 전하량**에만 달려 있고, 곡면의 모양이나 바깥 전하와는 상관이 없습니다. 이것이 가우스 법칙입니다.
+
+가우스 법칙은 항상 성립하지만, 전기장을 **계산하는 도구**로 쓸 수 있는 것은 전하 분포에 대칭이 있을 때뿐입니다. 대칭 덕분에 곡면 위에서 전기장의 크기가 일정하고 방향이 면에 수직이면, 선속 적분이 $E \times (\text{넓이})$로 바뀌어 $E$를 바로 구할 수 있습니다.
+
+## 핵심 공식
+
+$$
+\oint \vec{E}\cdot d\vec{A} = \frac{Q_{\text{in}}}{\varepsilon_0}, \qquad k = \frac{1}{4\pi\varepsilon_0} \approx 8.99\times10^{9}\ \text{N·m}^2/\text{C}^2
+$$
+
+| 전하 분포 | 가우스면 | 결과 |
+|---|---|---|
+| 점전하·대전된 구 (바깥) | 동심 구 | $E = \dfrac{kQ}{r^2}$ |
+| 균일하게 대전된 구 (안쪽) | 동심 구 | $E = \dfrac{kQ\,r}{R^3}$ |
+| 무한 직선 (선전하 밀도 $\lambda$) | 동축 원통 | $E = \dfrac{\lambda}{2\pi\varepsilon_0 r} = \dfrac{2k\lambda}{r}$ |
+| 무한 평면 (면전하 밀도 $\sigma$) | 평면을 관통하는 원통 | $E = \dfrac{\sigma}{2\varepsilon_0}$ |
+
+## 예제
+
+<Example>
+반지름 $R = 0.10\ \text{m}$인 부도체 구에 전하 $Q = 4.0\ \text{nC}$이 부피 전체에 균일하게 분포해 있습니다. 중심에서 (a) $r = 0.05\ \text{m}$, (b) $r = 0.20\ \text{m}$인 점의 전기장 크기를 구하세요.
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="대칭성으로 가우스면을 고른다">
+전하 분포가 구대칭이므로 전기장은 반지름 방향이고, 같은 $r$에서 크기가 같습니다. 반지름 $r$인 동심 구를 가우스면으로 잡으면 선속은 $E \cdot 4\pi r^2$ 입니다.
+</Step>
+
+<Step n={2} title="(a) 구 안쪽: 가우스면 안의 전하만 센다">
+전하 밀도가 균일하므로 반지름 $r$ 안의 전하는 부피 비율만큼입니다.
+
+$$
+Q_{\text{in}} = Q\frac{r^3}{R^3}
+\quad\Longrightarrow\quad
+E\cdot 4\pi r^2 = \frac{Q r^3}{\varepsilon_0 R^3}
+\quad\Longrightarrow\quad
+E = \frac{kQ\,r}{R^3}
+$$
+</Step>
+
+<Step n={3} title="(a) 숫자를 넣는다">
+$$
+E = \frac{(8.99\times10^9)(4.0\times10^{-9})(0.05)}{(0.10)^3} \approx 1.8\times10^{3}\ \text{N/C}
+$$
+</Step>
+
+<Step n={4} title="(b) 구 바깥: 전체 전하가 안에 있다">
+$Q_{\text{in}} = Q$이므로 $E = \dfrac{kQ}{r^2}$, 점전하와 같습니다.
+
+$$
+E = \frac{(8.99\times10^9)(4.0\times10^{-9})}{(0.20)^2} \approx 9.0\times10^{2}\ \text{N/C}
+$$
+</Step>
+
+<Step n={5} title="경계에서 이어지는지 확인한다">
+$r = R$을 두 식에 넣으면 둘 다 $\dfrac{kQ}{R^2}$가 됩니다. 부도체 구의 전기장은 표면에서 끊기지 않고 이어집니다.
+</Step>
+
+<Answer>
+(a) $E \approx 1.8\times10^{3}\ \text{N/C}$ (b) $E \approx 9.0\times10^{2}\ \text{N/C}$ (둘 다 중심에서 바깥 방향)
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="구 안쪽에서도 전체 전하 Q를 쓴다">
+가우스 법칙의 $Q_{\text{in}}$은 가우스면 **안에 든** 전하뿐입니다. 안쪽 점에서는 반지름 $r$ 안의 전하만 셉니다.
+</Mistake>
+
+<Mistake title="도체와 부도체를 구분하지 않는다">
+대전된 **도체** 구라면 전하가 모두 표면에 있어 안쪽 전기장은 $0$입니다. 예제의 $\frac{kQr}{R^3}$은 전하가 부피에 고르게 퍼진 부도체 구에만 맞습니다.
+</Mistake>
+
+<Mistake title="대칭이 없는 분포에 가우스 법칙으로 E를 구하려 한다">
+유한한 길이의 막대나 정사각형 판처럼 대칭이 부족하면 곡면 위에서 $E$가 일정하지 않아 $E$를 밖으로 꺼낼 수 없습니다. 이때는 쿨롱 법칙을 적분합니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+선전하 밀도 $\lambda = 2.0\ \text{nC/m}$인 무한히 긴 직선 전하로부터 $0.10\ \text{m}$ 떨어진 점의 전기장 크기를 구하세요.
+</Fragment>
+
+반지름 $r$, 길이 $L$인 동축 원통을 잡으면 옆면 선속 $E\cdot 2\pi rL = \dfrac{\lambda L}{\varepsilon_0}$ (위아래 면은 선속 $0$). 따라서 $E = \dfrac{2k\lambda}{r} = \dfrac{2(8.99\times10^9)(2.0\times10^{-9})}{0.10}$.
+
+**정답:** 약 $3.6\times10^{2}\ \text{N/C}$
+</Practice>
+
+<Practice n={2}>
+<Fragment slot="problem">
+면전하 밀도 $\sigma = 8.85\ \text{nC/m}^2$인 무한 평면 근처의 전기장 크기를 구하세요. ($\varepsilon_0 = 8.85\times10^{-12}\ \text{C}^2/\text{N·m}^2$)
+</Fragment>
+
+평면을 관통하는 원통의 양쪽 끝면에서 선속이 나가므로 $2EA = \dfrac{\sigma A}{\varepsilon_0}$, $E = \dfrac{\sigma}{2\varepsilon_0}$. 거리와 무관합니다.
+
+**정답:** $500\ \text{N/C}$
+</Practice>

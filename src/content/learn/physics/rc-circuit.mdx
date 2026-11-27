@@ -1,0 +1,130 @@
+---
+subject: physics
+unit: electromagnetism
+order: 190
+title: "RC 회로 충전·방전 — 시간 상수, 공식 유도, 예제 풀이"
+h1: "RC 회로의 충전과 방전"
+description: "축전기가 저항을 통해 충전·방전될 때 전하, 전압, 전류가 지수함수로 변하는 이유를 키르히호프 법칙에서 유도하고, 시간 상수 τ=RC를 이용한 예제를 단계별로 해설해요. 90% 충전 시간, 반감 시간 계산까지."
+summary:
+  - "키르히호프 전압 법칙을 쓰면 RC 회로는 1계 선형 미분방정식이 되고, 해는 지수함수다."
+  - "충전: q(t) = Cℰ(1 − e^{−t/RC}), 전류 I(t) = (ℰ/R)e^{−t/RC}. 방전: q(t) = Q₀e^{−t/RC}."
+  - "시간 상수 τ = RC가 지나면 충전은 약 63%, 방전은 약 37%가 남는다."
+keyword: "RC 회로 충전 방전 시간 상수"
+level: core
+checks:
+  - id: ode
+    claim: "q=Cℰ(1−e^{−t/RC})가 ℰ − R dq/dt − q/C = 0과 q(0)=0을 만족한다"
+    sympy: "(lambda t, R, C, E: simplify(E - R*diff(C*E*(1-exp(-t/(R*C))), t) - C*E*(1-exp(-t/(R*C)))/C) == 0 and (C*E*(1-exp(-t/(R*C)))).subs(t, 0) == 0)(*symbols('t R C E', positive=True))"
+  - id: ex-num
+    claim: "R=10 kΩ, C=100 μF, ℰ=12 V: τ=1.0 s, Q=1.2 mC, t=2 s에서 V_C≈10.4 V, I≈0.162 mA"
+    sympy: "Abs(10e3*100e-6 - 1.0) < 1e-12 and Abs(100e-6*12 - 1.2e-3) < 1e-12 and Abs(N(12*(1-exp(-2))) - 10.376) < 1e-3 and Abs(N(12/10e3*exp(-2)) - 1.624e-4) < 1e-7"
+  - id: ex-90
+    claim: "90% 충전까지 t = τ ln 10 ≈ 2.30 s"
+    sympy: "Abs(N(log(10)) - 2.3026) < 1e-4 and simplify(1 - exp(-log(10)) - Rational(9,10)) == 0"
+  - id: p1
+    claim: "τ=2.0 s 방전에서 전하가 절반이 되는 시간 = τ ln 2 ≈ 1.39 s"
+    sympy: "Abs(N(2*log(2)) - 1.3863) < 1e-4 and simplify(exp(-log(2)) - Rational(1,2)) == 0"
+provenance: original
+author: Qlip
+status: ai-verified
+created: 2026-11-27
+updated: 2026-11-27
+---
+
+## 개념: 쌓일수록 느려지는 충전
+
+빈 축전기를 전지와 저항에 연결하면 처음에는 축전기 전압이 $0$이라 저항에 전지 전압이 모두 걸리고 전류가 가장 큽니다. 전하가 쌓일수록 축전기 전압이 전지 전압을 상쇄해 저항에 걸리는 전압과 전류가 줄어들고, 충전은 점점 느려집니다. "변화 속도가 남은 양에 비례"하는 이런 과정은 언제나 지수함수로 나타납니다.
+
+키르히호프 전압 법칙으로 회로를 한 바퀴 돌며 전압을 더하면 이 현상이 1계 선형 미분방정식으로 정리됩니다. 카메라 플래시, 타이머 회로, 신호 필터, 신경 세포막 모델이 모두 RC 회로입니다.
+
+## 핵심 공식
+
+충전 회로(전지 $\mathcal{E}$, 저항 $R$, 축전기 $C$ 직렬)에서 키르히호프 전압 법칙:
+
+$$
+\mathcal{E} - R\frac{dq}{dt} - \frac{q}{C} = 0
+$$
+
+$q(0) = 0$일 때의 해와 시간 상수:
+
+$$
+q(t) = C\mathcal{E}\left(1 - e^{-t/RC}\right), \qquad I(t) = \frac{dq}{dt} = \frac{\mathcal{E}}{R}e^{-t/RC}, \qquad \tau = RC
+$$
+
+방전(처음 전하 $Q_0$, 전지 없음):
+
+$$
+q(t) = Q_0\,e^{-t/RC}
+$$
+
+## 예제
+
+<Example>
+기전력 $12\ \text{V}$인 전지, $10\ \text{k}\Omega$ 저항, $100\ \mu\text{F}$ 축전기를 직렬로 연결하고 $t = 0$에 스위치를 닫았습니다. 축전기는 처음에 비어 있습니다.
+
+(a) 시간 상수와 최종 전하량 (b) $t = 2.0\ \text{s}$일 때 축전기 전압과 회로 전류 (c) 최종 전하의 90%까지 충전되는 시간
+</Example>
+
+## 단계별 해설
+
+<Step n={1} title="(a) 시간 상수와 최종 전하">
+$$
+\tau = RC = (10\times10^3)(100\times10^{-6}) = 1.0\ \text{s}, \qquad Q_{\max} = C\mathcal{E} = (100\times10^{-6})(12) = 1.2\ \text{mC}
+$$
+
+단위 확인: $\Omega\cdot\text{F} = \frac{\text{V}}{\text{A}}\cdot\frac{\text{C}}{\text{V}} = \frac{\text{C}}{\text{C/s}} = \text{s}$.
+</Step>
+
+<Step n={2} title="(b) 축전기 전압">
+$V_C = \dfrac{q}{C} = \mathcal{E}\left(1 - e^{-t/\tau}\right)$ 이므로
+
+$$
+V_C(2.0) = 12\left(1 - e^{-2}\right) = 12(1 - 0.135) \approx 10.4\ \text{V}
+$$
+</Step>
+
+<Step n={3} title="(b) 전류">
+$$
+I(2.0) = \frac{12}{10\times10^3}e^{-2} = (1.2\ \text{mA})(0.135) \approx 0.16\ \text{mA}
+$$
+
+검산: 저항 전압 $IR \approx 1.6\ \text{V}$와 $V_C \approx 10.4\ \text{V}$의 합이 $12\ \text{V}$입니다.
+</Step>
+
+<Step n={4} title="(c) 90% 충전 시간">
+$1 - e^{-t/\tau} = 0.90$에서 $e^{-t/\tau} = 0.10$ 이므로
+
+$$
+t = \tau\ln 10 = (1.0)(2.30) \approx 2.3\ \text{s}
+$$
+</Step>
+
+<Answer>
+(a) $\tau = 1.0\ \text{s}$, $Q_{\max} = 1.2\ \text{mC}$ (b) $V_C \approx 10.4\ \text{V}$, $I \approx 0.16\ \text{mA}$ (c) 약 $2.3\ \text{s}$
+</Answer>
+
+## 자주 하는 실수
+
+<Mistake title="kΩ, μF의 접두어를 빠뜨린다">
+$\tau = RC$에서 $10\ \text{k}\Omega \times 100\ \mu\text{F}$를 $10\times100 = 1000\ \text{s}$로 계산하는 실수가 흔합니다. $10^3$과 $10^{-6}$을 반드시 넣으세요.
+</Mistake>
+
+<Mistake title="충전 전류도 점점 커진다고 생각한다">
+충전 중 전하와 축전기 전압은 커지지만, 전류는 처음에 가장 크고 지수적으로 줄어듭니다. $t = 0$에서 축전기는 도선처럼, $t \to \infty$에서는 끊어진 회로처럼 행동합니다.
+</Mistake>
+
+<Mistake title="τ가 지나면 완전히 충전된다고 생각한다">
+$t = \tau$에서는 $1 - e^{-1} \approx 63\%$만 충전됩니다. 실무에서는 보통 $5\tau$ 정도 지나면(약 99.3%) 다 찼다고 봅니다.
+</Mistake>
+
+## 유사 연습 문제
+
+<Practice n={1}>
+<Fragment slot="problem">
+$1.0\ \mu\text{F}$ 축전기가 $2.0\ \text{M}\Omega$ 저항을 통해 방전됩니다. 전하가 처음의 절반이 되는 데 걸리는 시간은?
+</Fragment>
+
+$\tau = (2.0\times10^6)(1.0\times10^{-6}) = 2.0\ \text{s}$. $e^{-t/\tau} = \tfrac12$에서 $t = \tau\ln 2$.
+
+**정답:** 약 $1.4\ \text{s}$
+</Practice>
