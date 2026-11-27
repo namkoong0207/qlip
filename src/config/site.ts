@@ -31,7 +31,7 @@ export const SITE = {
   verification: {
     naver: "0bcca00eafc8b18704cf328968ef412a5b8d03ae",
     google: "",
-    bing: "",
+    bing: "AE21FFFC10A88379DC781F121216CDEF",
   },
 
   /**
